@@ -1,0 +1,72 @@
+/*
+*
+* BASE
+*
+*/
+
+:root {
+	font-family: sans-serif;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+
+/*
+*
+* NAV
+*
+*/
+
+nav {
+	background-color: #0c8bca;
+	height: 50px;
+}
+
+nav li {
+	display: inline;
+	color: white;
+	margin-right: auto;
+}
+
+/*
+*
+* SECTIONS
+*
+*/
+
+section {
+	height: 100vh;
+	border: white 1px solid;
+}
+
+#accueil {
+	background-color: aliceblue;
+}
+
+#presentation {
+	height: 200vh;
+	background-color: antiquewhite;
+}
+
+#phase-apnee {
+	background-color: aquamarine;
+}
+
+#phase-patrick-miguel {
+	background-color: azure;
+}
+
+#apnee-periode {
+	background-color: beige;
+}
+
+#frequence-temps {
+	background-color: bisque;
+}
+
+#comparaison-nuit {
+	background-color: blanchedalmond;
+}
