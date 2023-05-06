@@ -10,7 +10,7 @@ import * as d3 from "d3";
  *
  **/
 
-// set the dimensions and margins of the graph
+// Dimensions de la heatmap
 const margin = {
 		top: 30,
 		right: 30,
@@ -20,9 +20,9 @@ const margin = {
 	width = 450 - margin.left - margin.right,
 	height = 450 - margin.top - margin.bottom;
 
-// append the svg object to the body of the page
+// append du svg dans la div my_dataviz
 const svg = d3
-	.select("#my_dataviz")
+	.select(".my_dataviz")
 	.append("svg")
 	.attr("width", width + margin.left + margin.right)
 	.attr("height", height + margin.top + margin.bottom)
@@ -35,6 +35,7 @@ const myVars = ["v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"];
 
 // Build X scales and axis:
 const x = d3.scaleBand().range([0, width]).domain(myGroups).padding(0.01);
+
 svg
 	.append("g")
 	.attr("transform", `translate(0, ${height})`)
@@ -55,7 +56,7 @@ d3
 	.then(function (data) {
 		// create a tooltip
 		const tooltip = d3
-			.select("#my_dataviz")
+			.select(".my_dataviz")
 			.append("div")
 			.style("opacity", 0)
 			.attr("class", "tooltip")
@@ -81,71 +82,6 @@ d3
 
 		// add the squares
 		svg
-			.selectAll()
-			.data(data, function (d) {
-				return d.group + ":" + d.variable;
-			})
-			.enter()
-			.append("rect")
-			.attr("x", function (d) {
-				return x(d.group);
-			})
-			.attr("y", function (d) {
-				return y(d.variable);
-			})
-			.attr("width", x.bandwidth())
-			.attr("height", y.bandwidth())
-			.style("fill", function (d) {
-				return myColor(d.value);
-			})
-			.on("mouseover", mouseover)
-			.on("mousemove", mousemove)
-			.on("mouseleave", mouseleave);
-	});
-
-// append the svg object to the body of the page
-const svg2 = d3
-	.select("#my_dataviz-second")
-	.append("svg")
-	.attr("width", width + margin.left + margin.right)
-	.attr("height", height + margin.top + margin.bottom)
-	.append("g")
-	.attr("transform", `translate(${margin.left},${margin.top})`);
-
-//Read the data
-d3
-	.csv(
-		"https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv"
-	)
-	.then(function (data) {
-		// create a tooltip
-		const tooltip = d3
-			.select("#my_dataviz-second")
-			.append("div")
-			.style("opacity", 0)
-			.attr("class", "tooltip")
-			.style("background-color", "white")
-			.style("border", "solid")
-			.style("border-width", "2px")
-			.style("border-radius", "5px")
-			.style("padding", "5px");
-
-		// Three function that change the tooltip when user hover / move / leave a cell
-		const mouseover = function (event, d) {
-			tooltip.style("opacity", 1);
-		};
-		const mousemove = function (event, d) {
-			tooltip
-				.html("The exact value of<br>this cell is: " + d.value)
-				.style("left", event.x / 2 + "px")
-				.style("top", event.y / 2 + "px");
-		};
-		const mouseleave = function (d) {
-			tooltip.style("opacity", 0);
-		};
-
-		// add the squares
-		svg2
 			.selectAll()
 			.data(data, function (d) {
 				return d.group + ":" + d.variable;

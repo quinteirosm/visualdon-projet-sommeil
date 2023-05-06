@@ -126,6 +126,13 @@ section {
 	background-color: blanchedalmond;
 }
 
-.inline {
-	display: inline;
+footer {
+	background-color: var(--fonce);
+	height: 10vh;
 }
+
+/*
+*
+* ESPACEMENT DANS LA SECTION PRESENTATION
+*
+*/
