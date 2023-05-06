@@ -1,3 +1,4 @@
+@import "font.css";
 /*
 *
 * BASE
@@ -6,8 +7,8 @@
 
 :root {
 	font-family: sans-serif;
-	--couleur-primaire: #0c8bca;
-	--couleur-secondaire: red;
+	--fonce: #005fc8;
+	--clair: #00d4ff;
 }
 
 html,
@@ -22,24 +23,29 @@ body {
 *
 */
 
-nav {
-	background-color: #0c8bca;
-	height: 50px;
-	/* border: 1px red solid; */
-	text-align: center; /* Ajout de la propriété text-align */
+.nav {
+	background-color: var(--fonce);
+	position: fixed;
+	width: 100%;
+}
+
+.nav a {
+	color: white;
+}
+
+.nav a:hover {
+	color: var(--clair);
 }
 
 nav li {
 	display: inline;
 	color: white;
-	/* border: 1px blue solid; */
 	margin-left: 20px;
 	margin-right: 20px;
 }
 
 nav ul {
 	padding-top: 12px;
-	/* border: 1px green solid; */
 }
 
 .read-more {
@@ -49,26 +55,27 @@ nav ul {
 	margin-right: 40vw;
 	margin-top: 500px;
 	line-height: 47px;
-	border: 2px solid var(--couleur-primaire);
+	border: 2px solid white;
+	border-radius: 15px;
 	text-transform: uppercase;
-	color: var(--couleur-primaire);
+	color: white;
 	display: block;
 	cursor: pointer;
 	font-size: 16px;
 	letter-spacing: 1px;
 	background: none;
-	-webkit-transition: all 0.6s ease-in;
-	-moz-transition: all 0.6s ease-in;
-	-ms-transition: all 0.6s ease-in;
-	-o-transition: all 0.6s ease-in;
-	transition: all 0.6s ease-in;
+	-webkit-transition: all 0.2s ease;
+	-moz-transition: all 0.2s ease;
+	-ms-transition: all 0.2s ease;
+	-o-transition: all 0.2s ease;
+	transition: all 0.2s ease;
 	text-align: center;
 }
 
 .read-more:hover {
-	color: white;
-	background: var(--couleur-secondaire);
-	border: 1px solid var(--couleur-secondaire);
+	color: var(--fonce);
+	background: white;
+	border: 2px solid white;
 }
 
 a,
@@ -90,12 +97,13 @@ section {
 }
 
 #accueil {
-	background-color: aliceblue;
+	background: var(--fonce);
 }
 
 #presentation {
 	height: 200vh;
-	background-color: antiquewhite;
+	background: var(--fonce);
+	background: linear-gradient(180deg, var(--fonce) 0%, var(--clair) 100%);
 }
 
 #phase-apnee {
@@ -121,14 +129,3 @@ section {
 .inline {
 	display: inline;
 }
-
-.titre {
-	font-size: 60px;
-	font-weight: light;
-	/* background-color: green; */
-	color: black;
-	text-align: center;
-	margin-top: 10vh;
-}
-
-/* @import "font.css"; */
