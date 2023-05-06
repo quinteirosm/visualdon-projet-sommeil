@@ -94,6 +94,7 @@ a:active {
 section {
 	height: 100vh;
 	border: white 1px solid;
+	background-color: var(--clair);
 }
 
 #accueil {
@@ -106,7 +107,7 @@ section {
 	background: linear-gradient(180deg, var(--fonce) 0%, var(--clair) 100%);
 }
 
-#phase-apnee {
+/* #phase-apnee {
 	background-color: aquamarine;
 }
 
@@ -124,7 +125,7 @@ section {
 
 #comparaison-nuit {
 	background-color: blanchedalmond;
-}
+} */
 
 footer {
 	background-color: var(--fonce);

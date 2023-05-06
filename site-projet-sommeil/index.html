@@ -12,7 +12,7 @@
     </script>
     <link rel="stylesheet" href="src/style.css">
     <script src="src/graph.js" type="module"></script>
-    <script src="src/script.js" type="module" defer></script>
+    <script src="src/script.js" type="module"></script>
 </head>
 
 <body>
@@ -52,7 +52,7 @@
             <!-- CODE HERE -->
             <div class="d-flex flex-row justify-content-center align-items-center">
                 <div>
-                    <img src="src/img/cpap.svg" width="50%" alt="cpap-icon" loading="lazy" />
+                    <img src="src/img/cpap.svg" width="400px" alt="cpap-icon" loading="lazy">
                 </div>
                 <div>
                     <h2>Le projet</h2>
@@ -61,33 +61,48 @@
             </div>
 
             <div class="d-flex flex-row justify-content-center align-items-center">
-                <div width="50%">
+                <div>
                     <h2>Apnée ?</h2>
                     <p>blablabla tout a fait ceci est un test pour la largeur maximal de la fenetre</p>
                 </div>
                 <div>
-                    <img src="src/img/heig.svg" width="50%" alt="heig-icon" loading="lazy" />
+                    <img src="src/img/heig.svg" width="400px" alt="heig-icon" loading="lazy">
                 </div>
             </div>
         </section>
 
         <section id="phase-apnee" class="d-flex flex-row justify-content-center align-items-center">
-            <!-- HEATMAP -->
-            <div class="my_dataviz"></div>
-
+            <div>
+                <h2>Sommeil profond par rapport aux apnées</h2>
+                <div class="my_dataviz"></div>
+                <div class="my_dataviz"></div>
+            </div>
         </section>
 
         <section id="phase-patrick-miguel" class="d-flex flex-row justify-content-center align-items-center">
+            <div>
+                <h2>Sommeil profond d'un apnéique VS personne normal</h2>
+                <div class="other"></div>
+                <div class="other"></div>
+            </div>
         </section>
         <section id="apnee-periode" class="d-flex flex-row justify-content-center align-items-center">
-            <!-- CODE HERE -->
+            <div>
+                <h2>Apnées par périodes dans un mois</h2>
+                <div class="bar_chart"></div>
+            </div>
         </section>
         <section id="frequence-temps" class="d-flex flex-row justify-content-center align-items-center">
-            <!-- CODE HERE -->
-            <div id="circular_chart"></div>
+            <div>
+                <h2>Fréquence d'apnée cette année</h2>
+                <div id="circular_chart"></div>
+            </div>
         </section>
         <section id="comparaison-nuit" class="d-flex flex-row justify-content-center align-items-center">
-            <!-- CODE HERE -->
+            <div>
+                <h2>Comparaison d'une nuit de même durée</h2>
+                <div class="line_chart"></div>
+            </div>
         </section>
     </main>
     <footer class="d-flex flex-row justify-content-center align-items-center">
