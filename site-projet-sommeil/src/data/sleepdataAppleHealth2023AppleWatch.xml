@@ -1,3 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE HealthData [
+<!-- HealthKit Export Version: 13 -->
+<!ELEMENT HealthData (ExportDate,Me,(Record|Correlation|Workout|ActivitySummary|ClinicalRecord|Audiogram|VisionPrescription)*)>
+<!ATTLIST HealthData
+  locale CDATA #REQUIRED
+>
+<!ELEMENT ExportDate EMPTY>
+<!ATTLIST ExportDate
+  value CDATA #REQUIRED
+>
+<!ELEMENT Me EMPTY>
+<!ATTLIST Me
+  HKCharacteristicTypeIdentifierDateOfBirth                   CDATA #REQUIRED
+  HKCharacteristicTypeIdentifierBiologicalSex                 CDATA #REQUIRED
+  HKCharacteristicTypeIdentifierBloodType                     CDATA #REQUIRED
+  HKCharacteristicTypeIdentifierFitzpatrickSkinType           CDATA #REQUIRED
+  HKCharacteristicTypeIdentifierCardioFitnessMedicationsUse   CDATA #REQUIRED
+>
+<!ELEMENT Record ((MetadataEntry|HeartRateVariabilityMetadataList)*)>
+<!ATTLIST Record
+  type          CDATA #REQUIRED
+  unit          CDATA #IMPLIED
+  value         CDATA #IMPLIED
+  sourceName    CDATA #REQUIRED
+  sourceVersion CDATA #IMPLIED
+  device        CDATA #IMPLIED
+  creationDate  CDATA #IMPLIED
+  startDate     CDATA #REQUIRED
+  endDate       CDATA #REQUIRED
+>
+<!-- Note: Any Records that appear as children of a correlation also appear as top-level records in this document. -->
+<!ELEMENT Correlation ((MetadataEntry|Record)*)>
+<!ATTLIST Correlation
+  type          CDATA #REQUIRED
+  sourceName    CDATA #REQUIRED
+  sourceVersion CDATA #IMPLIED
+  device        CDATA #IMPLIED
+  creationDate  CDATA #IMPLIED
+  startDate     CDATA #REQUIRED
+  endDate       CDATA #REQUIRED
+>
+<!ELEMENT Workout ((MetadataEntry|WorkoutEvent|WorkoutRoute|WorkoutStatistics)*)>
+<!ATTLIST Workout
+  workoutActivityType   CDATA #REQUIRED
+  duration              CDATA #IMPLIED
+  durationUnit          CDATA #IMPLIED
+  totalDistance         CDATA #IMPLIED
+  totalDistanceUnit     CDATA #IMPLIED
+  totalEnergyBurned     CDATA #IMPLIED
+  totalEnergyBurnedUnit CDATA #IMPLIED
+  sourceName            CDATA #REQUIRED
+  sourceVersion         CDATA #IMPLIED
+  device                CDATA #IMPLIED
+  creationDate          CDATA #IMPLIED
+  startDate             CDATA #REQUIRED
+  endDate               CDATA #REQUIRED
+>
+<!ELEMENT WorkoutActivity ((MetadataEntry)*)>
+<!ATTLIST WorkoutActivity
+  uuid                 CDATA #REQUIRED
+  startDate            CDATA #REQUIRED
+  endDate              CDATA #IMPLIED
+  duration             CDATA #IMPLIED
+  durationUnit         CDATA #IMPLIED
+>
+<!ELEMENT WorkoutEvent ((MetadataEntry)*)>
+<!ATTLIST WorkoutEvent
+  type                 CDATA #REQUIRED
+  date                 CDATA #REQUIRED
+  duration             CDATA #IMPLIED
+  durationUnit         CDATA #IMPLIED
+>
+<!ELEMENT WorkoutStatistics EMPTY>
+<!ATTLIST WorkoutStatistics
+  type                 CDATA #REQUIRED
+  startDate            CDATA #REQUIRED
+  endDate              CDATA #REQUIRED
+  average              CDATA #IMPLIED
+  minimum              CDATA #IMPLIED
+  maximum              CDATA #IMPLIED
+  sum                  CDATA #IMPLIED
+  unit                 CDATA #IMPLIED
+>
+<!ELEMENT WorkoutRoute ((MetadataEntry|FileReference)*)>
+<!ATTLIST WorkoutRoute
+  sourceName    CDATA #REQUIRED
+  sourceVersion CDATA #IMPLIED
+  device        CDATA #IMPLIED
+  creationDate  CDATA #IMPLIED
+  startDate     CDATA #REQUIRED
+  endDate       CDATA #REQUIRED
+>
+<!ELEMENT FileReference EMPTY>
+<!ATTLIST FileReference
+  path CDATA #REQUIRED
+>
+<!ELEMENT ActivitySummary EMPTY>
+<!ATTLIST ActivitySummary
+  dateComponents           CDATA #IMPLIED
+  activeEnergyBurned       CDATA #IMPLIED
+  activeEnergyBurnedGoal   CDATA #IMPLIED
+  activeEnergyBurnedUnit   CDATA #IMPLIED
+  appleMoveTime            CDATA #IMPLIED
+  appleMoveTimeGoal        CDATA #IMPLIED
+  appleExerciseTime        CDATA #IMPLIED
+  appleExerciseTimeGoal    CDATA #IMPLIED
+  appleStandHours          CDATA #IMPLIED
+  appleStandHoursGoal      CDATA #IMPLIED
+>
+<!ELEMENT MetadataEntry EMPTY>
+<!ATTLIST MetadataEntry
+  key   CDATA #REQUIRED
+  value CDATA #REQUIRED
+>
+<!-- Note: Heart Rate Variability records captured by Apple Watch may include an associated list of instantaneous beats-per-minute readings. -->
+<!ELEMENT HeartRateVariabilityMetadataList (InstantaneousBeatsPerMinute*)>
+<!ELEMENT InstantaneousBeatsPerMinute EMPTY>
+<!ATTLIST InstantaneousBeatsPerMinute
+  bpm  CDATA #REQUIRED
+  time CDATA #REQUIRED
+>
+<!ELEMENT ClinicalRecord EMPTY>
+<!ATTLIST ClinicalRecord
+  type              CDATA #REQUIRED
+  identifier        CDATA #REQUIRED
+  sourceName        CDATA #REQUIRED
+  sourceURL         CDATA #REQUIRED
+  fhirVersion       CDATA #REQUIRED
+  receivedDate      CDATA #REQUIRED
+  resourceFilePath  CDATA #REQUIRED
+>
+<!ELEMENT Audiogram ((MetadataEntry|SensitivityPoint)*)>
+<!ATTLIST Audiogram
+  type          CDATA #REQUIRED
+  sourceName    CDATA #REQUIRED
+  sourceVersion CDATA #IMPLIED
+  device        CDATA #IMPLIED
+  creationDate  CDATA #IMPLIED
+  startDate     CDATA #REQUIRED
+  endDate       CDATA #REQUIRED
+>
+<!ELEMENT SensitivityPoint EMPTY>
+<!ATTLIST SensitivityPoint
+  frequencyValue   CDATA #REQUIRED
+  frequencyUnit    CDATA #REQUIRED
+  leftEarValue     CDATA #IMPLIED
+  leftEarUnit      CDATA #IMPLIED
+  rightEarValue    CDATA #IMPLIED
+  rightEarUnit     CDATA #IMPLIED
+>
+<!ELEMENT VisionPrescription ((RightEye|LeftEye|Attachment|MetadataEntry)*)>
+<!ATTLIST VisionPrescription
+  type             CDATA #REQUIRED
+  dateIssued       CDATA #REQUIRED
+  expirationDate   CDATA #IMPLIED
+  brand            CDATA #IMPLIED
+>
+<!ELEMENT RightEye EMPTY>
+<!ATTLIST RightEye
+  sphere           CDATA #IMPLIED
+  sphereUnit       CDATA #IMPLIED
+  cylinder         CDATA #IMPLIED
+  cylinderUnit     CDATA #IMPLIED
+  axis             CDATA #IMPLIED
+  axisUnit         CDATA #IMPLIED
+  add              CDATA #IMPLIED
+  addUnit          CDATA #IMPLIED
+  vertex           CDATA #IMPLIED
+  vertexUnit       CDATA #IMPLIED
+  prismAmount      CDATA #IMPLIED
+  prismAmountUnit  CDATA #IMPLIED
+  prismAngle       CDATA #IMPLIED
+  prismAngleUnit   CDATA #IMPLIED
+  farPD            CDATA #IMPLIED
+  farPDUnit        CDATA #IMPLIED
+  nearPD           CDATA #IMPLIED
+  nearPDUnit       CDATA #IMPLIED
+  baseCurve        CDATA #IMPLIED
+  baseCurveUnit    CDATA #IMPLIED
+  diameter         CDATA #IMPLIED
+  diameterUnit     CDATA #IMPLIED
+>
+<!ELEMENT LeftEye EMPTY>
+<!ATTLIST LeftEye
+  sphere           CDATA #IMPLIED
+  sphereUnit       CDATA #IMPLIED
+  cylinder         CDATA #IMPLIED
+  cylinderUnit     CDATA #IMPLIED
+  axis             CDATA #IMPLIED
+  axisUnit         CDATA #IMPLIED
+  add              CDATA #IMPLIED
+  addUnit          CDATA #IMPLIED
+  vertex           CDATA #IMPLIED
+  vertexUnit       CDATA #IMPLIED
+  prismAmount      CDATA #IMPLIED
+  prismAmountUnit  CDATA #IMPLIED
+  prismAngle       CDATA #IMPLIED
+  prismAngleUnit   CDATA #IMPLIED
+  farPD            CDATA #IMPLIED
+  farPDUnit        CDATA #IMPLIED
+  nearPD           CDATA #IMPLIED
+  nearPDUnit       CDATA #IMPLIED
+  baseCurve        CDATA #IMPLIED
+  baseCurveUnit    CDATA #IMPLIED
+  diameter         CDATA #IMPLIED
+  diameterUnit     CDATA #IMPLIED
+>
+<!ELEMENT Attachment EMPTY>
+<!ATTLIST Attachment
+  identifier       CDATA #IMPLIED
+>
+]>
+<HealthData locale="fr_CH">
+ <ExportDate value="2023-04-20 13:48:59 +0200"/>
+ <Me HKCharacteristicTypeIdentifierDateOfBirth="1997-10-22" HKCharacteristicTypeIdentifierBiologicalSex="HKBiologicalSexMale" HKCharacteristicTypeIdentifierBloodType="HKBloodTypeNotSet" HKCharacteristicTypeIdentifierFitzpatrickSkinType="HKFitzpatrickSkinTypeIII" HKCharacteristicTypeIdentifierCardioFitnessMedicationsUse="Aucune"/>
+
+
 <Record type="HKCategoryTypeIdentifierSleepAnalysis" sourceName="Apple Watch de Patrick" sourceVersion="9.2" creationDate="2023-01-20 08:25:54 +0200" startDate="2023-01-20 02:40:51 +0200" endDate="2023-01-20 02:57:51 +0200" value="HKCategoryValueSleepAnalysisAsleepCore">
   <MetadataEntry key="HKTimeZone" value="Europe/Zurich"/>
  </Record>
@@ -4093,3 +4311,5 @@
  <Record type="HKCategoryTypeIdentifierSleepAnalysis" sourceName="Apple Watch de Patrick" sourceVersion="9.4" creationDate="2023-04-20 09:00:22 +0200" startDate="2023-04-20 08:20:22 +0200" endDate="2023-04-20 08:30:22 +0200" value="HKCategoryValueSleepAnalysisInBed">
   <MetadataEntry key="HKTimeZone" value="Europe/Zurich"/>
  </Record>
+ 
+ </HealthData>
