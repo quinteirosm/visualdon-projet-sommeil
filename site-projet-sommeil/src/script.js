@@ -11,9 +11,10 @@ function triArrayDate(array) {
 
 	// Boucle à l'envers pour ne pas casser les index
 	for (var i = array.length - 1; i >= 0; i--) {
-		// Enlève des chars parasite au début de la propriété date (pour les dataCpap, ne fait rien sur les autres)
-		array[i].heureCoucher = array[i].heureCoucher.replace("SLEEP_RECORD#", "");
-
+		if (array[i].date) {
+			// Enlève des chars parasite au début de la propriété date (pour les dataCpap, ne fait rien sur les autres)
+			array[i].date = array[i].date.replace("SLEEP_RECORD#", "");
+		}
 		// Converti la date en timestamp
 		var timestamp = new Date(array[i].date).getTime();
 
@@ -23,12 +24,12 @@ function triArrayDate(array) {
 		}
 	}
 
-	function comparaison(a, b) {
-		return a.heureCoucher - b.heureCoucher;
-	}
-	array.sort(comparaison);
+	array.sort(function (a, b) {
+		return new Date(a.date) - new Date(b.date);
+	});
 }
 
+// Fonction qui calcule la durée du sommeil
 function dureeSommeil(array) {
 	for (var i = 0; i < array.length; i++) {
 		array[i].dureeSommeil =
@@ -36,6 +37,14 @@ function dureeSommeil(array) {
 				array[i].tempsSommeilLeger +
 				array[i].tempsSommeilParadoxal) /
 			60;
+	}
+}
+
+// Fonction qui calcule le pourcentage de sommeil profond par nuit
+function pourcentagePhaseProfondParNuit(array) {
+	for (var i = 0; i < array.length; i++) {
+		array[i].pourcentagePhaseProfond =
+			(array[i].tempsSommeilProfond / 60 / array[i].dureeSommeil) * 100;
 	}
 }
 
@@ -56,6 +65,8 @@ let dataMiguel = d3
 
 		console.log("dataMiguel");
 		console.log(data);
+
+		return data;
 	})
 	.catch(function (error) {
 		console.log(error);
@@ -64,17 +75,18 @@ let dataMiguel = d3
 let dataCpap = d3
 	.csv("./src/data/cpap-original.csv", function (d) {
 		return {
-			date: d.approximatecreationdatetime,
-			heureCoucher: d.keys_sort_key,
-			evenementHeure: parseInt(d.score_detail_ahi),
-			fuiteMoyenne: parseInt(d.score_detail_leak_95_percentile),
-			tempsUtilisation: parseInt(d.usage_hours),
+			heureReveil: d.approximatecreationdatetime,
+			date: d.keys_sort_key,
+			evenementHeure: parseFloat(d.score_detail_ahi),
+			fuiteMoyenne: parseFloat(d.score_detail_leak_95_percentile),
+			tempsUtilisation: parseFloat(d.usage_hours),
 		};
 	})
 	.then(function (data) {
 		triArrayDate(data);
 		console.log("dataCpap");
 		console.log(data);
+
 		return data;
 	})
 	.catch(function (error) {
@@ -83,9 +95,33 @@ let dataCpap = d3
 
 let dataAppleWatch = d3
 	.xml("./src/data/sleepdataAppleHealth2023AppleWatch.xml")
-	.then(function (data) {
-		// Manipulation des données XML ici
-		console.log(data);
+	.then(function (xml) {
+		const records = xml.getElementsByTagName("Record");
+		const data = [];
+
+		for (let i = 0; i < records.length; i++) {
+			const record = records[i];
+
+			if (
+				record.getAttribute("type") === "HKCategoryTypeIdentifierSleepAnalysis" &&
+				record.getAttribute("creationDate") &&
+				record.getAttribute("startDate") &&
+				record.getAttribute("endDate")
+			) {
+				const obj = {
+					date: record.getAttribute("creationDate"),
+					dateDeDebut: record.getAttribute("startDate"),
+					dateDeFin: record.getAttribute("endDate"),
+					valeur: record.getAttribute("value"),
+				};
+				data.push(obj);
+			}
+		}
+		triArrayDate(data);
+		console.log("dataAppleWatch");
+		console.log(data); // Affiche le tableau d'objets
+
+		return data;
 	})
 	.catch(function (error) {
 		console.log(error);
