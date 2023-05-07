@@ -65,6 +65,8 @@ let dataMiguel = d3
 
     console.log("dataMiguel");
     console.log(data);
+
+    return data;
   })
   .catch(function (error) {
     console.log(error);
@@ -84,6 +86,8 @@ let dataCpap = d3
     triArrayDate(data);
     console.log("dataCpap");
     console.log(data);
+
+    return data;
   })
   .catch(function (error) {
     console.log(error);
@@ -117,6 +121,8 @@ let dataAppleWatch = d3
     triArrayDate(data);
     console.log("dataAppleWatch");
     console.log(data); // Affiche le tableau d'objets
+
+    return data;
   })
   .catch(function (error) {
     console.log(error);
