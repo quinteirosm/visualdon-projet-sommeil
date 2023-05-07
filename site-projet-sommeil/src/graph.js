@@ -106,15 +106,15 @@ const heatmap = (name, donnees) => {
 		});
 };
 
-const containter = document.querySelectorAll(".my_dataviz");
+const container = document.querySelectorAll(".my_dataviz");
 
-containter.forEach((element) => {
+container.forEach((element) => {
 	heatmap(".my_dataviz");
 });
 
-const containter2 = document.querySelectorAll(".other");
+const container2 = document.querySelectorAll(".other");
 
-containter2.forEach((element) => {
+container2.forEach((element) => {
 	heatmap(".other");
 });
 

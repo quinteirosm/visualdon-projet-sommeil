@@ -1,14 +1,28 @@
-import * as d3 from "../node_modules/d3/dist/d3.js";
+import * as d3 from "d3"
 
-// Load the CSV file using D3's built-in function
-// d3.csv("data/activity.csv").then(function(data) {
-//     // Convert the CSV data to a JSON object using D3's built-in function
-//     var jsonData = d3.csvFormat(data);
+let dataMiguel = 
+    d3.csv("./src/data/dataMiguel.csv").then(function(dataMiguel) {
+    console.log("dataMiguel");
+    console.log(dataMiguel);
+  })
+  .catch(function(error) {
+    console.log(error);
+  });
 
-//     // Convert the JSON object to a string using JavaScript's JSON.stringify function
-//     var jsonString = JSON.stringify(jsonData);
+let dataCpap = 
+    d3.csv("./src/data/cpap-original.csv").then(function(dataCpap) {
+    console.log("dataCpap");
+    console.log(dataCpap);
+  })
+  .catch(function(error) {
+    console.log(error);
+  });
 
-//     // Log the JSON string to the console
-//     console.log(jsonString);
-//   });
-//
+let dataApWatch = 
+    d3.xml("./src/data/sleepdataAppleHealth2023AppleWatch.xml").then(function(dataApWatch) {
+    console.log("dataApWatch");
+    console.log(dataApWatch);
+  })
+  .catch(function(error) {
+    console.log(error);
+  });
