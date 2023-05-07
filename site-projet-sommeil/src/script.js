@@ -29,6 +29,7 @@ function triArrayDate(array) {
   });
 }
 
+// Fonction qui calcule la durée du sommeil
 function dureeSommeil(array) {
   for (var i = 0; i < array.length; i++) {
     array[i].dureeSommeil =
@@ -39,6 +40,7 @@ function dureeSommeil(array) {
   }
 }
 
+// Fonction qui calcule le pourcentage de sommeil profond par nuit
 function pourcentagePhaseProfondParNuit(array) {
   for (var i = 0; i < array.length; i++) {
     array[i].pourcentagePhaseProfond =
@@ -104,7 +106,7 @@ let dataAppleWatch = d3
         record.getAttribute("endDate")
       ) {
         const obj = {
-          dateDeCreation: record.getAttribute("creationDate"),
+          date: record.getAttribute("creationDate"),
           dateDeDebut: record.getAttribute("startDate"),
           dateDeFin: record.getAttribute("endDate"),
           valeur: record.getAttribute("value"),
@@ -112,6 +114,7 @@ let dataAppleWatch = d3
         data.push(obj);
       }
     }
+    triArrayDate(data);
     console.log("dataAppleWatch");
     console.log(data); // Affiche le tableau d'objets
   })
