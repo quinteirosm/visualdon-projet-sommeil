@@ -2,6 +2,8 @@
 
 import * as d3 from "d3";
 
+import { dataMiguel, dataCpap, dataAppleWatch } from "./script.js";
+
 // Dimensions de la heatmap
 const margin = {
 		top: 30,
@@ -144,56 +146,74 @@ const bar = (name, donnees) => {
 		.attr("transform", `translate(${margin.left},${margin.top})`);
 
 	// Parse the Data
-	d3
-		.csv(
-			"https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/7_OneCatOneNum_header.csv"
-		)
-		.then(function (data) {
-			// X axis
-			const x = d3
-				.scaleBand()
-				.range([0, width])
-				.domain(data.map((d) => d.Country))
-				.padding(0.2);
-			svg
-				.append("g")
-				.attr("transform", `translate(0,${height})`)
-				.call(d3.axisBottom(x))
-				.selectAll("text")
-				.attr("transform", "translate(-10,0)rotate(-45)")
-				.style("text-anchor", "end");
+	// d3
+	// 	.csv(
+	// 		"https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/7_OneCatOneNum_header.csv"
+	// 	)
+	donnees.then(function (data) {
+		console.log(data);
 
-			// Add Y axis
-			const y = d3.scaleLinear().domain([0, 13000]).range([height, 0]);
-			svg.append("g").call(d3.axisLeft(y));
+		// X axis
+		const x = d3
+			.scaleBand()
+			.range([0, width])
+			.domain(
+				data.map((d) => {
+					// let newDate = new Date(d.date);
+					// console.log(d.date);
 
-			// Bars
-			svg
-				.selectAll("mybar")
-				.data(data)
-				.join("rect")
-				.attr("x", (d) => x(d.Country))
-				.attr("width", x.bandwidth())
-				.attr("fill", "#69b3a2")
-				// no bar at the beginning thus:
-				.attr("height", (d) => height - y(0)) // always equal to 0
-				.attr("y", (d) => y(0));
+					// let jour = newDate.getDate();
+					// let mois = newDate.getMonth() + 1;
+					// console.log(jour);
+					// console.log(mois);
+					// return `${jour}.${mois}`;
+					return d.date;
+				})
+			)
+			.padding(0.2);
+		svg
+			.append("g")
+			.attr("transform", `translate(0,${height})`)
+			.call(d3.axisBottom(x))
+			.selectAll("text")
+			.attr("transform", "translate(-10,0)rotate(-45)")
+			.style("text-anchor", "end");
 
-			// Animation
-			svg
-				.selectAll("rect")
-				.transition()
-				.duration(800)
-				.attr("y", (d) => y(d.Value))
-				.attr("height", (d) => height - y(d.Value))
-				.delay((d, i) => {
-					console.log(i);
-					return i * 100;
-				});
-		});
+		// Add Y axis
+		const y = d3.scaleLinear().domain([0, 7]).range([height, 0]);
+		svg.append("g").call(d3.axisLeft(y));
+
+		// Bars
+		svg
+			.selectAll("mybar")
+			.data(data)
+			.join("rect")
+			.attr("x", (d) => x(d.date))
+			.attr("width", x.bandwidth())
+			.attr("fill", "#ffffff")
+			// no bar at the beginning thus:
+			.attr("height", (d) => height - y(0)) // always equal to 0
+			.attr("y", (d) => y(0));
+
+		// Animation
+		svg
+			.selectAll("rect")
+			.transition()
+			.duration(800)
+			.attr("y", (d) => y(d.evenementHeure))
+			.attr("height", (d) => height - y(d.evenementHeure))
+			.delay((d, i) => {
+				return i * 100;
+			});
+	});
 };
 
-bar(".bar_chart");
+bar(".bar_chart", dataCpap);
+
+console.log("Essai");
+console.log(dataCpap);
+
+// import { dataMiguel, dataCpap, dataAppleWatch } from "./script.js";
 
 /**
  * FIN BAR CHART
