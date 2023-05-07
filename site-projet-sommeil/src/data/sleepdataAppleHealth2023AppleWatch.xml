@@ -215,7 +215,6 @@
  <ExportDate value="2023-04-20 13:48:59 +0200"/>
  <Me HKCharacteristicTypeIdentifierDateOfBirth="1997-10-22" HKCharacteristicTypeIdentifierBiologicalSex="HKBiologicalSexMale" HKCharacteristicTypeIdentifierBloodType="HKBloodTypeNotSet" HKCharacteristicTypeIdentifierFitzpatrickSkinType="HKFitzpatrickSkinTypeIII" HKCharacteristicTypeIdentifierCardioFitnessMedicationsUse="Aucune"/>
 
-
 <Record type="HKCategoryTypeIdentifierSleepAnalysis" sourceName="Apple Watch de Patrick" sourceVersion="9.2" creationDate="2023-01-20 08:25:54 +0200" startDate="2023-01-20 02:40:51 +0200" endDate="2023-01-20 02:57:51 +0200" value="HKCategoryValueSleepAnalysisAsleepCore">
   <MetadataEntry key="HKTimeZone" value="Europe/Zurich"/>
  </Record>
