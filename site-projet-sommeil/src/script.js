@@ -148,10 +148,8 @@ let dataAppleWatch = d3
 				tabFinal.push(obj)
 			}
 		};
-		console.log(dateSave)
-		console.log(tabFinal)
 		console.log("dataAppleWatch");
-		console.log(data); 
+		console.log(tabFinal)
 
 		return data;
 	})
