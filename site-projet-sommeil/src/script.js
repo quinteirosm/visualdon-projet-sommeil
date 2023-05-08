@@ -19,7 +19,7 @@ function triArrayDate(array) {
 		var timestamp = new Date(array[i].date).getTime();
 
 		// Supprime l'objet si la date n'est pas comprise entre les deux timestamps
-		if (timestamp < dateDebut.getTime() || timestamp > dateFin.getTime()) {
+		if (timestamp < timestampDebut || timestamp > timestampFin) {
 			array.splice(i, 1);
 		}
 	}
@@ -27,17 +27,6 @@ function triArrayDate(array) {
 	array.sort(function (a, b) {
 		return new Date(a.date) - new Date(b.date);
 	});
-}
-
-// Fonction qui calcule la durée du sommeil
-function dureeSommeil(array) {
-	for (var i = 0; i < array.length; i++) {
-		array[i].dureeSommeil =
-			(array[i].tempsSommeilProfond +
-				array[i].tempsSommeilLeger +
-				array[i].tempsSommeilParadoxal) /
-			60;
-	}
 }
 
 // Fonction qui calcule le pourcentage de sommeil profond par nuit
@@ -60,8 +49,19 @@ let dataMiguel = d3
 		};
 	})
 	.then(function (data) {
+		// Boucle sur les données pour donner la durée totale
+		// Insertion en tant que nouvelle propriété
+		for (var i = 0; i < data.length; i++) {
+			data[i].dureeSommeil =
+				(data[i].tempsSommeilProfond +
+					data[i].tempsSommeilLeger +
+					data[i].tempsSommeilParadoxal) /
+				60;
+
+			data[i].heureReveil = new Date(new Date(data[i].heureCoucher).getTime() + (data[i].dureeSommeil*3600000))
+		}
+
 		triArrayDate(data);
-		dureeSommeil(data);
 
 		console.log("dataMiguel");
 		console.log(data);
@@ -79,11 +79,17 @@ let dataCpap = d3
 			date: d.keys_sort_key,
 			evenementHeure: parseFloat(d.score_detail_ahi),
 			fuiteMoyenne: parseFloat(d.score_detail_leak_95_percentile),
-			tempsUtilisation: parseFloat(d.usage_hours),
+			dureeSommeil: parseFloat(d.usage_hours),
 		};
 	})
 	.then(function (data) {
+		for (var i = 0; i < data.length; i++) {
+			let heureReveilDate = new Date(data[i].heureReveil)
+			data[i].heureCoucher = new Date(heureReveilDate.getTime() - (data[i].dureeSommeil*3600000));
+		}
+
 		triArrayDate(data);
+
 		console.log("dataCpap");
 		console.log(data);
 
@@ -119,7 +125,7 @@ let dataAppleWatch = d3
 		}
 		triArrayDate(data);
 		console.log("dataAppleWatch");
-		console.log(data); // Affiche le tableau d'objets
+		console.log(data); 
 
 		return data;
 	})
