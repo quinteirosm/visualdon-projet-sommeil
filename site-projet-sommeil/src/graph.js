@@ -4,15 +4,12 @@ import * as d3 from "d3";
 
 import { dataMiguel, dataCpap, dataAppleWatch } from "./script.js";
 
-// Dimensions de la heatmap
-const margin = {
-		top: 30,
-		right: 30,
-		bottom: 30,
-		left: 30,
-	},
-	width = 450 - margin.left - margin.right,
-	height = 450 - margin.top - margin.bottom;
+const nbCols = 5; // Nombre de colonnes
+const rectWidth = 100;
+const rectHeight = 67;
+
+const width = 600;
+const height = 400;
 
 /*
  *
@@ -155,23 +152,22 @@ const margin = {
 // heatmap(".heatmap_profond_patrick");
 
 const heatmapApneePatrick = (name, donnees) => {
-	const width = 600;
-	const height = 400;
 	const dates = [];
 	const values = [];
 
-	dataCpap.then((dataRecue) => {
-		console.log("essai HEATMAP CPAP PATRICK");
-
+	donnees.then((dataRecue) => {
 		let maxValue = 0;
+		let minValue = 100;
 
 		dataRecue.forEach((element) => {
-			console.log(element.evenementHeure + " " + element.date);
 			dates.push(element.date);
 			values.push(element.evenementHeure);
 
 			if (element.evenementHeure > maxValue) {
 				maxValue = element.evenementHeure;
+			}
+			if (element.evenementHeure < minValue) {
+				minValue = element.evenementHeure;
 			}
 		});
 
@@ -182,11 +178,10 @@ const heatmapApneePatrick = (name, donnees) => {
 
 		const colorScale = d3
 			.scaleLinear()
-			.domain([0, maxValue])
+			.domain([minValue, maxValue])
 			.range(["#00FFFF", "#000000"]);
 
 		let compteur = 0;
-		const nbCols = 4; // Nombre de colonnes
 		const data = [];
 		for (let i = 0; i < dates.length; i++) {
 			data[i] = [];
@@ -196,12 +191,6 @@ const heatmapApneePatrick = (name, donnees) => {
 				// data[i][j] = Math.floor(Math.random() * 11); // Remplacer par vos propres données
 			}
 		}
-
-		// const rectWidth = width / (dates.length * nbCols);
-		// const rectHeight = height / nbCols;
-
-		const rectWidth = 50;
-		const rectHeight = 50;
 
 		const svg = d3
 			.select(name)
@@ -236,8 +225,85 @@ const heatmapApneePatrick = (name, donnees) => {
 
 heatmapApneePatrick(".heatmap_nb_apnee", dataCpap);
 
-heatmapApneePatrick(".heatmap_profond_patrick_deux", dataCpap);
-// heatmap(".heatmap_profond_miguel");
+const heatmapProfondMiguel = (name, donnees) => {
+	const dates = [];
+	const values = [];
+
+	donnees.then((dataRecue) => {
+		let maxValue = 0;
+		let minValue = 100;
+
+		dataRecue.forEach((element) => {
+			dates.push(element.heureReveil);
+			values.push(element.pourcentagePhaseProfond);
+
+			if (element.pourcentagePhaseProfond > maxValue) {
+				maxValue = element.pourcentagePhaseProfond;
+			}
+			if (element.pourcentagePhaseProfond < minValue) {
+				minValue = element.pourcentagePhaseProfond;
+			}
+		});
+
+		const xScale = d3
+			.scaleTime()
+			.domain([new Date(dates[0]), new Date(dates[dates.length - 1])])
+			.range([0, width]);
+
+		const colorScale = d3
+			.scaleLinear()
+			.domain([minValue, maxValue])
+			.range(["#00FFFF", "#000000"]);
+
+		let compteur = 0;
+		const data = [];
+		for (let i = 0; i < dates.length; i++) {
+			data[i] = [];
+			for (let j = 0; j < nbCols; j++) {
+				data[i][j] = values[compteur];
+				compteur++;
+				// data[i][j] = Math.floor(Math.random() * 11); // Remplacer par vos propres données
+			}
+		}
+
+		// const rectWidth = width / (dates.length * nbCols);
+		// const rectHeight = height / nbCols;
+
+		// const rectWidth = 50;
+		// const rectHeight = 50;
+
+		const svg = d3
+			.select(name)
+			.append("svg")
+			.attr("width", width)
+			.attr("height", height);
+
+		const rows = svg
+			.selectAll("g")
+			.data(data)
+			.enter()
+			.append("g")
+			.attr("transform", (d, i) => `translate(0, ${i * rectHeight})`);
+
+		const rects = rows
+			.selectAll("rect")
+			.data((d) => d)
+			.enter()
+			.append("rect")
+			.attr(
+				"x",
+				(d, i) =>
+					(i % nbCols) * rectWidth +
+					Math.floor(i / nbCols) * dates.length * rectWidth
+			)
+			.attr("y", (d, i) => Math.floor(i / nbCols) * rectHeight)
+			.attr("width", rectWidth)
+			.attr("height", rectHeight)
+			.attr("fill", (d) => colorScale(d));
+	});
+};
+
+heatmapProfondMiguel(".heatmap_profond_miguel", dataMiguel);
 
 /*
  *
