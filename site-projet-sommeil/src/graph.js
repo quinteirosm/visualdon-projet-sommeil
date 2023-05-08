@@ -22,41 +22,52 @@ const margin = {
  *
  **/
 
-const heatmap = (name, donnees) => {
-	// append du svg dans la div my_dataviz
+const heatmap = (name, donnees, commentaire) => {
+	// append the svg object to the body of the page
 	const svg = d3
 		.select(name)
 		.append("svg")
 		.attr("width", width + margin.left + margin.right)
 		.attr("height", height + margin.top + margin.bottom)
 		.append("g")
-		.attr("transform", `translate(${margin.left},${margin.top})`);
-
-	// Labels of row and columns
-	const myGroups = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-	const myVars = ["v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"];
-
-	// Build X scales and axis:
-	const x = d3.scaleBand().range([0, width]).domain(myGroups).padding(0.01);
-
-	svg
-		.append("g")
-		.attr("transform", `translate(0, ${height})`)
-		.call(d3.axisBottom(x));
-
-	// Build X scales and axis:
-	const y = d3.scaleBand().range([height, 0]).domain(myVars).padding(0.01);
-	svg.append("g").call(d3.axisLeft(y));
-
-	// Build color scale
-	const myColor = d3.scaleLinear().range(["white", "#69b3a2"]).domain([1, 100]);
+		.attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 	//Read the data
 	d3
 		.csv(
 			"https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv"
 		)
+
 		.then(function (data) {
+			// Labels of row and columns -> unique identifier of the column called 'group' and 'variable'
+			const myGroups = Array.from(new Set(data.map((d) => d.group)));
+			const myVars = Array.from(new Set(data.map((d) => d.variable)));
+
+			// Build X scales and axis:
+			const x = d3.scaleBand().range([0, width]).domain(myGroups).padding(0.05);
+			svg
+				.append("g")
+				.style("font-size", 15)
+				.attr("transform", `translate(0, ${height})`)
+				.call(d3.axisBottom(x).tickSize(0))
+				.select(".domain")
+				.remove();
+
+			// Build Y scales and axis:
+			const y = d3.scaleBand().range([height, 0]).domain(myVars).padding(0.05);
+			svg
+				.append("g")
+				.style("font-size", 15)
+				.call(d3.axisLeft(y).tickSize(0))
+				.select(".domain")
+				.remove();
+
+			// Build color scale
+			const myColor = d3
+				.scaleSequential()
+				.interpolator(d3.interpolateInferno)
+				.domain([1, 100]);
+
 			// create a tooltip
 			const tooltip = d3
 				.select(name)
@@ -72,6 +83,7 @@ const heatmap = (name, donnees) => {
 			// Three function that change the tooltip when user hover / move / leave a cell
 			const mouseover = function (event, d) {
 				tooltip.style("opacity", 1);
+				d3.select(this).style("stroke", "black").style("opacity", 1);
 			};
 			const mousemove = function (event, d) {
 				tooltip
@@ -79,8 +91,9 @@ const heatmap = (name, donnees) => {
 					.style("left", event.x / 2 + "px")
 					.style("top", event.y / 2 + "px");
 			};
-			const mouseleave = function (d) {
+			const mouseleave = function (event, d) {
 				tooltip.style("opacity", 0);
+				d3.select(this).style("stroke", "none").style("opacity", 0.8);
 			};
 
 			// add the squares
@@ -89,36 +102,61 @@ const heatmap = (name, donnees) => {
 				.data(data, function (d) {
 					return d.group + ":" + d.variable;
 				})
-				.enter()
-				.append("rect")
+				.join("rect")
 				.attr("x", function (d) {
 					return x(d.group);
 				})
 				.attr("y", function (d) {
 					return y(d.variable);
 				})
+				.attr("rx", 4)
+				.attr("ry", 4)
 				.attr("width", x.bandwidth())
 				.attr("height", y.bandwidth())
 				.style("fill", function (d) {
 					return myColor(d.value);
 				})
+				.style("stroke-width", 4)
+				.style("stroke", "none")
+				.style("opacity", 0.8)
 				.on("mouseover", mouseover)
 				.on("mousemove", mousemove)
 				.on("mouseleave", mouseleave);
 		});
+
+	// Add title to graph
+	svg
+		.append("text")
+		.attr("x", 0)
+		.attr("y", -50)
+		.attr("text-anchor", "left")
+		.style("font-size", "22px")
+		.text("A d3.js heatmap");
+
+	// Add subtitle to graph
+	svg
+		.append("text")
+		.attr("x", 0)
+		.attr("y", -20)
+		.attr("text-anchor", "left")
+		.style("font-size", "14px")
+		.style("fill", "grey")
+		.style("max-width", 400)
+		.text(commentaire);
 };
 
-const container = document.querySelectorAll(".my_dataviz");
-
-container.forEach((element) => {
-	heatmap(".my_dataviz");
+dataCpap.then((data) => {
+	console.log("essai HEATMAP CPAP PATRICK");
+	data.forEach((element) => {
+		console.log(element.evenementHeure + " " + element.date);
+	});
 });
 
-const container2 = document.querySelectorAll(".other");
+heatmap(".heatmap_profond_patrick");
+heatmap(".heatmap_nb_apnee", dataCpap, "commentaire");
 
-container2.forEach((element) => {
-	heatmap(".other");
-});
+heatmap(".heatmap_profond_patrick_deux");
+heatmap(".heatmap_profond_miguel");
 
 /*
  *
@@ -151,8 +189,8 @@ const bar = (name, donnees) => {
 	// 		"https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/7_OneCatOneNum_header.csv"
 	// 	)
 	donnees.then(function (data) {
-/* 		console.log(data);
- */
+		/* 		console.log(data);
+		 */
 		// X axis
 		const x = d3
 			.scaleBand()
@@ -167,7 +205,6 @@ const bar = (name, donnees) => {
 					// console.log(jour);
 					// console.log(mois);
 					// return `${jour}.${mois}`;
-					d.date.setHours(0, 0, 0, 0);
 					return d.date;
 				})
 			)
@@ -209,7 +246,7 @@ const bar = (name, donnees) => {
 	});
 };
 
-bar(".bar_chart", dataCpap);
+bar("#bar_chart", dataCpap);
 
 /* console.log("Essai");
 console.log(dataCpap); */
@@ -431,7 +468,7 @@ const line = (name, donnees) => {
 		});
 };
 
-line(".line_chart");
+line("#line_chart");
 
 /*
  *

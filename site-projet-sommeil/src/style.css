@@ -29,6 +29,10 @@ body {
 	width: 100%;
 }
 
+ul {
+	position: fixed;
+}
+
 .nav a {
 	color: white;
 }
@@ -118,6 +122,11 @@ footer {
 
 .half {
 	height: 90vh;
+}
+
+#phase-patrick-miguel div,
+#phase-apnee div {
+	display: inline;
 }
 
 /*

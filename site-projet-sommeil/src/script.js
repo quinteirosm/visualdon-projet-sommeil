@@ -54,7 +54,9 @@ let dataMiguel = d3
 					data[i].tempsSommeilParadoxal) /
 				60;
 
-			data[i].heureReveil = new Date(new Date(data[i].heureCoucher).getTime() + (data[i].dureeSommeil*3600000))
+			data[i].heureReveil = new Date(
+				new Date(data[i].heureCoucher).getTime() + data[i].dureeSommeil * 3600000
+			);
 		}
 
 		triArrayDate(data);
@@ -80,8 +82,10 @@ let dataCpap = d3
 	})
 	.then(function (data) {
 		for (var i = 0; i < data.length; i++) {
-			let heureReveilDate = new Date(data[i].heureReveil)
-			data[i].heureCoucher = new Date(heureReveilDate.getTime() - (data[i].dureeSommeil*3600000));
+			let heureReveilDate = new Date(data[i].heureReveil);
+			data[i].heureCoucher = new Date(
+				heureReveilDate.getTime() - data[i].dureeSommeil * 3600000
+			);
 		}
 
 		triArrayDate(data);
@@ -102,6 +106,7 @@ let dataAppleWatch = d3
 		const data = [];
 		// Création d'un objet pour chaque record, et push dans l'array data
 		for (let i = 0; i < records.length; i++) {
+<<<<<<< HEAD
 				const obj = {
 					date: new Date(records[i].getAttribute("creationDate")),
 					valeur: records[i].getAttribute("value"),
@@ -150,6 +155,23 @@ let dataAppleWatch = d3
 		};
 		console.log("dataAppleWatch");
 		console.log(tabFinal)
+=======
+			const obj = {
+				date: records[i].getAttribute("creationDate"),
+				dateDeDebut: records[i].getAttribute("startDate"),
+				dateDeFin: records[i].getAttribute("endDate"),
+				valeur: records[i].getAttribute("value"),
+				durée:
+					(new Date(records[i].getAttribute("endDate")).getTime() -
+						new Date(records[i].getAttribute("startDate")).getTime()) /
+					60000,
+			};
+			data.push(obj);
+		}
+		triArrayDate(data);
+		console.log("dataAppleWatch");
+		console.log(data);
+>>>>>>> 5949ccc2698cfd1e8226e0f80100858eb92f68f8
 
 		return data;
 	})
