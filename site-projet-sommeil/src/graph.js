@@ -167,7 +167,6 @@ const bar = (name, donnees) => {
 					// console.log(jour);
 					// console.log(mois);
 					// return `${jour}.${mois}`;
-					d.date.setHours(0, 0, 0, 0);
 					return d.date;
 				})
 			)
