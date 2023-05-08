@@ -105,24 +105,18 @@ let dataAppleWatch = d3
 		const records = xml.getElementsByTagName("Record");
 		const data = [];
 
+		// Création d'un objet pour chaque record, et push dans l'array data
 		for (let i = 0; i < records.length; i++) {
-			const record = records[i];
-
-			if (
-				record.getAttribute("type") === "HKCategoryTypeIdentifierSleepAnalysis" &&
-				record.getAttribute("creationDate") &&
-				record.getAttribute("startDate") &&
-				record.getAttribute("endDate")
-			) {
 				const obj = {
-					date: record.getAttribute("creationDate"),
-					dateDeDebut: record.getAttribute("startDate"),
-					dateDeFin: record.getAttribute("endDate"),
-					valeur: record.getAttribute("value"),
-				};
-				data.push(obj);
-			}
-		}
+					date: records[i].getAttribute("creationDate"),
+					dateDeDebut: records[i].getAttribute("startDate"),
+					dateDeFin: records[i].getAttribute("endDate"),
+					valeur: records[i].getAttribute("value"),
+					durée: (new Date(records[i].getAttribute("endDate")).getTime() - new Date(records[i].getAttribute("startDate")).getTime())/60000,
+
+				}
+		data.push(obj);
+		};
 		triArrayDate(data);
 		console.log("dataAppleWatch");
 		console.log(data); 
