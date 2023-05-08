@@ -11,10 +11,6 @@ function triArrayDate(array) {
 
 	// Boucle à l'envers pour ne pas casser les index
 	for (var i = array.length - 1; i >= 0; i--) {
-		if (array[i].date) {
-			// Enlève des chars parasite au début de la propriété date (pour les dataCpap, ne fait rien sur les autres)
-			array[i].date = array[i].date.replace("SLEEP_RECORD#", "");
-		}
 		// Converti la date en timestamp
 		var timestamp = new Date(array[i].date).getTime();
 
@@ -76,7 +72,7 @@ let dataCpap = d3
 	.csv("./src/data/cpap-original.csv", function (d) {
 		return {
 			heureReveil: d.approximatecreationdatetime,
-			date: d.keys_sort_key,
+			date: d.keys_sort_key.replace("SLEEP_RECORD#", ""),
 			evenementHeure: parseFloat(d.score_detail_ahi),
 			fuiteMoyenne: parseFloat(d.score_detail_leak_95_percentile),
 			dureeSommeil: parseFloat(d.usage_hours),
@@ -104,20 +100,56 @@ let dataAppleWatch = d3
 	.then(function (xml) {
 		const records = xml.getElementsByTagName("Record");
 		const data = [];
-
 		// Création d'un objet pour chaque record, et push dans l'array data
 		for (let i = 0; i < records.length; i++) {
 				const obj = {
-					date: records[i].getAttribute("creationDate"),
-					dateDeDebut: records[i].getAttribute("startDate"),
-					dateDeFin: records[i].getAttribute("endDate"),
+					date: new Date(records[i].getAttribute("creationDate")),
 					valeur: records[i].getAttribute("value"),
-					durée: (new Date(records[i].getAttribute("endDate")).getTime() - new Date(records[i].getAttribute("startDate")).getTime())/60000,
-
+					dureeSommeil: (new Date(records[i].getAttribute("endDate")).getTime() - new Date(records[i].getAttribute("startDate")).getTime())/60000,
 				}
-		data.push(obj);
+			data.push(obj);
 		};
-		triArrayDate(data);
+		triArrayDate(data)
+
+
+		let dateSave
+		let obj = {}
+		let tabFinal = []
+		for (let i = 0; i < data.length; i++) {
+			if(i==0){
+				dateSave = data[i].date;
+				obj = {
+					date: data[i].date,
+					tempsSommeilLeger: data[i].valeur=="HKCategoryValueSleepAnalysisAsleepCore"?data[i].dureeSommeil:0,
+					tempsSommeilParadoxal: data[i].valeur=="HKCategoryValueSleepAnalysisAsleepREM"?data[i].dureeSommeil:0,
+					tempsSommeilProfond: data[i].valeur=="HKCategoryValueSleepAnalysisAsleepDeep"?data[i].dureeSommeil:0,
+					duree:0,
+				}
+			}
+			if(dateSave.getTime()!=data[i].date.getTime()){
+				console.log('nouveau jour')
+				dateSave = data[i].date;
+				obj.duree = (obj.tempsSommeilLeger+obj.tempsSommeilParadoxal+obj.tempsSommeilProfond)/60
+				tabFinal.push(obj)
+				obj = {
+					date: data[i].date,
+					tempsSommeilLeger: data[i].valeur=="HKCategoryValueSleepAnalysisAsleepCore"?data[i].dureeSommeil:0,
+					tempsSommeilParadoxal: data[i].valeur=="HKCategoryValueSleepAnalysisAsleepREM"?data[i].dureeSommeil:0,
+					tempsSommeilProfond: data[i].valeur=="HKCategoryValueSleepAnalysisAsleepDeep"?data[i].dureeSommeil:0,
+				}
+			}else{
+				if(i!=0){
+					obj.tempsSommeilLeger+= data[i].valeur=="HKCategoryValueSleepAnalysisAsleepCore"?data[i].dureeSommeil:0
+					obj.tempsSommeilParadoxal+= data[i].valeur=="HKCategoryValueSleepAnalysisAsleepREM"?data[i].dureeSommeil:0
+					obj.tempsSommeilProfond+= data[i].valeur=="HKCategoryValueSleepAnalysisAsleepDeep"?data[i].dureeSommeil:0
+				}
+			}
+			if(i==data.length-1){
+				tabFinal.push(obj)
+			}
+		};
+		console.log(dateSave)
+		console.log(tabFinal)
 		console.log("dataAppleWatch");
 		console.log(data); 
 
@@ -128,3 +160,4 @@ let dataAppleWatch = d3
 	});
 
 export { dataMiguel, dataCpap, dataAppleWatch };
+
