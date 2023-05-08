@@ -151,8 +151,8 @@ const bar = (name, donnees) => {
 	// 		"https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/7_OneCatOneNum_header.csv"
 	// 	)
 	donnees.then(function (data) {
-		console.log(data);
-
+/* 		console.log(data);
+ */
 		// X axis
 		const x = d3
 			.scaleBand()
@@ -210,8 +210,8 @@ const bar = (name, donnees) => {
 
 bar(".bar_chart", dataCpap);
 
-console.log("Essai");
-console.log(dataCpap);
+/* console.log("Essai");
+console.log(dataCpap); */
 
 // import { dataMiguel, dataCpap, dataAppleWatch } from "./script.js";
 
