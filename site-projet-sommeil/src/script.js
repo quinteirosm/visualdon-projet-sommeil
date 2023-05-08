@@ -4,7 +4,7 @@ import * as d3 from "d3";
 function triArrayDate(array) {
 	// Set les dates de début et de fin
 	var dateDebut = new Date("2023-03-01");
-	var dateFin = new Date("2023-03-31");
+	var dateFin = new Date("2023-03-30");
 	// Converti les dates en timestamps pour pouvoir comparer
 	var timestampDebut = dateDebut.getTime();
 	var timestampFin = dateFin.getTime();
