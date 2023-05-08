@@ -36,12 +36,12 @@ function pourcentagePhaseProfondParNuitMi(array) {
 let dataMiguel = d3
   .csv("./src/data/dataMiguel.csv", function (d) {
     return {
-      date: d.date,
-      tempsSommeilProfond: parseInt(d.deepSleepTime),
-      tempsSommeilLeger: parseInt(d.shallowSleepTime),
-      tempsSommeilParadoxal: parseInt(d.REMTime),
-      nombreReveil: parseInt(d.wakeTime),
-      heureCoucher: d.start,
+      date: d.date || 0,
+      tempsSommeilProfond: parseInt(d.deepSleepTime) || 0,
+      tempsSommeilLeger: parseInt(d.shallowSleepTime) || 0,
+      tempsSommeilParadoxal: parseInt(d.REMTime) || 0,
+      nombreReveil: parseInt(d.wakeTime) || 0,
+      heureCoucher: d.start || 0,
     };
   })
   .then(function (data) {
@@ -74,11 +74,11 @@ let dataMiguel = d3
 let dataCpap = d3
   .csv("./src/data/cpap-original.csv", function (d) {
     return {
-      heureReveil: d.approximatecreationdatetime,
-      date: d.keys_sort_key.replace("SLEEP_RECORD#", ""),
-      evenementHeure: parseFloat(d.score_detail_ahi),
-      fuiteMoyenne: parseFloat(d.score_detail_leak_95_percentile),
-      dureeSommeil: parseFloat(d.usage_hours),
+      heureReveil: d.approximatecreationdatetime || 0,
+      date: d.keys_sort_key.replace("SLEEP_RECORD#", "") || 0,
+      evenementHeure: parseFloat(d.score_detail_ahi) || 0,
+      fuiteMoyenne: parseFloat(d.score_detail_leak_95_percentile) || 0,
+      dureeSommeil: parseFloat(d.usage_hours) || 0,
     };
   })
   .then(function (data) {
@@ -108,12 +108,12 @@ let dataAppleWatch = d3
     // Création d'un objet pour chaque record, et push dans l'array data
     for (let i = 0; i < records.length; i++) {
       const obj = {
-        date: new Date(records[i].getAttribute("creationDate")),
-        valeur: records[i].getAttribute("value"),
+        date: new Date(records[i].getAttribute("creationDate")) || 0,
+        valeur: records[i].getAttribute("value") || 0,
         dureeSommeil:
           (new Date(records[i].getAttribute("endDate")).getTime() -
             new Date(records[i].getAttribute("startDate")).getTime()) /
-          60000,
+            60000 || 0,
       };
       data.push(obj);
     }
