@@ -2,18 +2,25 @@
 
 import * as d3 from "d3";
 
-import { dataMiguel, dataCpap, dataAppleWatch } from "./script.js";
+import {
+	dataMiguel,
+	dataCpap,
+	dataCpap2023,
+	dataAppleWatch,
+	dateFormatDayMonthYear,
+} from "./script.js";
 
 const nbCols = 5; // Nombre de colonnes
-const rectWidth = 100;
-const rectHeight = 67;
 
 // const width = 600;
 // const height = 400;
 
 const margin = { top: 30, right: 30, bottom: 30, left: 30 },
 	width = 600,
-	height = 400;
+	height = 500;
+
+const rectWidth = width / 5;
+const rectHeight = height / 6;
 
 const couleurMin = "#FFFFFF";
 const couleurMax = "#0154C2";
@@ -25,138 +32,6 @@ const couleurMax = "#0154C2";
  *
  *
  **/
-
-// const heatmap = (name, donnees, commentaire) => {
-// 	// append the svg object to the body of the page
-// 	const svg = d3
-// 		.select(name)
-// 		.append("svg")
-// 		.attr("width", width + margin.left + margin.right)
-// 		.attr("height", height + margin.top + margin.bottom)
-// 		.append("g")
-// 		.attr("transform", `translate(${margin.left}, ${margin.top})`);
-
-// 	//Read the data
-// 	d3
-// 		.csv(
-// 			"https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv"
-// 		)
-
-// 		.then(function (data) {
-// 			// Labels of row and columns -> unique identifier of the column called 'group' and 'variable'
-// 			const myGroups = Array.from(new Set(data.map((d) => d.group)));
-// 			const myVars = Array.from(new Set(data.map((d) => d.variable)));
-
-// 			// Build X scales and axis:
-// 			const x = d3.scaleBand().range([0, width]).domain(myGroups).padding(0.05);
-// 			svg
-// 				.append("g")
-// 				.style("font-size", 15)
-// 				.attr("transform", `translate(0, ${height})`)
-// 				.call(d3.axisBottom(x).tickSize(0))
-// 				.select(".domain")
-// 				.remove();
-
-// 			// Build Y scales and axis:
-// 			const y = d3.scaleBand().range([height, 0]).domain(myVars).padding(0.05);
-// 			svg
-// 				.append("g")
-// 				.style("font-size", 15)
-// 				.call(d3.axisLeft(y).tickSize(0))
-// 				.select(".domain")
-// 				.remove();
-
-// 			// Build color scale
-// 			const myColor = d3
-// 				.scaleSequential()
-// 				.interpolator(d3.interpolateInferno)
-// 				.domain([1, 100]);
-
-// 			// create a tooltip
-// 			const tooltip = d3
-// 				.select(name)
-// 				.append("div")
-// 				.style("opacity", 0)
-// 				.attr("class", "tooltip")
-// 				.style("background-color", "white")
-// 				.style("border", "solid")
-// 				.style("border-width", "2px")
-// 				.style("border-radius", "5px")
-// 				.style("padding", "5px");
-
-// 			// Three function that change the tooltip when user hover / move / leave a cell
-// 			const mouseover = function (event, d) {
-// 				tooltip.style("opacity", 1);
-// 				d3.select(this).style("stroke", "black").style("opacity", 1);
-// 			};
-// 			const mousemove = function (event, d) {
-// 				tooltip
-// 					.html("The exact value of<br>this cell is: " + d.value)
-// 					.style("left", event.x / 2 + "px")
-// 					.style("top", event.y / 2 + "px");
-// 			};
-// 			const mouseleave = function (event, d) {
-// 				tooltip.style("opacity", 0);
-// 				d3.select(this).style("stroke", "none").style("opacity", 0.8);
-// 			};
-
-// 			// add the squares
-// 			svg
-// 				.selectAll()
-// 				.data(data, function (d) {
-// 					return d.group + ":" + d.variable;
-// 				})
-// 				.join("rect")
-// 				.attr("x", function (d) {
-// 					return x(d.group);
-// 				})
-// 				.attr("y", function (d) {
-// 					return y(d.variable);
-// 				})
-// 				.attr("rx", 4)
-// 				.attr("ry", 4)
-// 				.attr("width", x.bandwidth())
-// 				.attr("height", y.bandwidth())
-// 				.style("fill", function (d) {
-// 					return myColor(d.value);
-// 				})
-// 				.style("stroke-width", 4)
-// 				.style("stroke", "none")
-// 				.style("opacity", 0.8)
-// 				.on("mouseover", mouseover)
-// 				.on("mousemove", mousemove)
-// 				.on("mouseleave", mouseleave);
-// 		});
-
-// 	// Add title to graph
-// 	svg
-// 		.append("text")
-// 		.attr("x", 0)
-// 		.attr("y", -50)
-// 		.attr("text-anchor", "left")
-// 		.style("font-size", "22px")
-// 		.text("A d3.js heatmap");
-
-// 	// Add subtitle to graph
-// 	svg
-// 		.append("text")
-// 		.attr("x", 0)
-// 		.attr("y", -20)
-// 		.attr("text-anchor", "left")
-// 		.style("font-size", "14px")
-// 		.style("fill", "grey")
-// 		.style("max-width", 400)
-// 		.text(commentaire);
-// };
-
-// dataCpap.then((data) => {
-// 	console.log("essai HEATMAP CPAP PATRICK");
-// 	data.forEach((element) => {
-// 		console.log(element.evenementHeure + " " + element.date);
-// 	});
-// });
-
-// heatmap(".heatmap_profond_patrick");
 
 const heatmapProfondPatrick = (name, donnees) => {
 	const dates = [];
@@ -512,11 +387,6 @@ const bar = (name, donnees) => {
 
 bar("#bar_chart", dataCpap);
 
-/* console.log("Essai");
-console.log(dataCpap); */
-
-// import { dataMiguel, dataCpap, dataAppleWatch } from "./script.js";
-
 /**
  * FIN BAR CHART
  *
@@ -535,34 +405,40 @@ console.log(dataCpap); */
 // set the dimensions and margins of the graph
 
 const circular = (name, donnees) => {
-	const margin3 = {
-			top: 100,
-			right: 0,
-			bottom: 0,
-			left: 0,
-		},
-		width3 = 460 - margin3.left - margin3.right,
-		height3 = 460 - margin3.top - margin3.bottom,
-		innerRadius = 90,
-		outerRadius = Math.min(width, height3) / 2; // the outerRadius goes from the middle of the SVG area to the border
+	const innerRadius = 90;
+	const outerRadius = Math.min(width, height) / 2; // the outerRadius goes from the middle of the SVG area to the border
 
 	// append the svg object
 	const svg3 = d3
 		.select(name)
 		.append("svg")
-		.attr("width", width3 + margin3.left + margin3.right)
-		.attr("height", height3 + margin3.top + margin3.bottom)
+		.attr("width", width)
+		.attr("height", height)
 		.append("g")
 		.attr(
 			"transform",
-			`translate(${width / 2 + margin.left}, ${height / 2 + margin3.top})`
+			`translate(${width / 2 + margin.left}, ${height / 2 + margin.top})`
 		);
 
 	// d3
 	// 	.csv(
 	// 		"https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/7_OneCatOneNum.csv"
 	// 	)
+
 	donnees.then((data) => {
+		let maxValue = 0;
+		let minValue = 100;
+
+		console.log(data);
+
+		data.forEach((element) => {
+			if (element.fuiteMoyenne > maxValue) {
+				maxValue = element.fuiteMoyenne;
+			}
+			if (element.fuiteMoyenne < minValue) {
+				minValue = element.fuiteMoyenne;
+			}
+		});
 		// Scales
 		const x = d3
 			.scaleBand()
@@ -572,7 +448,7 @@ const circular = (name, donnees) => {
 		const y = d3
 			.scaleRadial()
 			.range([innerRadius, outerRadius]) // Domain will be define later.
-			.domain([0, 14000]); // Domain of Y is from 0 to the max seen in the data
+			.domain([minValue, maxValue]); // Domain of Y is from 0 to the max seen in the data
 
 		// Add the bars
 		svg3
@@ -580,13 +456,13 @@ const circular = (name, donnees) => {
 			.selectAll("path")
 			.data(data)
 			.join("path")
-			.attr("fill", couleurMax)
+			.attr("fill", couleurMin)
 			.attr(
 				"d",
 				d3
 					.arc() // imagine your doing a part of a donut plot
 					.innerRadius(innerRadius)
-					.outerRadius((d) => y(d["evenementHeure"]))
+					.outerRadius((d) => y(d.fuiteMoyenne))
 					.startAngle((d) => x(d.date))
 					.endAngle((d) => x(d.date) + x.bandwidth())
 					.padAngle(0.01)
@@ -610,13 +486,15 @@ const circular = (name, donnees) => {
 					(((x(d.date) + x.bandwidth() / 2) * 180) / Math.PI - 90) +
 					")" +
 					"translate(" +
-					(y(d["Value"]) + 10) +
+					(y(d.fuiteMoyenne) + 10) +
 					",0)"
 				);
 			})
 			.append("text")
 			.text(function (d) {
-				return d.date;
+				let date = dateFormatDayMonthYear(new Date(d.date));
+				console.log(date);
+				return date;
 			})
 			.attr("transform", function (d) {
 				return (x(d.date) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI
@@ -628,7 +506,9 @@ const circular = (name, donnees) => {
 	});
 };
 
-circular("#circular_chart");
+//circular("#circular_chart", dataCpap);
+
+circular("#circular_chart", dataCpap2023);
 
 /*
  *
