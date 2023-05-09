@@ -34,7 +34,7 @@ function pourcentagePhaseProfondParNuitMi(array) {
 }
 
 let dataMiguel = d3
-	.csv("./src/data/dataMiguel.csv", function (d) {
+	.csv("./dataMiguel.csv", function (d) {
 		return {
 			date: d.date || 0,
 			tempsSommeilProfond: parseInt(d.deepSleepTime) || 0,
@@ -71,7 +71,7 @@ let dataMiguel = d3
 	});
 
 let dataCpap = d3
-	.csv("./src/data/cpap-original.csv", function (d) {
+	.csv("./cpap-original.csv", function (d) {
 		return {
 			heureReveil: d.approximatecreationdatetime || 0,
 			date: d.keys_sort_key.replace("SLEEP_RECORD#", "") || 0,
@@ -100,7 +100,7 @@ let dataCpap = d3
 	});
 
 let dataAppleWatch = d3
-	.xml("./src/data/sleepdataAppleHealth2023AppleWatch.xml")
+	.xml("./sleepdataAppleHealth2023AppleWatch.xml")
 	.then(function (xml) {
 		const records = xml.getElementsByTagName("Record");
 		const data = [];
