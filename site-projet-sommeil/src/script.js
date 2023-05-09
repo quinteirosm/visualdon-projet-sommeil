@@ -33,145 +33,144 @@ export function triArrayDate2023(array) {
 	// Converti les dates en timestamps pour pouvoir comparer
 	var timestampDebut = dateDebut.getTime();
 	var timestampFin = dateFin.getTime();
-  
+
 	// Boucle à l'envers pour ne pas casser les index
 	for (var i = array.length - 1; i >= 0; i--) {
-	  // Converti la date en timestamp
-	  var timestamp = new Date(array[i].date).getTime();
-  
-	  // Supprime l'objet si la date n'est pas comprise entre les deux timestamps
-	  if (timestamp < timestampDebut || timestamp > timestampFin) {
-		array.splice(i, 1);
-	  }
+		// Converti la date en timestamp
+		var timestamp = new Date(array[i].date).getTime();
+
+		// Supprime l'objet si la date n'est pas comprise entre les deux timestamps
+		if (timestamp < timestampDebut || timestamp > timestampFin) {
+			array.splice(i, 1);
+		}
 	}
-  
+
 	array.sort(function (a, b) {
-	  return new Date(a.date) - new Date(b.date);
+		return new Date(a.date) - new Date(b.date);
 	});
-  }
+}
 
 // Fonction qui parse une date en format "jour mois année" avec le mois en lettres
 export function dateFormatDayMonthYear(date) {
-  let options = { year: "numeric", month: "long" };
-  let moisEtAnnee = date.toLocaleDateString("fr-FR", options);
+	let options = { day: "numeric", month: "long", year: "numeric" };
+	let dateStandard = new Intl.DateTimeFormat("fr-FR", options).format(date);
 
-  return moisEtAnnee;
+	return dateStandard;
 }
 
 // Fonction qui parse une date en format "mois année" avec le mois en lettres
 export function dateFormatMonthYear(date) {
   let options = { year: "numeric", month: "long" };
-  const moisEtAnnee = date.toLocaleDateString("fr-FR", options);
+  let moisEtAnnee = date.toLocaleDateString("fr-FR", options);
 
-  return moisEtAnnee;
+	return moisEtAnnee;
 }
 
 // Fonction qui calcule le pourcentage de sommeil profond par nuit pour miguel
 function pourcentagePhaseProfondParNuitMi(array) {
-  for (var i = 0; i < array.length; i++) {
-    array[i].pourcentagePhaseProfond =
-      (array[i].tempsSommeilProfond / 60 / array[i].dureeSommeil) * 100;
-  }
+	for (var i = 0; i < array.length; i++) {
+		array[i].pourcentagePhaseProfond =
+			(array[i].tempsSommeilProfond / 60 / array[i].dureeSommeil) * 100;
+	}
 }
 
 // Fetch, parse, trie et retourne les données de dataMiguel.csv
 let dataMiguel = d3
-  .csv("./dataMiguel.csv", function (d) {
-    return {
-      date: d.date || 0,
-      tempsSommeilProfond: parseInt(d.deepSleepTime) || 0,
-      tempsSommeilLeger: parseInt(d.shallowSleepTime) || 0,
-      tempsSommeilParadoxal: parseInt(d.REMTime) || 0,
-      nombreReveil: parseInt(d.wakeTime) || 0,
-      heureCoucher: d.start || 0,
-    };
-  })
-  .then(function (data) {
-    // Boucle sur les données pour donner la durée totale
-    // Insertion en tant que nouvelle propriété
-    for (var i = 0; i < data.length; i++) {
-      data[i].dureeSommeil =
-        (data[i].tempsSommeilProfond +
-          data[i].tempsSommeilLeger +
-          data[i].tempsSommeilParadoxal) /
-        60;
+	.csv("./dataMiguel.csv", function (d) {
+		return {
+			date: d.date || 0,
+			tempsSommeilProfond: parseInt(d.deepSleepTime) || 0,
+			tempsSommeilLeger: parseInt(d.shallowSleepTime) || 0,
+			tempsSommeilParadoxal: parseInt(d.REMTime) || 0,
+			nombreReveil: parseInt(d.wakeTime) || 0,
+			heureCoucher: d.start || 0,
+		};
+	})
+	.then(function (data) {
+		// Boucle sur les données pour donner la durée totale
+		// Insertion en tant que nouvelle propriété
+		for (var i = 0; i < data.length; i++) {
+			data[i].dureeSommeil =
+				(data[i].tempsSommeilProfond +
+					data[i].tempsSommeilLeger +
+					data[i].tempsSommeilParadoxal) /
+				60;
 
-      data[i].heureReveil = new Date(
-        new Date(data[i].heureCoucher).getTime() +
-          data[i].dureeSommeil * 3600000
-      );
-    }
+			data[i].heureReveil = new Date(
+				new Date(data[i].heureCoucher).getTime() + data[i].dureeSommeil * 3600000
+			);
+		}
 
-    triArrayDate(data);
-    pourcentagePhaseProfondParNuitMi(data);
-    console.log("dataMiguel");
-    console.log(data);
+		triArrayDate(data);
+		pourcentagePhaseProfondParNuitMi(data);
+		console.log("dataMiguel");
+		console.log(data);
 
-    return data;
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
+		return data;
+	})
+	.catch(function (error) {
+		console.log(error);
+	});
 
 // Fetch, parse, trie et retourne les données de dataCpap.csv
 let dataCpap = d3
-  .csv("./cpap-original.csv", function (d) {
-    return {
-      heureReveil: d.approximatecreationdatetime || 0,
-      date: d.keys_sort_key.replace("SLEEP_RECORD#", "") || 0,
-      evenementHeure: parseFloat(d.score_detail_ahi) || 0,
-      fuiteMoyenne: parseFloat(d.score_detail_leak_95_percentile) || 0,
-      dureeSommeil: parseFloat(d.usage_hours) || 0,
-    };
-  })
-  .then(function (data) {
-    for (var i = 0; i < data.length; i++) {
-      let heureReveilDate = new Date(data[i].heureReveil);
-      data[i].heureCoucher = new Date(
-        heureReveilDate.getTime() - data[i].dureeSommeil * 3600000
-      );
-    }
+	.csv("./cpap-original.csv", function (d) {
+		return {
+			heureReveil: d.approximatecreationdatetime || 0,
+			date: d.keys_sort_key.replace("SLEEP_RECORD#", "") || 0,
+			evenementHeure: parseFloat(d.score_detail_ahi) || 0,
+			fuiteMoyenne: parseFloat(d.score_detail_leak_95_percentile) || 0,
+			dureeSommeil: parseFloat(d.usage_hours) || 0,
+		};
+	})
+	.then(function (data) {
+		for (var i = 0; i < data.length; i++) {
+			let heureReveilDate = new Date(data[i].heureReveil);
+			data[i].heureCoucher = new Date(
+				heureReveilDate.getTime() - data[i].dureeSommeil * 3600000
+			);
+		}
 
-    triArrayDate(data);
+		triArrayDate(data);
 
-    console.log("dataCpap");
-    console.log(data);
+		console.log("dataCpap");
+		console.log(data);
 
-    return data;
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
+		return data;
+	})
+	.catch(function (error) {
+		console.log(error);
+	});
 
 // Fetch, parse, trie et retourne les données de dataCpap2023.csv
 let dataCpap2023 = d3
-  .csv("./cpap-original.csv", function (d) {
-    return {
-      heureReveil: d.approximatecreationdatetime || 0,
-      date: d.keys_sort_key.replace("SLEEP_RECORD#", "") || 0,
-      evenementHeure: parseFloat(d.score_detail_ahi) || 0,
-      fuiteMoyenne: parseFloat(d.score_detail_leak_95_percentile) || 0,
-      dureeSommeil: parseFloat(d.usage_hours) || 0,
-    };
-  })
-  .then(function (data) {
-    for (var i = 0; i < data.length; i++) {
-      let heureReveilDate = new Date(data[i].heureReveil);
-      data[i].heureCoucher = new Date(
-        heureReveilDate.getTime() - data[i].dureeSommeil * 3600000
-      );
-    }
+	.csv("./cpap-original.csv", function (d) {
+		return {
+			heureReveil: d.approximatecreationdatetime || 0,
+			date: d.keys_sort_key.replace("SLEEP_RECORD#", "") || 0,
+			evenementHeure: parseFloat(d.score_detail_ahi) || 0,
+			fuiteMoyenne: parseFloat(d.score_detail_leak_95_percentile) || 0,
+			dureeSommeil: parseFloat(d.usage_hours) || 0,
+		};
+	})
+	.then(function (data) {
+		for (var i = 0; i < data.length; i++) {
+			let heureReveilDate = new Date(data[i].heureReveil);
+			data[i].heureCoucher = new Date(
+				heureReveilDate.getTime() - data[i].dureeSommeil * 3600000
+			);
+		}
 
-    triArrayDate2023(data);
+		triArrayDate2023(data);
 
-    console.log("dataCpapYear");
-    console.log(data);
+		console.log("dataCpapYear");
+		console.log(data);
 
-    return data;
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
+		return data;
+	})
+	.catch(function (error) {
+		console.log(error);
+	});
 
 // Fetch, parse, trie et retourne les données de dataAppleWatch.csv
 let dataAppleWatch = d3
@@ -268,10 +267,10 @@ let dataAppleWatch = d3
     console.log("dataAppleWatch");
     console.log(tabFinal);
 
-    return tabFinal;
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
+		return tabFinal;
+	})
+	.catch(function (error) {
+		console.log(error);
+	});
 
 export { dataMiguel, dataCpap, dataCpap2023, dataAppleWatch };

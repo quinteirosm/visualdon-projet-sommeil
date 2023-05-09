@@ -336,14 +336,8 @@ const bar = (name, donnees) => {
 			.range([0, width])
 			.domain(
 				data.map((d) => {
-					// let newDate = new Date(d.date);
-					// console.log(d.date);
-
-					// let jour = newDate.getDate();
-					// let mois = newDate.getMonth() + 1;
-					// console.log(jour);
-					// console.log(mois);
-					// return `${jour}.${mois}`;
+					// Si je mets date à la place de d.date, cela ne fonctionne pas
+					let date = dateFormatDayMonthYear(new Date(d.date));
 					return d.date;
 				})
 			)
@@ -506,9 +500,9 @@ const circular = (name, donnees) => {
 	});
 };
 
-//circular("#circular_chart", dataCpap);
+circular("#circular_chart", dataCpap);
 
-circular("#circular_chart", dataCpap2023);
+// circular("#circular_chart", dataCpap2023);
 
 /*
  *
