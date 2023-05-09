@@ -12,11 +12,8 @@ import {
 
 const nbCols = 5; // Nombre de colonnes
 
-// const width = 600;
-// const height = 400;
-
 const margin = { top: 30, right: 30, bottom: 30, left: 30 },
-	width = 600,
+	width = 500,
 	height = 500;
 
 const rectWidth = width / 5;
@@ -26,12 +23,8 @@ const couleurMin = "#FFFFFF";
 const couleurMax = "#0154C2";
 
 /*
- *
- *
  * HEATMAP
- *
- *
- **/
+ */
 
 const heatmapProfondPatrick = (name, donnees) => {
 	const dates = [];
@@ -49,31 +42,39 @@ const heatmapProfondPatrick = (name, donnees) => {
 		// console.log(dataRecueAppleWatch);
 
 		let tableauCopie = [...dataRecueAppleWatch];
-		// for (let i = 0; i <= 7; i++) {
-		// 	tableauCopie.unshift({ tempsSommeilProfond: 1 });
-		// }
 
-		// tableauCopie.push({ tempsSommeilProfond: 1 });
-
-		console.log("Tentative d'avoir tout dans la même boucle");
 		dataRecueCpap.forEach((element, index) => {
-			const num2 = tableauCopie[index].tempsSommeilProfond;
-			// console.log(element.dureeSommeil * 60, num2);
+			let tempsProfond = tableauCopie[index].tempsSommeilProfond
+				? tableauCopie[index].tempsSommeilProfond
+				: 1;
+			let dureeNuit = element.dureeSommeil;
 
-			// console.log(num2);
+			let pourcentageProfondAppleWatchEtNuitCpap = 0;
 
-			let pourcentageProfondAppleWatchEtNuitCpap =
-				((tableauCopie[index].tempsSommeilProfond
-					? tableauCopie[index].tempsSommeilProfond
-					: 1) /
-					60 /
-					(element.dureeSommeil ? element.dureeSommeil : 1)) *
-				100;
+			if (!tempsProfond) {
+				tempsProfond = 1;
+			}
 
-			console.log(pourcentageProfondAppleWatchEtNuitCpap);
+			if (!dureeNuit) {
+				dureeNuit = 1;
+			}
+
+			console.log("tempsProfond : " + tempsProfond);
+			console.log("dureeNuit : " + dureeNuit);
+
+			if (tempsProfond == 1 || dureeNuit == 1) {
+				pourcentageProfondAppleWatchEtNuitCpap = 0;
+			} else {
+				pourcentageProfondAppleWatchEtNuitCpap =
+					(tempsProfond / (dureeNuit * 60)) * 100;
+			}
+
+			console.log("pourcentage : " + pourcentageProfondAppleWatchEtNuitCpap);
 
 			dates.push(element.date);
 			values.push(pourcentageProfondAppleWatchEtNuitCpap);
+
+			// console.log(pourcentageProfondAppleWatchEtNuitCpap);
 
 			if (pourcentageProfondAppleWatchEtNuitCpap > maxValue) {
 				maxValue = pourcentageProfondAppleWatchEtNuitCpap;
@@ -298,17 +299,6 @@ const heatmapProfondMiguel = (name, donnees) => {
 heatmapProfondMiguel(".heatmap_profond_miguel", dataMiguel);
 
 /*
- *
- *
- * FIN HEATMAP
- *
- *
- **/
-
-/**
- *
- *
- *
  * BAR CHART
  */
 
@@ -318,22 +308,29 @@ const bar = (name, donnees) => {
 		.select(name)
 		.append("svg")
 		.attr("width", width + margin.left + margin.right)
-		.attr("height", height + margin.top + margin.bottom)
+		.attr("height", height + 100)
+		// .attr("width", width)
+		// .attr("height", height)
 		.append("g")
 		.attr("transform", `translate(${margin.left},${margin.top})`);
 
-	// Parse the Data
-	// d3
-	// 	.csv(
-	// 		"https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/7_OneCatOneNum_header.csv"
-	// 	)
 	donnees.then(function (data) {
-		/* 		console.log(data);
-		 */
+		let maxValue = 0;
+		let minValue = 100;
+
+		data.forEach((element) => {
+			if (element.evenementHeure > maxValue) {
+				maxValue = element.evenementHeure;
+			}
+			if (element.evenementHeure < minValue) {
+				minValue = element.evenementHeure;
+			}
+		});
+
 		// X axis
 		const x = d3
 			.scaleBand()
-			.range([0, width])
+			.range([0, width - margin.left - margin.right])
 			.domain(
 				data.map((d) => {
 					// Si je mets date à la place de d.date, cela ne fonctionne pas
@@ -351,7 +348,7 @@ const bar = (name, donnees) => {
 			.style("text-anchor", "end");
 
 		// Add Y axis
-		const y = d3.scaleLinear().domain([0, 7]).range([height, 0]);
+		const y = d3.scaleLinear().domain([0, maxValue]).range([height, 0]);
 		svg.append("g").call(d3.axisLeft(y));
 
 		// Bars
@@ -381,20 +378,9 @@ const bar = (name, donnees) => {
 
 bar("#bar_chart", dataCpap);
 
-/**
- * FIN BAR CHART
- *
- *
- *
- * */
-
 /*
- *
- *
  * GRAPH CIRCULAIRE
- *
- *
- **/
+ */
 
 // set the dimensions and margins of the graph
 
@@ -422,8 +408,6 @@ const circular = (name, donnees) => {
 	donnees.then((data) => {
 		let maxValue = 0;
 		let minValue = 100;
-
-		console.log(data);
 
 		data.forEach((element) => {
 			if (element.fuiteMoyenne > maxValue) {
@@ -487,7 +471,6 @@ const circular = (name, donnees) => {
 			.append("text")
 			.text(function (d) {
 				let date = dateFormatDayMonthYear(new Date(d.date));
-				console.log(date);
 				return date;
 			})
 			.attr("transform", function (d) {
@@ -503,23 +486,9 @@ const circular = (name, donnees) => {
 circular("#circular_chart", dataCpap);
 
 // circular("#circular_chart", dataCpap2023);
-
 /*
- *
- *
- * FIN GRAPH CIRCULAIRE
- *
- *
- * */
-
-/*
- *
- *
  * LIGNES
- *
- *
- *
- * */
+ */
 
 const line = (name, donnees) => {
 	// append the svg object to the body of the page
@@ -605,11 +574,3 @@ const line = (name, donnees) => {
 };
 
 line("#line_chart");
-
-/*
- *
- *
- * FIN LIGNES
- *
- *
- * */
