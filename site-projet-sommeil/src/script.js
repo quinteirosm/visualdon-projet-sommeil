@@ -106,56 +106,6 @@ let dataAppleWatch = d3
 		const data = [];
 		// Création d'un objet pour chaque record, et push dans l'array data
 		for (let i = 0; i < records.length; i++) {
-<<<<<<< HEAD
-				const obj = {
-					date: new Date(records[i].getAttribute("creationDate")),
-					valeur: records[i].getAttribute("value"),
-					dureeSommeil: (new Date(records[i].getAttribute("endDate")).getTime() - new Date(records[i].getAttribute("startDate")).getTime())/60000,
-				}
-			data.push(obj);
-		};
-		triArrayDate(data)
-
-
-		let dateSave
-		let obj = {}
-		let tabFinal = []
-		for (let i = 0; i < data.length; i++) {
-			if(i==0){
-				dateSave = data[i].date;
-				obj = {
-					date: data[i].date,
-					tempsSommeilLeger: data[i].valeur=="HKCategoryValueSleepAnalysisAsleepCore"?data[i].dureeSommeil:0,
-					tempsSommeilParadoxal: data[i].valeur=="HKCategoryValueSleepAnalysisAsleepREM"?data[i].dureeSommeil:0,
-					tempsSommeilProfond: data[i].valeur=="HKCategoryValueSleepAnalysisAsleepDeep"?data[i].dureeSommeil:0,
-					duree:0,
-				}
-			}
-			if(dateSave.getTime()!=data[i].date.getTime()){
-				console.log('nouveau jour')
-				dateSave = data[i].date;
-				obj.duree = (obj.tempsSommeilLeger+obj.tempsSommeilParadoxal+obj.tempsSommeilProfond)/60
-				tabFinal.push(obj)
-				obj = {
-					date: data[i].date,
-					tempsSommeilLeger: data[i].valeur=="HKCategoryValueSleepAnalysisAsleepCore"?data[i].dureeSommeil:0,
-					tempsSommeilParadoxal: data[i].valeur=="HKCategoryValueSleepAnalysisAsleepREM"?data[i].dureeSommeil:0,
-					tempsSommeilProfond: data[i].valeur=="HKCategoryValueSleepAnalysisAsleepDeep"?data[i].dureeSommeil:0,
-				}
-			}else{
-				if(i!=0){
-					obj.tempsSommeilLeger+= data[i].valeur=="HKCategoryValueSleepAnalysisAsleepCore"?data[i].dureeSommeil:0
-					obj.tempsSommeilParadoxal+= data[i].valeur=="HKCategoryValueSleepAnalysisAsleepREM"?data[i].dureeSommeil:0
-					obj.tempsSommeilProfond+= data[i].valeur=="HKCategoryValueSleepAnalysisAsleepDeep"?data[i].dureeSommeil:0
-				}
-			}
-			if(i==data.length-1){
-				tabFinal.push(obj)
-			}
-		};
-		console.log("dataAppleWatch");
-		console.log(tabFinal)
-=======
 			const obj = {
 				date: records[i].getAttribute("creationDate"),
 				dateDeDebut: records[i].getAttribute("startDate"),
@@ -171,7 +121,6 @@ let dataAppleWatch = d3
 		triArrayDate(data);
 		console.log("dataAppleWatch");
 		console.log(data);
->>>>>>> 5949ccc2698cfd1e8226e0f80100858eb92f68f8
 
 		return data;
 	})
