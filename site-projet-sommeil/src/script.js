@@ -140,7 +140,6 @@ let dataAppleWatch = d3
 				};
 			}
 			if (dateSave.getTime() != data[i].date.getTime()) {
-				console.log("nouveau jour");
 				dateSave = data[i].date;
 				obj.duree =
 					(obj.tempsSommeilLeger +
