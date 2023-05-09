@@ -52,15 +52,15 @@ export function triArrayDate2023(array) {
 
 // Fonction qui parse une date en format "jour mois année" avec le mois en lettres
 export function dateFormatDayMonthYear(date) {
-  let options = { month: "long" };
-  let moisEnLettres = new Intl.DateTimeFormat("fr-FR", options).format(date);
+  let options = { year: "numeric", month: "long" };
+  let moisEtAnnee = date.toLocaleDateString("fr-FR", options);
 
-  return moisEnLettres;
+  return moisEtAnnee;
 }
 
 // Fonction qui parse une date en format "mois année" avec le mois en lettres
 export function dateFormatMonthYear(date) {
-  const options = { year: "numeric", month: "long" };
+  let options = { year: "numeric", month: "long" };
   const moisEtAnnee = date.toLocaleDateString("fr-FR", options);
 
   return moisEtAnnee;
@@ -187,7 +187,7 @@ let dataAppleWatch = d3
         dureeSommeil:
           (new Date(records[i].getAttribute("endDate")).getTime() -
             new Date(records[i].getAttribute("startDate")).getTime()) /
-            60000 || 0,
+            60000 || 1,
       };
       data.push(obj);
     }
@@ -202,15 +202,15 @@ let dataAppleWatch = d3
           tempsSommeilLeger:
             data[i].valeur == "HKCategoryValueSleepAnalysisAsleepCore"
               ? data[i].dureeSommeil
-              : 0,
+              : 1,
           tempsSommeilParadoxal:
             data[i].valeur == "HKCategoryValueSleepAnalysisAsleepREM"
               ? data[i].dureeSommeil
-              : 0,
+              : 1,
           tempsSommeilProfond:
             data[i].valeur == "HKCategoryValueSleepAnalysisAsleepDeep"
               ? data[i].dureeSommeil
-              : 0,
+              : 1,
           duree: 0,
         };
       }
@@ -227,30 +227,30 @@ let dataAppleWatch = d3
           tempsSommeilLeger:
             data[i].valeur == "HKCategoryValueSleepAnalysisAsleepCore"
               ? data[i].dureeSommeil
-              : 0,
+              : 1,
           tempsSommeilParadoxal:
             data[i].valeur == "HKCategoryValueSleepAnalysisAsleepREM"
               ? data[i].dureeSommeil
-              : 0,
+              : 1,
           tempsSommeilProfond:
             data[i].valeur == "HKCategoryValueSleepAnalysisAsleepDeep"
               ? data[i].dureeSommeil
-              : 0,
+              : 1,
         };
       } else {
         if (i != 0) {
           obj.tempsSommeilLeger +=
             data[i].valeur == "HKCategoryValueSleepAnalysisAsleepCore"
               ? data[i].dureeSommeil
-              : 0;
+              : 1;
           obj.tempsSommeilParadoxal +=
             data[i].valeur == "HKCategoryValueSleepAnalysisAsleepREM"
               ? data[i].dureeSommeil
-              : 0;
+              : 1;
           obj.tempsSommeilProfond +=
             data[i].valeur == "HKCategoryValueSleepAnalysisAsleepDeep"
               ? data[i].dureeSommeil
-              : 0;
+              : 1;
         }
       }
       if (i == data.length - 1) {
