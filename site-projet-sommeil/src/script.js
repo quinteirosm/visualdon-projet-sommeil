@@ -117,6 +117,8 @@ let dataAppleWatch = d3
 			data.push(obj);
 		}
 		triArrayDate(data);
+		console.log("dataAppleWatch");
+		console.log(data);
 
 		let dateSave;
 		let obj = {};
@@ -142,6 +144,7 @@ let dataAppleWatch = d3
 				};
 			}
 			if (dateSave.getTime() != data[i].date.getTime()) {
+				console.log("nouveau jour");
 				dateSave = data[i].date;
 				obj.duree =
 					(obj.tempsSommeilLeger +

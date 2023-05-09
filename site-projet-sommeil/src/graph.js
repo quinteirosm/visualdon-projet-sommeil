@@ -173,16 +173,38 @@ const heatmapProfondPatrick = (name, donnees) => {
 		// console.log(dataRecueCpap);
 		// console.log(dataRecueAppleWatch);
 
-		dataRecueCpap.forEach((element) => {
-			// console.log(element);
-			dates.push(element.heureReveil);
-			values.push(element.pourcentagePhaseProfond);
+		let tableauCopie = [...dataRecueAppleWatch];
+		for (let i = 0; i <= 7; i++) {
+			tableauCopie.unshift({ tempsSommeilProfond: 1 });
+		}
 
-			if (element.pourcentagePhaseProfond > maxValue) {
-				maxValue = element.pourcentagePhaseProfond;
+		tableauCopie.push({ tempsSommeilProfond: 1 });
+
+		console.log("Tentative d'avoir tout dans la même boucle");
+		dataRecueCpap.forEach((element, index) => {
+			const num2 = tableauCopie[index].tempsSommeilProfond;
+			// console.log(element.dureeSommeil * 60, num2);
+
+			// console.log(num2);
+
+			let pourcentageProfondAppleWatchEtNuitCpap =
+				((tableauCopie[index].tempsSommeilProfond
+					? tableauCopie[index].tempsSommeilProfond
+					: 1) /
+					60 /
+					(element.dureeSommeil ? element.dureeSommeil : 1)) *
+				100;
+
+			console.log(pourcentageProfondAppleWatchEtNuitCpap);
+
+			dates.push(element.date);
+			values.push(pourcentageProfondAppleWatchEtNuitCpap);
+
+			if (pourcentageProfondAppleWatchEtNuitCpap > maxValue) {
+				maxValue = pourcentageProfondAppleWatchEtNuitCpap;
 			}
-			if (element.pourcentagePhaseProfond < minValue) {
-				minValue = element.pourcentagePhaseProfond;
+			if (pourcentageProfondAppleWatchEtNuitCpap < minValue) {
+				minValue = pourcentageProfondAppleWatchEtNuitCpap;
 			}
 		});
 
