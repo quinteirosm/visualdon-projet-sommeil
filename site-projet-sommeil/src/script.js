@@ -116,10 +116,6 @@ let dataAppleWatch = d3
 			};
 			data.push(obj);
 		}
-		triArrayDate(data);
-		console.log("dataAppleWatch");
-		console.log(data);
-
 		let dateSave;
 		let obj = {};
 		let tabFinal = [];
@@ -187,6 +183,8 @@ let dataAppleWatch = d3
 				tabFinal.push(obj);
 			}
 		}
+		tabFinal.unshift(0,0,0,0,0,0,0)
+		triArrayDate(tabFinal);
 		console.log("dataAppleWatch");
 		console.log(tabFinal);
 
