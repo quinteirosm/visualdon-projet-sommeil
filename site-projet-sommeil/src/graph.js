@@ -174,11 +174,11 @@ const heatmapProfondPatrick = (name, donnees) => {
 		// console.log(dataRecueAppleWatch);
 
 		let tableauCopie = [...dataRecueAppleWatch];
-		for (let i = 0; i <= 7; i++) {
-			tableauCopie.unshift({ tempsSommeilProfond: 1 });
-		}
+		// for (let i = 0; i <= 7; i++) {
+		// 	tableauCopie.unshift({ tempsSommeilProfond: 1 });
+		// }
 
-		tableauCopie.push({ tempsSommeilProfond: 1 });
+		// tableauCopie.push({ tempsSommeilProfond: 1 });
 
 		console.log("Tentative d'avoir tout dans la même boucle");
 		dataRecueCpap.forEach((element, index) => {
@@ -558,76 +558,74 @@ const circular = (name, donnees) => {
 			`translate(${width / 2 + margin.left}, ${height / 2 + margin3.top})`
 		);
 
-	d3
-		.csv(
-			"https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/7_OneCatOneNum.csv"
-		)
-		.then(function (data) {
-			// Scales
-			const x = d3
-				.scaleBand()
-				.range([0, 2 * Math.PI]) // X axis goes from 0 to 2pi = all around the circle. If I stop at 1Pi, it will be around a half circle
-				.align(0) // This does nothing
-				.domain(data.map((d) => d.Country)); // The domain of the X axis is the list of states.
-			const y = d3
-				.scaleRadial()
-				.range([innerRadius, outerRadius]) // Domain will be define later.
-				.domain([0, 14000]); // Domain of Y is from 0 to the max seen in the data
+	// d3
+	// 	.csv(
+	// 		"https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/7_OneCatOneNum.csv"
+	// 	)
+	donnees.then((data) => {
+		// Scales
+		const x = d3
+			.scaleBand()
+			.range([0, 2 * Math.PI]) // X axis goes from 0 to 2pi = all around the circle. If I stop at 1Pi, it will be around a half circle
+			.align(0) // This does nothing
+			.domain(data.map((d) => d.date)); // The domain of the X axis is the list of states.
+		const y = d3
+			.scaleRadial()
+			.range([innerRadius, outerRadius]) // Domain will be define later.
+			.domain([0, 14000]); // Domain of Y is from 0 to the max seen in the data
 
-			// Add the bars
-			svg3
-				.append("g")
-				.selectAll("path")
-				.data(data)
-				.join("path")
-				.attr("fill", "#69b3a2")
-				.attr(
-					"d",
-					d3
-						.arc() // imagine your doing a part of a donut plot
-						.innerRadius(innerRadius)
-						.outerRadius((d) => y(d["Value"]))
-						.startAngle((d) => x(d.Country))
-						.endAngle((d) => x(d.Country) + x.bandwidth())
-						.padAngle(0.01)
-						.padRadius(innerRadius)
+		// Add the bars
+		svg3
+			.append("g")
+			.selectAll("path")
+			.data(data)
+			.join("path")
+			.attr("fill", couleurMax)
+			.attr(
+				"d",
+				d3
+					.arc() // imagine your doing a part of a donut plot
+					.innerRadius(innerRadius)
+					.outerRadius((d) => y(d["evenementHeure"]))
+					.startAngle((d) => x(d.date))
+					.endAngle((d) => x(d.date) + x.bandwidth())
+					.padAngle(0.01)
+					.padRadius(innerRadius)
+			);
+
+		// Add the labels
+		svg3
+			.append("g")
+			.selectAll("g")
+			.data(data)
+			.join("g")
+			.attr("text-anchor", function (d) {
+				return (x(d.date) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI
+					? "end"
+					: "start";
+			})
+			.attr("transform", function (d) {
+				return (
+					"rotate(" +
+					(((x(d.date) + x.bandwidth() / 2) * 180) / Math.PI - 90) +
+					")" +
+					"translate(" +
+					(y(d["Value"]) + 10) +
+					",0)"
 				);
-
-			// Add the labels
-			svg3
-				.append("g")
-				.selectAll("g")
-				.data(data)
-				.join("g")
-				.attr("text-anchor", function (d) {
-					return (x(d.Country) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) <
-						Math.PI
-						? "end"
-						: "start";
-				})
-				.attr("transform", function (d) {
-					return (
-						"rotate(" +
-						(((x(d.Country) + x.bandwidth() / 2) * 180) / Math.PI - 90) +
-						")" +
-						"translate(" +
-						(y(d["Value"]) + 10) +
-						",0)"
-					);
-				})
-				.append("text")
-				.text(function (d) {
-					return d.Country;
-				})
-				.attr("transform", function (d) {
-					return (x(d.Country) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) <
-						Math.PI
-						? "rotate(180)"
-						: "rotate(0)";
-				})
-				.style("font-size", "11px")
-				.attr("alignment-baseline", "middle");
-		});
+			})
+			.append("text")
+			.text(function (d) {
+				return d.date;
+			})
+			.attr("transform", function (d) {
+				return (x(d.date) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI
+					? "rotate(180)"
+					: "rotate(0)";
+			})
+			.style("font-size", "11px")
+			.attr("alignment-baseline", "middle");
+	});
 };
 
 circular("#circular_chart");
