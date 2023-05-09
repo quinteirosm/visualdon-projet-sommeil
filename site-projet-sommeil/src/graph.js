@@ -4,15 +4,16 @@ import * as d3 from "d3";
 
 import { dataMiguel, dataCpap, dataAppleWatch } from "./script.js";
 
-// Dimensions de la heatmap
-const margin = {
-		top: 30,
-		right: 30,
-		bottom: 30,
-		left: 30,
-	},
-	width = 450 - margin.left - margin.right,
-	height = 450 - margin.top - margin.bottom;
+const nbCols = 5; // Nombre de colonnes
+const rectWidth = 100;
+const rectHeight = 67;
+
+// const width = 600;
+// const height = 400;
+
+const margin = { top: 30, right: 30, bottom: 30, left: 30 },
+	width = 600,
+	height = 400;
 
 /*
  *
@@ -22,141 +23,381 @@ const margin = {
  *
  **/
 
-const heatmap = (name, donnees, commentaire) => {
-	// append the svg object to the body of the page
-	const svg = d3
-		.select(name)
-		.append("svg")
-		.attr("width", width + margin.left + margin.right)
-		.attr("height", height + margin.top + margin.bottom)
-		.append("g")
-		.attr("transform", `translate(${margin.left}, ${margin.top})`);
+// const heatmap = (name, donnees, commentaire) => {
+// 	// append the svg object to the body of the page
+// 	const svg = d3
+// 		.select(name)
+// 		.append("svg")
+// 		.attr("width", width + margin.left + margin.right)
+// 		.attr("height", height + margin.top + margin.bottom)
+// 		.append("g")
+// 		.attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-	//Read the data
-	d3
-		.csv(
-			"https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv"
-		)
+// 	//Read the data
+// 	d3
+// 		.csv(
+// 			"https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv"
+// 		)
 
-		.then(function (data) {
-			// Labels of row and columns -> unique identifier of the column called 'group' and 'variable'
-			const myGroups = Array.from(new Set(data.map((d) => d.group)));
-			const myVars = Array.from(new Set(data.map((d) => d.variable)));
+// 		.then(function (data) {
+// 			// Labels of row and columns -> unique identifier of the column called 'group' and 'variable'
+// 			const myGroups = Array.from(new Set(data.map((d) => d.group)));
+// 			const myVars = Array.from(new Set(data.map((d) => d.variable)));
 
-			// Build X scales and axis:
-			const x = d3.scaleBand().range([0, width]).domain(myGroups).padding(0.05);
-			svg
-				.append("g")
-				.style("font-size", 15)
-				.attr("transform", `translate(0, ${height})`)
-				.call(d3.axisBottom(x).tickSize(0))
-				.select(".domain")
-				.remove();
+// 			// Build X scales and axis:
+// 			const x = d3.scaleBand().range([0, width]).domain(myGroups).padding(0.05);
+// 			svg
+// 				.append("g")
+// 				.style("font-size", 15)
+// 				.attr("transform", `translate(0, ${height})`)
+// 				.call(d3.axisBottom(x).tickSize(0))
+// 				.select(".domain")
+// 				.remove();
 
-			// Build Y scales and axis:
-			const y = d3.scaleBand().range([height, 0]).domain(myVars).padding(0.05);
-			svg
-				.append("g")
-				.style("font-size", 15)
-				.call(d3.axisLeft(y).tickSize(0))
-				.select(".domain")
-				.remove();
+// 			// Build Y scales and axis:
+// 			const y = d3.scaleBand().range([height, 0]).domain(myVars).padding(0.05);
+// 			svg
+// 				.append("g")
+// 				.style("font-size", 15)
+// 				.call(d3.axisLeft(y).tickSize(0))
+// 				.select(".domain")
+// 				.remove();
 
-			// Build color scale
-			const myColor = d3
-				.scaleSequential()
-				.interpolator(d3.interpolateInferno)
-				.domain([1, 100]);
+// 			// Build color scale
+// 			const myColor = d3
+// 				.scaleSequential()
+// 				.interpolator(d3.interpolateInferno)
+// 				.domain([1, 100]);
 
-			// create a tooltip
-			const tooltip = d3
+// 			// create a tooltip
+// 			const tooltip = d3
+// 				.select(name)
+// 				.append("div")
+// 				.style("opacity", 0)
+// 				.attr("class", "tooltip")
+// 				.style("background-color", "white")
+// 				.style("border", "solid")
+// 				.style("border-width", "2px")
+// 				.style("border-radius", "5px")
+// 				.style("padding", "5px");
+
+// 			// Three function that change the tooltip when user hover / move / leave a cell
+// 			const mouseover = function (event, d) {
+// 				tooltip.style("opacity", 1);
+// 				d3.select(this).style("stroke", "black").style("opacity", 1);
+// 			};
+// 			const mousemove = function (event, d) {
+// 				tooltip
+// 					.html("The exact value of<br>this cell is: " + d.value)
+// 					.style("left", event.x / 2 + "px")
+// 					.style("top", event.y / 2 + "px");
+// 			};
+// 			const mouseleave = function (event, d) {
+// 				tooltip.style("opacity", 0);
+// 				d3.select(this).style("stroke", "none").style("opacity", 0.8);
+// 			};
+
+// 			// add the squares
+// 			svg
+// 				.selectAll()
+// 				.data(data, function (d) {
+// 					return d.group + ":" + d.variable;
+// 				})
+// 				.join("rect")
+// 				.attr("x", function (d) {
+// 					return x(d.group);
+// 				})
+// 				.attr("y", function (d) {
+// 					return y(d.variable);
+// 				})
+// 				.attr("rx", 4)
+// 				.attr("ry", 4)
+// 				.attr("width", x.bandwidth())
+// 				.attr("height", y.bandwidth())
+// 				.style("fill", function (d) {
+// 					return myColor(d.value);
+// 				})
+// 				.style("stroke-width", 4)
+// 				.style("stroke", "none")
+// 				.style("opacity", 0.8)
+// 				.on("mouseover", mouseover)
+// 				.on("mousemove", mousemove)
+// 				.on("mouseleave", mouseleave);
+// 		});
+
+// 	// Add title to graph
+// 	svg
+// 		.append("text")
+// 		.attr("x", 0)
+// 		.attr("y", -50)
+// 		.attr("text-anchor", "left")
+// 		.style("font-size", "22px")
+// 		.text("A d3.js heatmap");
+
+// 	// Add subtitle to graph
+// 	svg
+// 		.append("text")
+// 		.attr("x", 0)
+// 		.attr("y", -20)
+// 		.attr("text-anchor", "left")
+// 		.style("font-size", "14px")
+// 		.style("fill", "grey")
+// 		.style("max-width", 400)
+// 		.text(commentaire);
+// };
+
+// dataCpap.then((data) => {
+// 	console.log("essai HEATMAP CPAP PATRICK");
+// 	data.forEach((element) => {
+// 		console.log(element.evenementHeure + " " + element.date);
+// 	});
+// });
+
+// heatmap(".heatmap_profond_patrick");
+
+const heatmapProfondPatrick = (name, donnees) => {
+	const dates = [];
+	const values = [];
+
+	Promise.all([dataCpap, dataAppleWatch]).then(
+		(dataRecueCpap, dataRecueAppleWatch) => {
+			let maxValue = 0;
+			let minValue = 100;
+
+			/**
+			 * dataCpap[i].tempsSommeil/dataCpap[i].tempsSommeilProfond *100
+			 */
+
+			console.log(dataRecueCpap);
+			console.log(dataRecueAppleWatch);
+
+			dataRecueCpap.forEach((element) => {
+				// console.log(element);
+				dates.push(element.heureReveil);
+				values.push(element.pourcentagePhaseProfond);
+
+				if (element.pourcentagePhaseProfond > maxValue) {
+					maxValue = element.pourcentagePhaseProfond;
+				}
+				if (element.pourcentagePhaseProfond < minValue) {
+					minValue = element.pourcentagePhaseProfond;
+				}
+			});
+
+			const xScale = d3
+				.scaleTime()
+				.domain([new Date(dates[0]), new Date(dates[dates.length - 1])])
+				.range([0, width]);
+
+			const colorScale = d3
+				.scaleLinear()
+				.domain([minValue, maxValue])
+				.range(["#00FFFF", "#000000"]);
+
+			let compteur = 0;
+			const data = [];
+			for (let i = 0; i < dates.length; i++) {
+				data[i] = [];
+				for (let j = 0; j < nbCols; j++) {
+					data[i][j] = values[compteur];
+					compteur++;
+					// data[i][j] = Math.floor(Math.random() * 11); // Remplacer par vos propres données
+				}
+			}
+
+			// const rectWidth = width / (dates.length * nbCols);
+			// const rectHeight = height / nbCols;
+
+			// const rectWidth = 50;
+			// const rectHeight = 50;
+
+			const svg = d3
 				.select(name)
-				.append("div")
-				.style("opacity", 0)
-				.attr("class", "tooltip")
-				.style("background-color", "white")
-				.style("border", "solid")
-				.style("border-width", "2px")
-				.style("border-radius", "5px")
-				.style("padding", "5px");
+				.append("svg")
+				.attr("width", width)
+				.attr("height", height);
 
-			// Three function that change the tooltip when user hover / move / leave a cell
-			const mouseover = function (event, d) {
-				tooltip.style("opacity", 1);
-				d3.select(this).style("stroke", "black").style("opacity", 1);
-			};
-			const mousemove = function (event, d) {
-				tooltip
-					.html("The exact value of<br>this cell is: " + d.value)
-					.style("left", event.x / 2 + "px")
-					.style("top", event.y / 2 + "px");
-			};
-			const mouseleave = function (event, d) {
-				tooltip.style("opacity", 0);
-				d3.select(this).style("stroke", "none").style("opacity", 0.8);
-			};
+			const rows = svg
+				.selectAll("g")
+				.data(data)
+				.enter()
+				.append("g")
+				.attr("transform", (d, i) => `translate(0, ${i * rectHeight})`);
 
-			// add the squares
-			svg
-				.selectAll()
-				.data(data, function (d) {
-					return d.group + ":" + d.variable;
-				})
-				.join("rect")
-				.attr("x", function (d) {
-					return x(d.group);
-				})
-				.attr("y", function (d) {
-					return y(d.variable);
-				})
-				.attr("rx", 4)
-				.attr("ry", 4)
-				.attr("width", x.bandwidth())
-				.attr("height", y.bandwidth())
-				.style("fill", function (d) {
-					return myColor(d.value);
-				})
-				.style("stroke-width", 4)
-				.style("stroke", "none")
-				.style("opacity", 0.8)
-				.on("mouseover", mouseover)
-				.on("mousemove", mousemove)
-				.on("mouseleave", mouseleave);
-		});
-
-	// Add title to graph
-	svg
-		.append("text")
-		.attr("x", 0)
-		.attr("y", -50)
-		.attr("text-anchor", "left")
-		.style("font-size", "22px")
-		.text("A d3.js heatmap");
-
-	// Add subtitle to graph
-	svg
-		.append("text")
-		.attr("x", 0)
-		.attr("y", -20)
-		.attr("text-anchor", "left")
-		.style("font-size", "14px")
-		.style("fill", "grey")
-		.style("max-width", 400)
-		.text(commentaire);
+			const rects = rows
+				.selectAll("rect")
+				.data((d) => d)
+				.enter()
+				.append("rect")
+				.attr(
+					"x",
+					(d, i) =>
+						(i % nbCols) * rectWidth +
+						Math.floor(i / nbCols) * dates.length * rectWidth
+				)
+				.attr("y", (d, i) => Math.floor(i / nbCols) * rectHeight)
+				.attr("width", rectWidth)
+				.attr("height", rectHeight)
+				.attr("fill", (d) => colorScale(d));
+		}
+	);
 };
 
-dataCpap.then((data) => {
-	console.log("essai HEATMAP CPAP PATRICK");
-	data.forEach((element) => {
-		console.log(element.evenementHeure + " " + element.date);
+heatmapProfondPatrick(".heatmap_profond_patrick", dataAppleWatch);
+
+const heatmapApneePatrick = (name, donnees) => {
+	const dates = [];
+	const values = [];
+
+	donnees.then((dataRecue) => {
+		let maxValue = 0;
+		let minValue = 100;
+
+		dataRecue.forEach((element) => {
+			dates.push(element.date);
+			values.push(element.evenementHeure);
+
+			if (element.evenementHeure > maxValue) {
+				maxValue = element.evenementHeure;
+			}
+			if (element.evenementHeure < minValue) {
+				minValue = element.evenementHeure;
+			}
+		});
+
+		const xScale = d3
+			.scaleTime()
+			.domain([new Date(dates[0]), new Date(dates[dates.length - 1])])
+			.range([0, width]);
+
+		const colorScale = d3
+			.scaleLinear()
+			.domain([minValue, maxValue])
+			.range(["#00FFFF", "#000000"]);
+
+		let compteur = 0;
+		const data = [];
+		for (let i = 0; i < dates.length; i++) {
+			data[i] = [];
+			for (let j = 0; j < nbCols; j++) {
+				data[i][j] = values[compteur];
+				compteur++;
+				// data[i][j] = Math.floor(Math.random() * 11); // Remplacer par vos propres données
+			}
+		}
+
+		const svg = d3
+			.select(name)
+			.append("svg")
+			.attr("width", width)
+			.attr("height", height);
+
+		const rows = svg
+			.selectAll("g")
+			.data(data)
+			.enter()
+			.append("g")
+			.attr("transform", (d, i) => `translate(0, ${i * rectHeight})`);
+
+		const rects = rows
+			.selectAll("rect")
+			.data((d) => d)
+			.enter()
+			.append("rect")
+			.attr(
+				"x",
+				(d, i) =>
+					(i % nbCols) * rectWidth +
+					Math.floor(i / nbCols) * dates.length * rectWidth
+			)
+			.attr("y", (d, i) => Math.floor(i / nbCols) * rectHeight)
+			.attr("width", rectWidth)
+			.attr("height", rectHeight)
+			.attr("fill", (d) => colorScale(d));
 	});
-});
+};
 
-heatmap(".heatmap_profond_patrick");
-heatmap(".heatmap_nb_apnee", dataCpap, "commentaire");
+heatmapApneePatrick(".heatmap_nb_apnee", dataCpap);
 
-heatmap(".heatmap_profond_patrick_deux");
-heatmap(".heatmap_profond_miguel");
+const heatmapProfondMiguel = (name, donnees) => {
+	const dates = [];
+	const values = [];
+
+	donnees.then((dataRecue) => {
+		let maxValue = 0;
+		let minValue = 100;
+
+		dataRecue.forEach((element) => {
+			dates.push(element.heureReveil);
+			values.push(element.pourcentagePhaseProfond);
+
+			if (element.pourcentagePhaseProfond > maxValue) {
+				maxValue = element.pourcentagePhaseProfond;
+			}
+			if (element.pourcentagePhaseProfond < minValue) {
+				minValue = element.pourcentagePhaseProfond;
+			}
+		});
+
+		const xScale = d3
+			.scaleTime()
+			.domain([new Date(dates[0]), new Date(dates[dates.length - 1])])
+			.range([0, width]);
+
+		const colorScale = d3
+			.scaleLinear()
+			.domain([minValue, maxValue])
+			.range(["#00FFFF", "#000000"]);
+
+		let compteur = 0;
+		const data = [];
+		for (let i = 0; i < dates.length; i++) {
+			data[i] = [];
+			for (let j = 0; j < nbCols; j++) {
+				data[i][j] = values[compteur];
+				compteur++;
+				// data[i][j] = Math.floor(Math.random() * 11); // Remplacer par vos propres données
+			}
+		}
+
+		// const rectWidth = width / (dates.length * nbCols);
+		// const rectHeight = height / nbCols;
+
+		// const rectWidth = 50;
+		// const rectHeight = 50;
+
+		const svg = d3
+			.select(name)
+			.append("svg")
+			.attr("width", width)
+			.attr("height", height);
+
+		const rows = svg
+			.selectAll("g")
+			.data(data)
+			.enter()
+			.append("g")
+			.attr("transform", (d, i) => `translate(0, ${i * rectHeight})`);
+
+		const rects = rows
+			.selectAll("rect")
+			.data((d) => d)
+			.enter()
+			.append("rect")
+			.attr(
+				"x",
+				(d, i) =>
+					(i % nbCols) * rectWidth +
+					Math.floor(i / nbCols) * dates.length * rectWidth
+			)
+			.attr("y", (d, i) => Math.floor(i / nbCols) * rectHeight)
+			.attr("width", rectWidth)
+			.attr("height", rectHeight)
+			.attr("fill", (d) => colorScale(d));
+	});
+};
+
+heatmapProfondMiguel(".heatmap_profond_miguel", dataMiguel);
 
 /*
  *
