@@ -55,7 +55,7 @@ export function dateFormatDayMonthYear(date) {
   let options = { month: "long" };
   let moisEnLettres = new Intl.DateTimeFormat("fr-FR", options).format(date);
 
-  console.log(moisEnLettres);
+  return moisEnLettres;
 }
 
 // Fonction qui parse une date en format "mois année" avec le mois en lettres
@@ -63,7 +63,7 @@ export function dateFormatMonthYear(date) {
   const options = { year: "numeric", month: "long" };
   const moisEtAnnee = date.toLocaleDateString("fr-FR", options);
 
-  console.log(moisEtAnnee);
+  return moisEtAnnee;
 }
 
 // Fonction qui calcule le pourcentage de sommeil profond par nuit pour miguel
