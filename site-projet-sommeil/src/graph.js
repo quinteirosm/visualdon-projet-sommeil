@@ -506,9 +506,9 @@ const circular = (name, donnees) => {
 	});
 };
 
-//circular("#circular_chart", dataCpap);
+circular("#circular_chart", dataCpap);
 
-circular("#circular_chart", dataCpap2023);
+// circular("#circular_chart", dataCpap2023);
 
 /*
  *
