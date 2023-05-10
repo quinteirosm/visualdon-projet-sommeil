@@ -94,7 +94,6 @@ a:active {
 section {
 	height: 100vh;
 	background-color: var(--clair);
-	width: 100%;
 }
 
 #accueil {
@@ -145,3 +144,15 @@ div + p {
 * ESPACEMENT DANS LA SECTION PRESENTATION
 *
 */
+
+.graphTitle {
+	height: 10vh;
+}
+
+.graphContainer {
+	height: 60vh;
+}
+
+.explication {
+	height: 30vh;
+}

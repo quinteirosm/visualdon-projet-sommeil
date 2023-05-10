@@ -23,6 +23,8 @@ const couleurMin = "#FFFFFF";
 const couleurMilieu = "#00A6FF";
 const couleurMax = "#0154C2";
 
+const dureeNuit = 7.25 * 60;
+
 /*
  * HEATMAP
  */
@@ -491,92 +493,6 @@ const circular = (name, donnees) => {
 circular("#circular_chart", dataCpap);
 
 // circular("#circular_chart", dataCpap2023);
-/*
- * LIGNES
- */
-
-// const line = (name, donnees) => {
-// 	// append the svg object to the body of the page
-// 	const svg = d3
-// 		.select(name)
-// 		.append("svg")
-// 		.attr("width", width + margin.left + margin.right)
-// 		.attr("height", height + margin.top + margin.bottom)
-// 		.append("g")
-// 		.attr("transform", `translate(${margin.left},${margin.top})`);
-
-// 	//Read the data
-// 	d3
-// 		.csv(
-// 			"https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/5_OneCatSevNumOrdered.csv"
-// 		)
-// 		.then(function (data) {
-// 			// group the data: I want to draw one line per group
-// 			const sumstat = d3.group(data, (d) => d.name); // nest function allows to group the calculation per level of a factor
-
-// 			// Add X axis --> it is a date format
-// 			const x = d3
-// 				.scaleLinear()
-// 				.domain(
-// 					d3.extent(data, function (d) {
-// 						return d.year;
-// 					})
-// 				)
-// 				.range([0, width]);
-// 			svg
-// 				.append("g")
-// 				.attr("transform", `translate(0, ${height})`)
-// 				.call(d3.axisBottom(x).ticks(5));
-
-// 			// Add Y axis
-// 			const y = d3
-// 				.scaleLinear()
-// 				.domain([
-// 					0,
-// 					d3.max(data, function (d) {
-// 						return +d.n;
-// 					}),
-// 				])
-// 				.range([height, 0]);
-// 			svg.append("g").call(d3.axisLeft(y));
-
-// 			// color palette (A voir parce que pour les autres, il y a que deux couleurs et ensuite cela se fait automatiquement)
-// 			const color = d3
-// 				.scaleOrdinal()
-// 				.range([
-// 					"#e41a1c",
-// 					"#377eb8",
-// 					"#4daf4a",
-// 					"#984ea3",
-// 					"#ff7f00",
-// 					"#ffff33",
-// 					"#a65628",
-// 					"#f781bf",
-// 					"#999999",
-// 				]);
-
-// 			// Draw the line
-// 			svg
-// 				.selectAll(".line")
-// 				.data(sumstat)
-// 				.join("path")
-// 				.attr("fill", "none")
-// 				.attr("stroke", function (d) {
-// 					return color(d[0]);
-// 				})
-// 				.attr("stroke-width", 1.5)
-// 				.attr("d", function (d) {
-// 					return d3
-// 						.line()
-// 						.x(function (d) {
-// 							return x(d.year);
-// 						})
-// 						.y(function (d) {
-// 							return y(+d.n);
-// 						})(d[1]);
-// 				});
-// 		});
-// };
 
 const line = (name, donnees) => {
 	// append the svg object to the body of the page
@@ -588,19 +504,20 @@ const line = (name, donnees) => {
 		.append("g")
 		.attr("transform", `translate(${margin.left},${margin.top})`);
 
-	d3.csv("./test.csv").then(function (data) {
+	d3.csv("./sommeilprofond.csv").then(function (data) {
 		// Promise.all(donnees).then(([dataRecueMiguel, dataRecueAppleWatch]) => {
-		// 	const id = 10;
+		// 	const idMi = 10;
+		// 	const idPat = 24;
 
 		// 	const nuitMiguel = {
-		// 		leger: dataRecueMiguel[id].tempsSommeilLeger,
-		// 		paradoxale: dataRecueMiguel[id].tempsSommeilParadoxal,
-		// 		profond: dataRecueMiguel[id].tempsSommeilProfond,
+		// 		leger: dataRecueMiguel[idMi].tempsSommeilLeger,
+		// 		paradoxale: dataRecueMiguel[idMi].tempsSommeilParadoxal,
+		// 		profond: dataRecueMiguel[idMi].tempsSommeilProfond,
 		// 	};
 		// 	const nuitPatrick = {
-		// 		leger: dataRecueAppleWatch[id].tempsSommeilLeger,
-		// 		paradoxale: dataRecueAppleWatch[id].tempsSommeilParadoxal,
-		// 		profond: dataRecueAppleWatch[id].tempsSommeilProfond,
+		// 		leger: dataRecueAppleWatch[0].tempsSommeilLeger,
+		// 		paradoxale: dataRecueAppleWatch[0].tempsSommeilParadoxal,
+		// 		profond: dataRecueAppleWatch[0].tempsSommeilProfond,
 		// 	};
 
 		// 	console.log(nuitMiguel);
@@ -639,7 +556,7 @@ const line = (name, donnees) => {
 			.call(d3.axisBottom(x).tickSizeOuter(0));
 
 		// Add Y axis
-		const y = d3.scaleLinear().domain([0, 550]).range([height, 0]);
+		const y = d3.scaleLinear().domain([0, dureeNuit]).range([height, 0]);
 		svg.append("g").call(d3.axisLeft(y));
 
 		// color palette = one color per subgroup
@@ -699,11 +616,181 @@ const line = (name, donnees) => {
 			.attr("y", (d) => y(d[1]))
 			.attr("height", (d) => y(d[0]) - y(d[1]))
 			.attr("width", x.bandwidth())
-			.attr("stroke", "grey")
-			.on("mouseover", mouseover)
-			.on("mousemove", mousemove)
-			.on("mouseleave", mouseleave);
+			.attr("stroke", "grey");
+		// .on("mouseover", mouseover)
+		// .on("mousemove", mousemove)
+		// .on("mouseleave", mouseleave);
 	});
 };
+
+// const line = (name, donnees) => {
+// 	// append the svg object to the body of the page
+// 	const svg = d3
+// 		.select(name)
+// 		.append("svg")
+// 		.attr("width", width + margin.left + margin.right)
+// 		.attr("height", height + margin.top + margin.bottom)
+// 		.append("g")
+// 		.attr("transform", `translate(${margin.left},${margin.top})`);
+
+// 	// d3.csv("./test.csv").then(function (data) {
+// 	Promise.all(donnees).then(([dataRecueMiguel, dataRecueAppleWatch]) => {
+// 		// 	const id = 10;
+
+// 		/* 		const nuitMiguel = {
+// 				leger: dataRecueMiguel[id].tempsSommeilLeger,
+// 				paradoxale: dataRecueMiguel[id].tempsSommeilParadoxal,
+// 				profond: dataRecueMiguel[id].tempsSommeilProfond,
+// 			};
+// 			const nuitPatrick = {
+// 				leger: dataRecueAppleWatch[id].tempsSommeilLeger,
+// 				paradoxale: dataRecueAppleWatch[id].tempsSommeilParadoxal,
+// 				profond: dataRecueAppleWatch[id].tempsSommeilProfond,
+// 			};
+
+// 			console.log(nuitMiguel);
+// 			console.log(nuitPatrick);
+
+// 			let sleepData = [
+// 				{
+// 					dataMiguelComparaison: {
+// 						leger: dataRecueMiguel[id].tempsSommeilLeger,
+// 						paradoxale: dataRecueMiguel[id].tempsSommeilParadoxal,
+// 						profond: dataRecueMiguel[id].tempsSommeilProfond,
+// 					},
+// 				},
+// 				{
+// 					dataAppleWatchComparaison: {
+// 						leger: dataRecueAppleWatch[id].tempsSommeilLeger,
+// 						paradoxale: dataRecueAppleWatch[id].tempsSommeilParadoxal,
+// 						profond: dataRecueAppleWatch[id].tempsSommeilProfond,
+// 					},
+// 				},
+// 			];
+
+// 			let data = sleepData; */
+
+// 		let sleepData = [
+// 			{
+// 				dataMiguelComparaison: {
+// 					tempsSommeilLeger: 1,
+// 					tempsSommeilParadoxal: 1,
+// 					tempsSommeilProfond: 1,
+// 				},
+// 			},
+// 			{
+// 				dataAppleWatchComparaison: {
+// 					tempsSommeilLeger: 1,
+// 					tempsSommeilParadoxal: 1,
+// 					tempsSommeilProfond: 1,
+// 				},
+// 			},
+// 		];
+
+// 		let id1 = 0;
+// 		let id2 = 0;
+
+// 		for (let indexX = 0; indexX < dataRecueMiguel.length; indexX++) {
+// 			for (let indexY = 0; indexY < dataRecueAppleWatch.length; indexY++) {
+// 				if (dataRecueMiguel[indexX].date === dataRecueAppleWatch[indexY].date) {
+// 					id1 = indexX;
+// 					id2 = indexY;
+// 				}
+// 			}
+// 		}
+
+// 		sleepData[0].dataMiguelComparaison.tempsSommeilParadoxal =
+// 			dataRecueMiguel[id1].tempsSommeilParadoxal;
+// 		sleepData[0].dataMiguelComparaison.tempsSommeilLéger =
+// 			dataRecueMiguel[id1].tempsSommeilLéger;
+// 		sleepData[0].dataMiguelComparaison.tempsSommeilProfond =
+// 			dataRecueMiguel[id1].tempsSommeilProfond;
+// 		sleepData[1].dataAppleWatchComparaison.tempsSommeilParadoxal =
+// 			dataRecueAppleWatch[id2].tempsSommeilParadoxal;
+// 		sleepData[1].dataAppleWatchComparaison.tempsSommeilLéger =
+// 			dataRecueAppleWatch[id2].tempsSommeilLéger;
+// 		sleepData[1].dataAppleWatchComparaison.tempsSommeilProfond =
+// 			dataRecueAppleWatch[id2].tempsSommeilProfond;
+
+// 		// List of subgroups = header of the csv files = soil condition here
+// 		const subgroups = sleepData.map(({ d }) => d);
+
+// 		// List of groups = species here = value of the first column called group -> I show them on the X axis
+// 		const groups = sleepData.map((d) => d);
+
+// 		// Add X axis
+// 		const x = d3.scaleBand().domain(groups).range([0, width]).padding([0.2]);
+// 		svg
+// 			.append("g")
+// 			.attr("transform", `translate(0, ${height})`)
+// 			.call(d3.axisBottom(x).tickSizeOuter(0));
+
+// 		// Add Y axis
+// 		const y = d3.scaleLinear().domain([0, 550]).range([height, 0]);
+// 		svg.append("g").call(d3.axisLeft(y));
+
+// 		// color palette = one color per subgroup
+// 		const color = d3
+// 			.scaleOrdinal()
+// 			.domain(subgroups)
+// 			.range([couleurMin, couleurMilieu, couleurMax]);
+
+// 		//stack the data? --> stack per subgroup
+// 		const stackedData = d3.stack().keys(subgroups)(dataSleep);
+
+// 		// ----------------
+// 		// Create a tooltip
+// 		// ----------------
+// 		const tooltip = d3
+// 			.select(name)
+// 			.append("div")
+// 			.style("opacity", 0)
+// 			.attr("class", "tooltip")
+// 			.style("background-color", "white")
+// 			.style("border", "solid")
+// 			.style("border-width", "1px")
+// 			.style("border-radius", "5px")
+// 			.style("padding", "10px");
+
+// 		// Three function that change the tooltip when user hover / move / leave a cell
+// 		const mouseover = function (event, d) {
+// 			const subgroupName = d3.select(this.parentNode).datum().key;
+// 			const subgroupValue = d.data[subgroupName];
+// 			tooltip
+// 				.html("subgroup: " + subgroupName + "<br>" + "Value: " + subgroupValue)
+// 				.style("opacity", 1);
+// 		};
+// 		const mousemove = function (event, d) {
+// 			tooltip
+// 				.style("transform", "translateY(-55%)")
+// 				.style("left", event.x / 2 + "px")
+// 				.style("top", event.y / 2 - 30 + "px");
+// 		};
+// 		const mouseleave = function (event, d) {
+// 			tooltip.style("opacity", 0);
+// 		};
+
+// 		// Show the bars
+// 		svg
+// 			.append("g")
+// 			.selectAll("g")
+// 			// Enter in the stack data = loop key per key = group per group
+// 			.data(stackedData)
+// 			.join("g")
+// 			.attr("fill", (d) => color(d.key))
+// 			.selectAll("rect")
+// 			// enter a second time = loop subgroup per subgroup to add all rectangles
+// 			.data((d) => d)
+// 			.join("rect")
+// 			.attr("x", (d) => x(d.data.personne))
+// 			.attr("y", (d) => y(d[1]))
+// 			.attr("height", (d) => y(d[0]) - y(d[1]))
+// 			.attr("width", x.bandwidth())
+// 			.attr("stroke", "grey")
+// 			.on("mouseover", mouseover)
+// 			.on("mousemove", mousemove)
+// 			.on("mouseleave", mouseleave);
+// 	});
+// };
 
 line("#line_chart", [dataMiguel, dataAppleWatch]);
