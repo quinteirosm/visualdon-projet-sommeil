@@ -480,6 +480,27 @@ const circular = (name, donnees) => {
 	// 	)
 
 	donnees.then((data) => {
+		// Three function that change the tooltip when user hover / move / leave a cell
+		const mouseover = function (event, d) {
+			let litreSingulierPluriel = d.fuiteMoyenne > 1 ? "litres" : "litre";
+
+			tooltip
+				.html(`${d.fuiteMoyenne} ${litreSingulierPluriel}/minute`)
+				.style("opacity", 1);
+			// tooltip
+			// 	.html("Sommeil " + subgroupName + "<br>" + subgroupValue + " min")
+			// 	.style("opacity", 1);
+		};
+		const mousemove = function (event, d) {
+			tooltip
+				.style("transform", "translateY(-55%)")
+				.style("left", event.x / 2 + "px")
+				.style("top", event.y / 2 - 30 + "px");
+		};
+		const mouseleave = function (event, d) {
+			tooltip.style("opacity", 0);
+		};
+
 		let maxValue = 0;
 		let minValue = 100;
 
@@ -519,7 +540,24 @@ const circular = (name, donnees) => {
 					.endAngle((d) => x(d.date) + x.bandwidth())
 					.padAngle(0.01)
 					.padRadius(innerRadius)
-			);
+			)
+			.on("mouseover", mouseover)
+			.on("mousemove", mousemove)
+			.on("mouseleave", mouseleave);
+
+		// ----------------
+		// Create a tooltip
+		// ----------------
+		const tooltip = d3
+			.select(name)
+			.append("div")
+			.style("opacity", 0)
+			.attr("class", "tooltip")
+			.style("background-color", "#005fc8")
+			.style("border", "solid")
+			.style("border-width", "1px")
+			.style("border-radius", "5px")
+			.style("padding", "10px");
 
 		// Add the labels
 		svg3
@@ -553,7 +591,33 @@ const circular = (name, donnees) => {
 					: "rotate(0)";
 			})
 			.style("font-size", "11px")
-			.attr("alignment-baseline", "middle");
+			.attr("alignment-baseline", "middle")
+			.on("mouseover", mouseover)
+			.on("mousemove", mousemove)
+			.on("mouseleave", mouseleave);
+
+		// svg
+		// 	.append("g")
+		// 	.selectAll("g")
+		// 	// Enter in the stack data = loop key per key = group per group
+		// 	.data(stackedData)
+		// 	.join("g")
+		// 	.attr("fill", (d) => {
+		// 		console.log("d.key : " + d.key);
+		// 		return color(d.key);
+		// 	})
+		// 	.selectAll("rect")
+		// 	// enter a second time = loop subgroup per subgroup to add all rectangles
+		// 	.data((d) => d)
+		// 	.join("rect")
+		// 	.attr("x", (d) => x(d.data.personne))
+		// 	.attr("y", (d) => y(d[1]))
+		// 	.attr("height", (d) => y(d[0]) - y(d[1]))
+		// 	.attr("width", x.bandwidth())
+		// 	.attr("stroke", "white")
+		// 	.on("mouseover", mouseover)
+		// 	.on("mousemove", mousemove)
+		// 	.on("mouseleave", mouseleave);
 	});
 };
 
@@ -686,7 +750,7 @@ const line = (name, donnees) => {
 			.attr("y", (d) => y(d[1]))
 			.attr("height", (d) => y(d[0]) - y(d[1]))
 			.attr("width", x.bandwidth())
-			.attr("stroke", "grey")
+			.attr("stroke", "white")
 			.on("mouseover", mouseover)
 			.on("mousemove", mousemove)
 			.on("mouseleave", mouseleave);
