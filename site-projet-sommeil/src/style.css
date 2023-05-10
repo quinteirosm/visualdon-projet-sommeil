@@ -92,7 +92,7 @@ a:active {
 */
 
 section {
-	height: 100vh;
+	min-height: 100vh;
 	background-color: var(--clair);
 }
 
@@ -151,8 +151,10 @@ div + p {
 
 .graphContainer {
 	height: 60vh;
+	width: 80vw;
 }
 
 .explication {
 	height: 30vh;
+	width: 60vw;
 }

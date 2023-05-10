@@ -309,17 +309,89 @@ heatmapProfondMiguel(".heatmap_profond_miguel", dataMiguel);
  * BAR CHART
  */
 
+// const bar = (name, donnees) => {
+// 	// append the svg object to the body of the page
+// 	const svg = d3
+// 		.select(name)
+// 		.append("svg")
+// 		.attr("width", width + margin.left + margin.right)
+// 		.attr("height", height + 100)
+// 		// .attr("width", width)
+// 		// .attr("height", height)
+// 		.append("g")
+// 		.attr("transform", `translate(${margin.left},${margin.top})`);
+
+// 	donnees.then(function (data) {
+// 		let maxValue = 0;
+// 		let minValue = 100;
+
+// 		data.forEach((element) => {
+// 			if (element.evenementHeure > maxValue) {
+// 				maxValue = element.evenementHeure;
+// 			}
+// 			if (element.evenementHeure < minValue) {
+// 				minValue = element.evenementHeure;
+// 			}
+// 		});
+
+// 		// X axis
+// 		const x = d3
+// 			.scaleBand()
+// 			.range([0, width - margin.left - margin.right])
+// 			.domain(
+// 				data.map((d) => {
+// 					// Si je mets date à la place de d.date, cela ne fonctionne pas
+// 					let date = dateFormatDayMonthYear(new Date(d.date));
+// 					return d.date;
+// 				})
+// 			)
+// 			.padding(0.2);
+// 		svg
+// 			.append("g")
+// 			.attr("transform", `translate(0,${height})`)
+// 			.call(d3.axisBottom(x))
+// 			.selectAll("text")
+// 			.attr("transform", "translate(-10,0)rotate(-45)")
+// 			.style("text-anchor", "end");
+
+// 		// Add Y axis
+// 		const y = d3.scaleLinear().domain([0, maxValue]).range([height, 0]);
+// 		svg.append("g").call(d3.axisLeft(y));
+
+// 		// Bars
+// 		svg
+// 			.selectAll("mybar")
+// 			.data(data)
+// 			.join("rect")
+// 			.attr("x", (d) => x(d.date))
+// 			.attr("width", x.bandwidth())
+// 			.attr("fill", couleurMin)
+// 			// no bar at the beginning thus:
+// 			.attr("height", (d) => height - y(0)) // always equal to 0
+// 			.attr("y", (d) => y(0));
+
+// 		// Animation
+// 		svg
+// 			.selectAll("rect")
+// 			.transition()
+// 			.duration(800)
+// 			.attr("y", (d) => y(d.evenementHeure))
+// 			.attr("height", (d) => height - y(d.evenementHeure))
+// 			.delay((d, i) => {
+// 				return i * 100;
+// 			});
+// 	});
+// };
+
 const bar = (name, donnees) => {
 	// append the svg object to the body of the page
 	const svg = d3
 		.select(name)
 		.append("svg")
 		.attr("width", width + margin.left + margin.right)
-		.attr("height", height + 100)
-		// .attr("width", width)
-		// .attr("height", height)
+		.attr("height", height + margin.top + margin.bottom)
 		.append("g")
-		.attr("transform", `translate(${margin.left},${margin.top})`);
+		.attr("transform", `translate(${60},${margin.top})`);
 
 	donnees.then(function (data) {
 		let maxValue = 0;
@@ -334,49 +406,44 @@ const bar = (name, donnees) => {
 			}
 		});
 
-		// X axis
-		const x = d3
+		// Y axis
+		const y = d3
 			.scaleBand()
-			.range([0, width - margin.left - margin.right])
+			.range([0, height])
 			.domain(
 				data.map((d) => {
-					// Si je mets date à la place de d.date, cela ne fonctionne pas
 					let date = dateFormatDayMonthYear(new Date(d.date));
 					return d.date;
 				})
 			)
 			.padding(0.2);
+		svg.append("g").call(d3.axisLeft(y));
+
+		// Add X axis
+		const x = d3.scaleLinear().domain([0, maxValue]).range([0, width]);
 		svg
 			.append("g")
-			.attr("transform", `translate(0,${height})`)
-			.call(d3.axisBottom(x))
-			.selectAll("text")
-			.attr("transform", "translate(-10,0)rotate(-45)")
-			.style("text-anchor", "end");
-
-		// Add Y axis
-		const y = d3.scaleLinear().domain([0, maxValue]).range([height, 0]);
-		svg.append("g").call(d3.axisLeft(y));
+			.attr("transform", `translate(0, ${height})`)
+			.call(d3.axisBottom(x));
 
 		// Bars
 		svg
 			.selectAll("mybar")
 			.data(data)
 			.join("rect")
-			.attr("x", (d) => x(d.date))
-			.attr("width", x.bandwidth())
+			.attr("y", (d) => y(d.date))
+			.attr("height", y.bandwidth())
 			.attr("fill", couleurMin)
-			// no bar at the beginning thus:
-			.attr("height", (d) => height - y(0)) // always equal to 0
-			.attr("y", (d) => y(0));
+			.attr("x", (d) => x(0))
+			.attr("width", (d) => x(d.evenementHeure));
 
 		// Animation
 		svg
 			.selectAll("rect")
 			.transition()
 			.duration(800)
-			.attr("y", (d) => y(d.evenementHeure))
-			.attr("height", (d) => height - y(d.evenementHeure))
+			.attr("x", (d) => x(0))
+			.attr("width", (d) => x(d.evenementHeure))
 			.delay((d, i) => {
 				return i * 100;
 			});

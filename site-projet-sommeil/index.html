@@ -25,16 +25,16 @@
                 <a class="nav-link" href="#presentation">Présentation</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#phase-apnee">Phase apnée</a>
+                <a class="nav-link" href="#phase-apnee">Apnée et sommeil profond</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#phase-patrick-miguel">Phase patrick miguel</a>
+                <a class="nav-link" href="#phase-patrick-miguel">Comparaison du sommeil profond</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#apnee-periode">Apnée par période</a>
+                <a class="nav-link" href="#apnee-periode">Apnées par heure du mois</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#frequence-temps">Fuite par période</a>
+                <a class="nav-link" href="#frequence-temps">Fuite d'air du mois</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#comparaison-nuit">Comparaison nuit</a>
@@ -61,6 +61,11 @@
                         atteinte du SAOS (Syndrome d'apnée obstructive du sommeil). Nous allons vous montrer la
                         différence entre les deux et vous montrer à quel point cela peut affecter la qualité du sommeil.
                     </p>
+                    <p>Les données ont été récupérées depuis une Xiaomi Mi Band 6, une Apple Watch Serie 8 ainsi qu'un
+                        appareil CPAP
+                        Resmed AirSense 10.</p>
+                    <p>Les emplacements vides indiquent les jours où Patrick n'as pas dormi chez lui où alors ne portait
+                        pas d'Apple Watch.</p>
                 </div>
 
             </div>
@@ -80,7 +85,10 @@
                     <p>Une apnée se définit comme un arrêt de la respiration d'au
                         moins 10 secondes.</p>
                     <p>Pour mieux vous donner une idée, Patrick souffre d'un SAOS sévère (stade maximal) avec une
-                        moyenne de 45 apnées par heure et jusqu'à 67 apnées par heure lorsqu'il est sur le dos.</p>
+                        moyenne de 45 apnées par heure et jusqu'à 67 apnées par heure lorsqu'il est sur le dos.
+                    </p>
+                    <p>Ce qui fait qu'il doit dormir avec un appareil CPAP (Continuous Positive Airway Pressure), un
+                        appareil qui lui procure constamment de l'air pendant la nuit à l'aide d'un masque facial.</p>
 
 
 
@@ -95,28 +103,29 @@
         <section id="phase-apnee" class="d-flex flex-column justify-content-center align-items-center">
 
             <h2 class="graphTitle">Sommeil profond par rapport aux apnées</h2>
-            <div class="graphContainer d-flex flex-row align-items-center justify-content-around" style='width:80vw'>
+            <div class="graphContainer d-flex flex-row align-items-center justify-content-around">
                 <div class="d-flex flex-column justify-content-around align-items-center">
                     <div class="graph heatmap_profond_patrick"></div>
-                    <p>Heatmap profond patrick</p>
+                    <p>Sommeil profond de Patrick</p>
                 </div>
                 <div class="d-flex flex-column justify-content-around align-items-center">
                     <div class="graph heatmap_nb_apnee"></div>
-                    <p>Heatmap nb apnée</p>
+                    <p>Apnées par heure</p>
                 </div>
             </div>
 
-            <p class="explication">Nous remarquons que les nuits avec plusieurs apnées représentent tout de même des
-                nuits
-                avec un plus
-                grand temps de sommeil profond</p>
+            <p class="explication">On peut voir, qu’en moyenne, les apnées n’ont pas vraiment un impact sur le sommeil
+                profond mais sont plutôt un facteur de plus capable de nuire.
+                Dans ce dataset, les nuits comportant le plus d’apnées sont les nuits où Patrick a eu plus de durée de
+                sommeil profond.
+                On peut imaginer que les apnées arrivent plus fréquemment durant la phase de sommeil profond.</p>
 
         </section>
 
         <section id="phase-patrick-miguel" class="d-flex flex-column justify-content-center align-items-center">
 
-            <h2 class="graphTitle">Sommeil profond d'un apnéique VS personne normal</h2>
-            <div class="graphContainer d-flex flex-row align-items-center justify-content-around" style='width:80vw'>
+            <h2 class="graphTitle">Comparaison sommeil profond</h2>
+            <div class="graphContainer d-flex flex-row align-items-center justify-content-around">
                 <div class="d-flex flex-column justify-content-around align-items-center">
                     <div class="heatmap_profond_patrick_deux"></div>
                     <p>Patrick</p>
@@ -127,56 +136,55 @@
                 </div>
             </div>
 
-            <p class="explication">Nous remarquons que Patrick a de plus grande chance d'avoir des grandes phases de
-                sommeil profond.</p>
+            <p class="explication">Ce graph ne prend pas en compte la durée, car une nuit plus longue peut vouloir dire
+                un sommeil profond plus long. Cependant, on peut constater que Miguel a en moyenne, des phases de
+                sommeil profond plus longues et surtout plus stables.</p>
 
         </section>
 
         <section id="apnee-periode" class="d-flex flex-column justify-content-center align-items-center">
 
             <h2 class="graphTitle">Apnées par heure dans un mois</h2>
-            <div class="graphContainer d-flex flex-row align-items-center justify-content-around" style='width:80vw'>
+            <div class="graphContainer d-flex flex-row align-items-center justify-content-around">
                 <div class="d-flex flex-column justify-content-around align-items-center">
                     <div id="bar_chart"></div>
                 </div>
             </div>
 
-            <p class="explication">De manière générale, Patrick fait un plus grand nombre d'apnées aux alentours du
-                mardi-mercredi.</p>
+            <p class="explication">De manière générale, Patrick fait un plus grand nombre d'apnées par heure aux
+                alentours du
+                mardi ou du mercredi.</p>
 
         </section>
 
         <section id="frequence-temps" class="d-flex flex-column justify-content-center align-items-center">
 
             <h2 class="graphTitle">Évolution des fuites d'air du masque pendant le mois</h2>
-            <div class="graphContainer d-flex flex-row align-items-center justify-content-around" style='width:80vw'>
+            <div class="graphContainer d-flex flex-row align-items-center justify-content-around">
                 <div class="d-flex flex-column justify-content-around align-items-center">
                     <div id="circular_chart"></div>
                 </div>
             </div>
 
-            <p class="explication">Du 21 au 23 mars, Patrick a de moins en moins de fuite d'air, ce qui veut dire qu'il
-                sert de plus en
-                plus le harnais de jour en jour, il est probable que le lendemain, il ne voulait pas avoir autant
-                mal en serrant trop fort le harnais et l'aurait trop desseré ce qui conclus la grande augmentation
-                le 26 mars (sans prendre en compte le fait que la barbe qui pousse provoque une perte d'étanchéité
-                également)</p>
+            <p class="explication">Du 21 au 23 mars, Patrick a de moins en moins de fuites d'air, ce qui veut dire qu'il
+                serre de plus en plus le masque de jour en jour, il est probable que le lendemain, il ne voulait pas
+                avoir autant mal en serrant trop fort le harnais et l'aurait trop desserré ce qui conclut la grande
+                augmentation le 26 mars (sans prendre en compte le fait que la barbe qui pousse provoque une perte
+                d'étanchéité également).</p>
 
         </section>
 
         <section id="comparaison-nuit" class="d-flex flex-column justify-content-center align-items-center">
 
             <h2 class="graphTitle">Comparaison d'une nuit de même durée</h2>
-            <div class="graphContainer d-flex flex-row align-items-center justify-content-around" style='width:80vw'>
+            <div class="graphContainer d-flex flex-row align-items-center justify-content-around">
                 <div class="d-flex flex-column justify-content-around align-items-center">
                     <div id="line_chart"></div>
                 </div>
             </div>
 
-            <p class="explication">Nous sommes encore en train d'analyser cette partie et faisons en sorte que vous ayez
-                des data au
-                propre, mais nous remarquons que Patrick a proportionnellement de grandes phases de sommeil
-                paradoxale par rapport au sommeil profond, contrairement à Miguel.</p>
+            <p class="explication">Nous remarquons que Patrick a proportionnellement de plus petites phases de sommeil
+                profond par rapport au sommeil paradoxal, contrairement à Miguel.</p>
 
         </section>
 
