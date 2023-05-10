@@ -129,6 +129,17 @@ footer {
 	display: inline;
 }
 
+div * {
+	color: white;
+}
+
+/*
+p frère adjacent de div
+*/
+div + p {
+	margin-top: 100px;
+}
+
 /*
 *
 * ESPACEMENT DANS LA SECTION PRESENTATION
