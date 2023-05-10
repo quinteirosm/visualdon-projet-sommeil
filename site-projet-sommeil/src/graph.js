@@ -394,6 +394,38 @@ const bar = (name, donnees) => {
 		.attr("transform", `translate(${60},${margin.top})`);
 
 	donnees.then(function (data) {
+		// ----------------
+		// Create a tooltip
+		// ----------------
+		const tooltip = d3
+			.select(name)
+			.append("div")
+			.style("opacity", 0)
+			.attr("class", "tooltip")
+			.style("background-color", "#005fc8")
+			.style("border", "solid")
+			.style("border-width", "1px")
+			.style("border-radius", "5px")
+			.style("padding", "10px");
+
+		// Three function that change the tooltip when user hover / move / leave a cell
+		const mouseover = function (event, d) {
+			let apneeSingulierPluriel = d.evenementHeure > 1 ? "apnées" : "apnée";
+
+			tooltip
+				.html(`${d.evenementHeure} ${apneeSingulierPluriel}/heure`)
+				.style("opacity", 1);
+		};
+		const mousemove = function (event, d) {
+			tooltip
+				.style("transform", "translateY(-55%)")
+				.style("left", event.x / 2 + "px")
+				.style("top", event.y / 2 - 30 + "px");
+		};
+		const mouseleave = function (event, d) {
+			tooltip.style("opacity", 0);
+		};
+
 		let maxValue = 0;
 		let minValue = 100;
 
@@ -417,6 +449,7 @@ const bar = (name, donnees) => {
 				})
 			)
 			.padding(0.2);
+
 		svg.append("g").call(d3.axisLeft(y));
 
 		// Add X axis
@@ -435,7 +468,10 @@ const bar = (name, donnees) => {
 			.attr("height", y.bandwidth())
 			.attr("fill", couleurMin)
 			.attr("x", (d) => x(0))
-			.attr("width", (d) => x(d.evenementHeure));
+			.attr("width", (d) => x(d.evenementHeure))
+			.on("mouseover", mouseover)
+			.on("mousemove", mousemove)
+			.on("mouseleave", mouseleave);
 
 		// Animation
 		svg
@@ -474,18 +510,38 @@ const circular = (name, donnees) => {
 			`translate(${width / 2 + margin.left}, ${height / 2 + margin.top})`
 		);
 
-	// d3
-	// 	.csv(
-	// 		"https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/7_OneCatOneNum.csv"
-	// 	)
-
 	donnees.then((data) => {
+		// ----------------
+		// Create a tooltip
+		// ----------------
+		const tooltip = d3
+			.select(name)
+			.append("div")
+			.style("opacity", 0)
+			.attr("class", "tooltip")
+			.style("background-color", "#005fc8")
+			.style("border", "solid")
+			.style("border-width", "1px")
+			.style("border-radius", "5px")
+			.style("padding", "10px");
+
 		// Three function that change the tooltip when user hover / move / leave a cell
 		const mouseover = function (event, d) {
 			let litreSingulierPluriel = d.fuiteMoyenne > 1 ? "litres" : "litre";
 
+			let supplementDeTexteSiPasDeFuite = "";
+
+			if (d.fuiteMoyenne == 0 && d.evenementHeure == 0) {
+				supplementDeTexteSiPasDeFuite = `<br> L'appareil n'a pas été utilisé`;
+			}
+			if (d.fuiteMoyenne == 0 && d.evenementHeure > 0) {
+				supplementDeTexteSiPasDeFuite = `<br> L'appareil a bel et bien été utilisé mais il n'y a pas eu de fuite`;
+			}
+
 			tooltip
-				.html(`${d.fuiteMoyenne} ${litreSingulierPluriel}/minute`)
+				.html(
+					`${d.fuiteMoyenne} ${litreSingulierPluriel}/minute ${supplementDeTexteSiPasDeFuite}`
+				)
 				.style("opacity", 1);
 			// tooltip
 			// 	.html("Sommeil " + subgroupName + "<br>" + subgroupValue + " min")
@@ -544,20 +600,6 @@ const circular = (name, donnees) => {
 			.on("mouseover", mouseover)
 			.on("mousemove", mousemove)
 			.on("mouseleave", mouseleave);
-
-		// ----------------
-		// Create a tooltip
-		// ----------------
-		const tooltip = d3
-			.select(name)
-			.append("div")
-			.style("opacity", 0)
-			.attr("class", "tooltip")
-			.style("background-color", "#005fc8")
-			.style("border", "solid")
-			.style("border-width", "1px")
-			.style("border-radius", "5px")
-			.style("padding", "10px");
 
 		// Add the labels
 		svg3
