@@ -62,8 +62,8 @@ const heatmapProfondPatrick = (name, donnees) => {
 				dureeNuit = 1;
 			}
 
-			console.log("tempsProfond : " + tempsProfond);
-			console.log("dureeNuit : " + dureeNuit);
+			// console.log("tempsProfond : " + tempsProfond);
+			// console.log("dureeNuit : " + dureeNuit);
 
 			if (tempsProfond == 1 || dureeNuit == 1) {
 				pourcentageProfondAppleWatchEtNuitCpap = 0;
@@ -643,7 +643,7 @@ const line = (name, donnees) => {
 			.append("div")
 			.style("opacity", 0)
 			.attr("class", "tooltip")
-			.style("background-color", "white")
+			.style("background-color", "#005fc8")
 			.style("border", "solid")
 			.style("border-width", "1px")
 			.style("border-radius", "5px")
@@ -654,7 +654,7 @@ const line = (name, donnees) => {
 			const subgroupName = d3.select(this.parentNode).datum().key;
 			const subgroupValue = d.data[subgroupName];
 			tooltip
-				.html("subgroup: " + subgroupName + "<br>" + "Value: " + subgroupValue)
+				.html("Sommeil " + subgroupName + "<br>" + subgroupValue + " min")
 				.style("opacity", 1);
 		};
 		const mousemove = function (event, d) {
@@ -674,7 +674,10 @@ const line = (name, donnees) => {
 			// Enter in the stack data = loop key per key = group per group
 			.data(stackedData)
 			.join("g")
-			.attr("fill", (d) => color(d.key))
+			.attr("fill", (d) => {
+				console.log("d.key : " + d.key);
+				return color(d.key);
+			})
 			.selectAll("rect")
 			// enter a second time = loop subgroup per subgroup to add all rectangles
 			.data((d) => d)
@@ -683,10 +686,10 @@ const line = (name, donnees) => {
 			.attr("y", (d) => y(d[1]))
 			.attr("height", (d) => y(d[0]) - y(d[1]))
 			.attr("width", x.bandwidth())
-			.attr("stroke", "grey");
-		// .on("mouseover", mouseover)
-		// .on("mousemove", mousemove)
-		// .on("mouseleave", mouseleave);
+			.attr("stroke", "grey")
+			.on("mouseover", mouseover)
+			.on("mousemove", mousemove)
+			.on("mouseleave", mouseleave);
 	});
 };
 

@@ -128,10 +128,6 @@ footer {
 	display: inline;
 }
 
-div * {
-	color: white;
-}
-
 /*
 p frère adjacent de div
 */
@@ -157,4 +153,13 @@ div + p {
 .explication {
 	height: 30vh;
 	width: 60vw;
+}
+
+/*
+Graph
+*/
+
+/* Ceci permet de mettre les lignes et les légendes des graphs en blanc */
+div * {
+	color: white;
 }
