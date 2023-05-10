@@ -142,6 +142,23 @@ const heatmapProfondPatrick = (name, donnees) => {
 			.attr("width", rectWidth)
 			.attr("height", rectHeight)
 			.attr("fill", (d) => colorScale(d));
+
+		// Insertion de texte dans chaque case
+		rows
+			.selectAll("text")
+			.data((d) => d)
+			.enter()
+			.append("text")
+			.attr(
+				"x",
+				(d, i) =>
+					(i % nbCols) * rectWidth +
+					Math.floor(i / nbCols) * dates.length * rectWidth +
+					10
+			)
+			.attr("y", (d, i) => Math.floor(i / nbCols) * rectHeight + 20)
+			.text((d) => d + "%")
+			.attr("fill", "black");
 	});
 };
 
@@ -532,10 +549,10 @@ const circular = (name, donnees) => {
 			let supplementDeTexteSiPasDeFuite = "";
 
 			if (d.fuiteMoyenne == 0 && d.evenementHeure == 0) {
-				supplementDeTexteSiPasDeFuite = `<br> L'appareil n'a pas été utilisé`;
+				supplementDeTexteSiPasDeFuite = `<br> L'appareil n'a pas été utilisé.`;
 			}
 			if (d.fuiteMoyenne == 0 && d.evenementHeure > 0) {
-				supplementDeTexteSiPasDeFuite = `<br> L'appareil a bel et bien été utilisé mais il n'y a pas eu de fuite`;
+				supplementDeTexteSiPasDeFuite = `<br> L'appareil a bel et bien été utilisé mais il n'y a pas eu de fuite.`;
 			}
 
 			tooltip
