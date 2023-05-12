@@ -32,43 +32,43 @@ const heatmapProfondPatrick = (name, donnees) => {
 	const values = [];
 
 	Promise.all(donnees).then(([dataRecueCpap, dataRecueAppleWatch]) => {
-		// ----------------
-		// Create a tooltip
-		// ----------------
-		const tooltip = d3
-			.select(name)
-			.append("div")
-			.style("opacity", 0)
-			.attr("class", "tooltip")
-			.style("background-color", "#005fc8")
-			.style("border", "solid")
-			.style("border-width", "1px")
-			.style("border-radius", "5px")
-			.style("padding", "10px");
+		// // ----------------
+		// // Create a tooltip
+		// // ----------------
+		// const tooltip = d3
+		// 	.select(name)
+		// 	.append("div")
+		// 	.style("opacity", 0)
+		// 	.attr("class", "tooltip")
+		// 	.style("background-color", "#005fc8")
+		// 	.style("border", "solid")
+		// 	.style("border-width", "1px")
+		// 	.style("border-radius", "5px")
+		// 	.style("padding", "10px");
 
-		// Three function that change the tooltip when user hover / move / leave a cell
-		const mouseover = function (event, d) {
-			// valeur arrondie à 2 chiffres après la virgule
-			let valeur = Math.round(d * 100) / 100;
+		// // Three function that change the tooltip when user hover / move / leave a cell
+		// const mouseover = function (event, d) {
+		// 	// valeur arrondie à 2 chiffres après la virgule
+		// 	let valeur = Math.round(d * 100) / 100;
 
-			tooltip.html(`${valeur}`).style("opacity", 1);
-		};
+		// 	tooltip.html(`${valeur}`).style("opacity", 1);
+		// };
 
-		const mousemove = function (event, d) {
-			tooltip
-				.html(`${valeur}`)
-				.style("opacity", 1)
-				.style("position", "absolute")
-				.style("left", event.pageX + "px")
-				.style("top", event.pageY + "px")
-				.style("z-index", 1000);
-		};
+		// const mousemove = function (event, d) {
+		// 	tooltip
+		// 		.html(`${valeur}`)
+		// 		.style("opacity", 1)
+		// 		.style("position", "absolute")
+		// 		.style("left", event.pageX + "px")
+		// 		.style("top", event.pageY + "px")
+		// 		.style("z-index", 1000);
+		// };
 
-		const mouseleave = function (event, d) {
-			tooltip.style("opacity", 0);
-		};
+		// const mouseleave = function (event, d) {
+		// 	tooltip.style("opacity", 0);
+		// };
 
-		let maxValue = 0;
+		let maxValue = 26;
 		let minValue = 0;
 
 		let tableauCopie = [...dataRecueAppleWatch];
@@ -89,10 +89,6 @@ const heatmapProfondPatrick = (name, donnees) => {
 
 			dates.push(element.date);
 			values.push(pourcentageProfond);
-
-			if (pourcentageProfond > maxValue) {
-				maxValue = pourcentageProfond;
-			}
 		});
 
 		const colorScale = d3
@@ -138,10 +134,10 @@ const heatmapProfondPatrick = (name, donnees) => {
 			.attr("y", (d, i) => Math.floor(i / nbCols) * rectHeight)
 			.attr("width", rectWidth)
 			.attr("height", rectHeight)
-			.attr("fill", (d) => colorScale(d))
-			.on("mouseover", mouseover)
-			.on("mousemove", mousemove)
-			.on("mouseleave", mouseleave);
+			.attr("fill", (d) => colorScale(d));
+		// .on("mouseover", mouseover)
+		// .on("mousemove", mousemove)
+		// .on("mouseleave", mouseleave);
 
 		// Insertion de texte dans chaque case
 		rows
@@ -157,7 +153,7 @@ const heatmapProfondPatrick = (name, donnees) => {
 					10
 			)
 			.attr("y", (d, i) => Math.floor(i / nbCols) * rectHeight + 20)
-			.text((d) => d + "%")
+			.text((d) => Math.round(d * 100) / 100 + "%")
 			.attr("fill", "black");
 	});
 };
@@ -173,36 +169,36 @@ const heatmapApneePatrick = (name, donnees) => {
 	const values = [];
 
 	donnees.then((dataRecue) => {
-		// ----------------
-		// Create a tooltip
-		// ----------------
-		const tooltip = d3
-			.select(name)
-			.append("div")
-			.style("opacity", 0)
-			.attr("class", "tooltip")
-			.style("background-color", "#005fc8")
-			.style("border", "solid")
-			.style("border-width", "1px")
-			.style("border-radius", "5px")
-			.style("padding", "10px");
+		// // ----------------
+		// // Create a tooltip
+		// // ----------------
+		// const tooltip = d3
+		// 	.select(name)
+		// 	.append("div")
+		// 	.style("opacity", 0)
+		// 	.attr("class", "tooltip")
+		// 	.style("background-color", "#005fc8")
+		// 	.style("border", "solid")
+		// 	.style("border-width", "1px")
+		// 	.style("border-radius", "5px")
+		// 	.style("padding", "10px");
 
-		// Three function that change the tooltip when user hover / move / leave a cell
-		const mouseover = function (event, d) {
-			// valeur arrondie à 2 chiffres après la virgule
-			let valeur = Math.round(d * 100) / 100;
+		// // Three function that change the tooltip when user hover / move / leave a cell
+		// const mouseover = function (event, d) {
+		// 	// valeur arrondie à 2 chiffres après la virgule
+		// 	let valeur = Math.round(d * 100) / 100;
 
-			tooltip.html(`${valeur}`).style("opacity", 1);
-		};
-		const mousemove = function (event, d) {
-			tooltip
-				.style("transform", "translateY(-55%)")
-				.style("left", event.x / 2 + "px")
-				.style("top", event.y / 2 - 30 + "px");
-		};
-		const mouseleave = function (event, d) {
-			tooltip.style("opacity", 0);
-		};
+		// 	tooltip.html(`${valeur}`).style("opacity", 1);
+		// };
+		// const mousemove = function (event, d) {
+		// 	tooltip
+		// 		.style("transform", "translateY(-55%)")
+		// 		.style("left", event.x / 2 + "px")
+		// 		.style("top", event.y / 2 - 30 + "px");
+		// };
+		// const mouseleave = function (event, d) {
+		// 	tooltip.style("opacity", 0);
+		// };
 
 		let maxValue = 0;
 		let minValue = 100;
@@ -262,10 +258,27 @@ const heatmapApneePatrick = (name, donnees) => {
 			.attr("y", (d, i) => Math.floor(i / nbCols) * rectHeight)
 			.attr("width", rectWidth)
 			.attr("height", rectHeight)
-			.attr("fill", (d) => colorScale(d))
-			.on("mouseover", mouseover)
-			.on("mousemove", mousemove)
-			.on("mouseleave", mouseleave);
+			.attr("fill", (d) => colorScale(d));
+		// .on("mouseover", mouseover)
+		// .on("mousemove", mousemove)
+		// .on("mouseleave", mouseleave);
+
+		// Insertion de texte dans chaque case
+		rows
+			.selectAll("text")
+			.data((d) => d)
+			.enter()
+			.append("text")
+			.attr(
+				"x",
+				(d, i) =>
+					(i % nbCols) * rectWidth +
+					Math.floor(i / nbCols) * dates.length * rectWidth +
+					10
+			)
+			.attr("y", (d, i) => Math.floor(i / nbCols) * rectHeight + 20)
+			.text((d) => d)
+			.attr("fill", "black");
 	});
 };
 
@@ -276,38 +289,38 @@ const heatmapProfondMiguel = (name, donnees) => {
 	const values = [];
 
 	donnees.then((dataRecue) => {
-		// ----------------
-		// Create a tooltip
-		// ----------------
-		const tooltip = d3
-			.select(name)
-			.append("div")
-			.style("opacity", 0)
-			.attr("class", "tooltip")
-			.style("background-color", "#005fc8")
-			.style("border", "solid")
-			.style("border-width", "1px")
-			.style("border-radius", "5px")
-			.style("padding", "10px");
+		// // ----------------
+		// // Create a tooltip
+		// // ----------------
+		// const tooltip = d3
+		// 	.select(name)
+		// 	.append("div")
+		// 	.style("opacity", 0)
+		// 	.attr("class", "tooltip")
+		// 	.style("background-color", "#005fc8")
+		// 	.style("border", "solid")
+		// 	.style("border-width", "1px")
+		// 	.style("border-radius", "5px")
+		// 	.style("padding", "10px");
 
-		// Three function that change the tooltip when user hover / move / leave a cell
-		const mouseover = function (event, d) {
-			// valeur arrondie à 2 chiffres après la virgule
-			let valeur = Math.round(d * 100) / 100;
+		// // Three function that change the tooltip when user hover / move / leave a cell
+		// const mouseover = function (event, d) {
+		// 	// valeur arrondie à 2 chiffres après la virgule
+		// 	let valeur = Math.round(d * 100) / 100;
 
-			tooltip.html(`${valeur}`).style("opacity", 1);
-		};
-		const mousemove = function (event, d) {
-			tooltip
-				.style("transform", "translateY(-55%)")
-				.style("left", event.x / 2 + "px")
-				.style("top", event.y / 2 - 30 + "px");
-		};
-		const mouseleave = function (event, d) {
-			tooltip.style("opacity", 0);
-		};
+		// 	tooltip.html(`${valeur}`).style("opacity", 1);
+		// };
+		// const mousemove = function (event, d) {
+		// 	tooltip
+		// 		.style("transform", "translateY(-55%)")
+		// 		.style("left", event.x / 2 + "px")
+		// 		.style("top", event.y / 2 - 30 + "px");
+		// };
+		// const mouseleave = function (event, d) {
+		// 	tooltip.style("opacity", 0);
+		// };
 
-		let maxValue = 30;
+		let maxValue = 26;
 		let minValue = 0;
 
 		dataRecue.forEach((element) => {
@@ -358,10 +371,27 @@ const heatmapProfondMiguel = (name, donnees) => {
 			.attr("y", (d, i) => Math.floor(i / nbCols) * rectHeight)
 			.attr("width", rectWidth)
 			.attr("height", rectHeight)
-			.attr("fill", (d) => colorScale(d))
-			.on("mouseover", mouseover)
-			.on("mousemove", mousemove)
-			.on("mouseleave", mouseleave);
+			.attr("fill", (d) => colorScale(d));
+		// .on("mouseover", mouseover)
+		// .on("mousemove", mousemove)
+		// .on("mouseleave", mouseleave);
+
+		// Insertion de texte dans chaque case
+		rows
+			.selectAll("text")
+			.data((d) => d)
+			.enter()
+			.append("text")
+			.attr(
+				"x",
+				(d, i) =>
+					(i % nbCols) * rectWidth +
+					Math.floor(i / nbCols) * dates.length * rectWidth +
+					10
+			)
+			.attr("y", (d, i) => Math.floor(i / nbCols) * rectHeight + 20)
+			.text((d) => Math.round(d * 100) / 100 + "%")
+			.attr("fill", "black");
 	});
 };
 
