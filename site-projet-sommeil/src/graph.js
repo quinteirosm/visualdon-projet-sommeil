@@ -37,6 +37,8 @@ const heatmapProfondPatrick = (name, donnees) => {
 		let maxValue = 0;
 		let minValue = 100;
 
+		console.log(dataRecueAppleWatch);
+
 		/**
 		 * dataCpap[i].tempsSommeil/dataCpap[i].tempsSommeilProfond *100
 		 */
@@ -46,44 +48,35 @@ const heatmapProfondPatrick = (name, donnees) => {
 
 		let tableauCopie = [...dataRecueAppleWatch];
 
-		dataRecueCpap.forEach((element, index) => {
-			let tempsProfond = tableauCopie[index].tempsSommeilProfond
-				? tableauCopie[index].tempsSommeilProfond
+		tableauCopie.forEach((element, index) => {
+			let tempsProfond = element.tempsSommeilProfond
+				? element.tempsSommeilProfond
 				: 1;
-			let dureeNuit = element.dureeSommeil;
+			let dureeNuit = element.duree ? element.duree : 1;
 
-			let pourcentageProfondAppleWatchEtNuitCpap = 0;
-
-			if (!tempsProfond) {
-				tempsProfond = 1;
-			}
-
-			if (!dureeNuit) {
-				dureeNuit = 1;
-			}
+			let pourcentageProfond = 0;
 
 			// console.log("tempsProfond : " + tempsProfond);
 			// console.log("dureeNuit : " + dureeNuit);
 
 			if (tempsProfond == 1 || dureeNuit == 1) {
-				pourcentageProfondAppleWatchEtNuitCpap = 0;
+				pourcentageProfond = 0;
 			} else {
-				pourcentageProfondAppleWatchEtNuitCpap =
-					(tempsProfond / (dureeNuit * 60)) * 100;
+				pourcentageProfond = (tempsProfond / (dureeNuit * 60)) * 100;
 			}
 
-			// console.log("pourcentage : " + pourcentageProfondAppleWatchEtNuitCpap);
+			// console.log("pourcentage : " + pourcentageProfond);
 
 			dates.push(element.date);
-			values.push(pourcentageProfondAppleWatchEtNuitCpap);
+			values.push(pourcentageProfond);
 
-			// console.log(pourcentageProfondAppleWatchEtNuitCpap);
+			// console.log(pourcentageProfond);
 
-			if (pourcentageProfondAppleWatchEtNuitCpap > maxValue) {
-				maxValue = pourcentageProfondAppleWatchEtNuitCpap;
+			if (pourcentageProfond > maxValue) {
+				maxValue = pourcentageProfond;
 			}
-			if (pourcentageProfondAppleWatchEtNuitCpap < minValue) {
-				minValue = pourcentageProfondAppleWatchEtNuitCpap;
+			if (pourcentageProfond < minValue) {
+				minValue = pourcentageProfond;
 			}
 		});
 
@@ -107,12 +100,6 @@ const heatmapProfondPatrick = (name, donnees) => {
 				// data[i][j] = Math.floor(Math.random() * 11); // Remplacer par vos propres données
 			}
 		}
-
-		// const rectWidth = width / (dates.length * nbCols);
-		// const rectHeight = height / nbCols;
-
-		// const rectWidth = 50;
-		// const rectHeight = 50;
 
 		const svg = d3
 			.select(name)
