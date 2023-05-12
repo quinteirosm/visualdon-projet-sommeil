@@ -55,18 +55,31 @@ const heatmapProfondPatrick = (name, donnees) => {
 
 			tooltip.html(`${valeur}`).style("opacity", 1);
 		};
+		// const mousemove = function (event, d) {
+		// 	tooltip
+		// 		.html(`${valeur}`)
+		// 		.style("opacity", 1)
+		// 		.style("transform", "translateY(-55%)")
+		// 		.style("left", event.x / 2 + "px")
+		// 		.style("top", event.y / 2 - 30 + "px");
+		// };
+
 		const mousemove = function (event, d) {
 			tooltip
-				.style("transform", "translateY(-55%)")
-				.style("left", event.x / 2 + "px")
-				.style("top", event.y / 2 - 30 + "px");
+				.html(`${valeur}`)
+				.style("opacity", 1)
+				.style("position", "absolute")
+				.style("left", event.pageX + "px")
+				.style("top", event.pageY + "px")
+				.style("z-index", 1000);
 		};
+
 		const mouseleave = function (event, d) {
 			tooltip.style("opacity", 0);
 		};
 
 		let maxValue = 0;
-		let minValue = 100;
+		let minValue = 0;
 
 		console.log(dataRecueAppleWatch);
 
@@ -101,9 +114,9 @@ const heatmapProfondPatrick = (name, donnees) => {
 			if (pourcentageProfond > maxValue) {
 				maxValue = pourcentageProfond;
 			}
-			if (pourcentageProfond < minValue) {
-				minValue = pourcentageProfond;
-			}
+			// if (pourcentageProfond < minValue) {
+			// 	minValue = pourcentageProfond;
+			// }
 		});
 
 		const xScale = d3
@@ -324,19 +337,12 @@ const heatmapProfondMiguel = (name, donnees) => {
 			tooltip.style("opacity", 0);
 		};
 
-		let maxValue = 0;
-		let minValue = 100;
+		let maxValue = 30;
+		let minValue = 0;
 
 		dataRecue.forEach((element) => {
 			dates.push(element.heureReveil);
 			values.push(element.pourcentagePhaseProfond);
-
-			if (element.pourcentagePhaseProfond > maxValue) {
-				maxValue = element.pourcentagePhaseProfond;
-			}
-			if (element.pourcentagePhaseProfond < minValue) {
-				minValue = element.pourcentagePhaseProfond;
-			}
 		});
 
 		const xScale = d3
@@ -359,12 +365,6 @@ const heatmapProfondMiguel = (name, donnees) => {
 				// data[i][j] = Math.floor(Math.random() * 11); // Remplacer par vos propres données
 			}
 		}
-
-		// const rectWidth = width / (dates.length * nbCols);
-		// const rectHeight = height / nbCols;
-
-		// const rectWidth = 50;
-		// const rectHeight = 50;
 
 		const svg = d3
 			.select(name)
@@ -400,89 +400,11 @@ const heatmapProfondMiguel = (name, donnees) => {
 	});
 };
 
-heatmapProfondPatrick(".heatmap_profond_patrick_deux", [
-	dataCpap,
-	dataAppleWatch,
-]);
 heatmapProfondMiguel(".heatmap_profond_miguel", dataMiguel);
 
 /*
  * BAR CHART
  */
-
-// const bar = (name, donnees) => {
-// 	// append the svg object to the body of the page
-// 	const svg = d3
-// 		.select(name)
-// 		.append("svg")
-// 		.attr("width", width + margin.left + margin.right)
-// 		.attr("height", height + 100)
-// 		// .attr("width", width)
-// 		// .attr("height", height)
-// 		.append("g")
-// 		.attr("transform", `translate(${margin.left},${margin.top})`);
-
-// 	donnees.then(function (data) {
-// 		let maxValue = 0;
-// 		let minValue = 100;
-
-// 		data.forEach((element) => {
-// 			if (element.evenementHeure > maxValue) {
-// 				maxValue = element.evenementHeure;
-// 			}
-// 			if (element.evenementHeure < minValue) {
-// 				minValue = element.evenementHeure;
-// 			}
-// 		});
-
-// 		// X axis
-// 		const x = d3
-// 			.scaleBand()
-// 			.range([0, width - margin.left - margin.right])
-// 			.domain(
-// 				data.map((d) => {
-// 					// Si je mets date à la place de d.date, cela ne fonctionne pas
-// 					let date = dateFormatDayMonthYear(new Date(d.date));
-// 					return d.date;
-// 				})
-// 			)
-// 			.padding(0.2);
-// 		svg
-// 			.append("g")
-// 			.attr("transform", `translate(0,${height})`)
-// 			.call(d3.axisBottom(x))
-// 			.selectAll("text")
-// 			.attr("transform", "translate(-10,0)rotate(-45)")
-// 			.style("text-anchor", "end");
-
-// 		// Add Y axis
-// 		const y = d3.scaleLinear().domain([0, maxValue]).range([height, 0]);
-// 		svg.append("g").call(d3.axisLeft(y));
-
-// 		// Bars
-// 		svg
-// 			.selectAll("mybar")
-// 			.data(data)
-// 			.join("rect")
-// 			.attr("x", (d) => x(d.date))
-// 			.attr("width", x.bandwidth())
-// 			.attr("fill", couleurMin)
-// 			// no bar at the beginning thus:
-// 			.attr("height", (d) => height - y(0)) // always equal to 0
-// 			.attr("y", (d) => y(0));
-
-// 		// Animation
-// 		svg
-// 			.selectAll("rect")
-// 			.transition()
-// 			.duration(800)
-// 			.attr("y", (d) => y(d.evenementHeure))
-// 			.attr("height", (d) => height - y(d.evenementHeure))
-// 			.delay((d, i) => {
-// 				return i * 100;
-// 			});
-// 	});
-// };
 
 const bar = (name, donnees) => {
 	// append the svg object to the body of the page
@@ -899,175 +821,5 @@ const line = (name, donnees) => {
 			.on("mouseleave", mouseleave);
 	});
 };
-
-// const line = (name, donnees) => {
-// 	// append the svg object to the body of the page
-// 	const svg = d3
-// 		.select(name)
-// 		.append("svg")
-// 		.attr("width", width + margin.left + margin.right)
-// 		.attr("height", height + margin.top + margin.bottom)
-// 		.append("g")
-// 		.attr("transform", `translate(${margin.left},${margin.top})`);
-
-// 	// d3.csv("./test.csv").then(function (data) {
-// 	Promise.all(donnees).then(([dataRecueMiguel, dataRecueAppleWatch]) => {
-// 		// 	const id = 10;
-
-// 		/* 		const nuitMiguel = {
-// 				leger: dataRecueMiguel[id].tempsSommeilLeger,
-// 				paradoxale: dataRecueMiguel[id].tempsSommeilParadoxal,
-// 				profond: dataRecueMiguel[id].tempsSommeilProfond,
-// 			};
-// 			const nuitPatrick = {
-// 				leger: dataRecueAppleWatch[id].tempsSommeilLeger,
-// 				paradoxale: dataRecueAppleWatch[id].tempsSommeilParadoxal,
-// 				profond: dataRecueAppleWatch[id].tempsSommeilProfond,
-// 			};
-
-// 			console.log(nuitMiguel);
-// 			console.log(nuitPatrick);
-
-// 			let sleepData = [
-// 				{
-// 					dataMiguelComparaison: {
-// 						leger: dataRecueMiguel[id].tempsSommeilLeger,
-// 						paradoxale: dataRecueMiguel[id].tempsSommeilParadoxal,
-// 						profond: dataRecueMiguel[id].tempsSommeilProfond,
-// 					},
-// 				},
-// 				{
-// 					dataAppleWatchComparaison: {
-// 						leger: dataRecueAppleWatch[id].tempsSommeilLeger,
-// 						paradoxale: dataRecueAppleWatch[id].tempsSommeilParadoxal,
-// 						profond: dataRecueAppleWatch[id].tempsSommeilProfond,
-// 					},
-// 				},
-// 			];
-
-// 			let data = sleepData; */
-
-// 		let sleepData = [
-// 			{
-// 				dataMiguelComparaison: {
-// 					tempsSommeilLeger: 1,
-// 					tempsSommeilParadoxal: 1,
-// 					tempsSommeilProfond: 1,
-// 				},
-// 			},
-// 			{
-// 				dataAppleWatchComparaison: {
-// 					tempsSommeilLeger: 1,
-// 					tempsSommeilParadoxal: 1,
-// 					tempsSommeilProfond: 1,
-// 				},
-// 			},
-// 		];
-
-// 		let id1 = 0;
-// 		let id2 = 0;
-
-// 		for (let indexX = 0; indexX < dataRecueMiguel.length; indexX++) {
-// 			for (let indexY = 0; indexY < dataRecueAppleWatch.length; indexY++) {
-// 				if (dataRecueMiguel[indexX].date === dataRecueAppleWatch[indexY].date) {
-// 					id1 = indexX;
-// 					id2 = indexY;
-// 				}
-// 			}
-// 		}
-
-// 		sleepData[0].dataMiguelComparaison.tempsSommeilParadoxal =
-// 			dataRecueMiguel[id1].tempsSommeilParadoxal;
-// 		sleepData[0].dataMiguelComparaison.tempsSommeilLéger =
-// 			dataRecueMiguel[id1].tempsSommeilLéger;
-// 		sleepData[0].dataMiguelComparaison.tempsSommeilProfond =
-// 			dataRecueMiguel[id1].tempsSommeilProfond;
-// 		sleepData[1].dataAppleWatchComparaison.tempsSommeilParadoxal =
-// 			dataRecueAppleWatch[id2].tempsSommeilParadoxal;
-// 		sleepData[1].dataAppleWatchComparaison.tempsSommeilLéger =
-// 			dataRecueAppleWatch[id2].tempsSommeilLéger;
-// 		sleepData[1].dataAppleWatchComparaison.tempsSommeilProfond =
-// 			dataRecueAppleWatch[id2].tempsSommeilProfond;
-
-// 		// List of subgroups = header of the csv files = soil condition here
-// 		const subgroups = sleepData.map(({ d }) => d);
-
-// 		// List of groups = species here = value of the first column called group -> I show them on the X axis
-// 		const groups = sleepData.map((d) => d);
-
-// 		// Add X axis
-// 		const x = d3.scaleBand().domain(groups).range([0, width]).padding([0.2]);
-// 		svg
-// 			.append("g")
-// 			.attr("transform", `translate(0, ${height})`)
-// 			.call(d3.axisBottom(x).tickSizeOuter(0));
-
-// 		// Add Y axis
-// 		const y = d3.scaleLinear().domain([0, 550]).range([height, 0]);
-// 		svg.append("g").call(d3.axisLeft(y));
-
-// 		// color palette = one color per subgroup
-// 		const color = d3
-// 			.scaleOrdinal()
-// 			.domain(subgroups)
-// 			.range([couleurMin, couleurMilieu, couleurMax]);
-
-// 		//stack the data? --> stack per subgroup
-// 		const stackedData = d3.stack().keys(subgroups)(dataSleep);
-
-// 		// ----------------
-// 		// Create a tooltip
-// 		// ----------------
-// 		const tooltip = d3
-// 			.select(name)
-// 			.append("div")
-// 			.style("opacity", 0)
-// 			.attr("class", "tooltip")
-// 			.style("background-color", "white")
-// 			.style("border", "solid")
-// 			.style("border-width", "1px")
-// 			.style("border-radius", "5px")
-// 			.style("padding", "10px");
-
-// 		// Three function that change the tooltip when user hover / move / leave a cell
-// 		const mouseover = function (event, d) {
-// 			const subgroupName = d3.select(this.parentNode).datum().key;
-// 			const subgroupValue = d.data[subgroupName];
-// 			tooltip
-// 				.html("subgroup: " + subgroupName + "<br>" + "Value: " + subgroupValue)
-// 				.style("opacity", 1);
-// 		};
-// 		const mousemove = function (event, d) {
-// 			tooltip
-// 				.style("transform", "translateY(-55%)")
-// 				.style("left", event.x / 2 + "px")
-// 				.style("top", event.y / 2 - 30 + "px");
-// 		};
-// 		const mouseleave = function (event, d) {
-// 			tooltip.style("opacity", 0);
-// 		};
-
-// 		// Show the bars
-// 		svg
-// 			.append("g")
-// 			.selectAll("g")
-// 			// Enter in the stack data = loop key per key = group per group
-// 			.data(stackedData)
-// 			.join("g")
-// 			.attr("fill", (d) => color(d.key))
-// 			.selectAll("rect")
-// 			// enter a second time = loop subgroup per subgroup to add all rectangles
-// 			.data((d) => d)
-// 			.join("rect")
-// 			.attr("x", (d) => x(d.data.personne))
-// 			.attr("y", (d) => y(d[1]))
-// 			.attr("height", (d) => y(d[0]) - y(d[1]))
-// 			.attr("width", x.bandwidth())
-// 			.attr("stroke", "grey")
-// 			.on("mouseover", mouseover)
-// 			.on("mousemove", mousemove)
-// 			.on("mouseleave", mouseleave);
-// 	});
-// };
 
 line("#line_chart", [dataMiguel, dataAppleWatch]);
