@@ -23,8 +23,6 @@ const couleurMin = "#FFFFFF";
 const couleurMilieu = "#00A6FF";
 const couleurMax = "#0154C2";
 
-const dureeNuit = 7.25 * 60;
-
 /*
  * HEATMAP
  */
@@ -55,14 +53,6 @@ const heatmapProfondPatrick = (name, donnees) => {
 
 			tooltip.html(`${valeur}`).style("opacity", 1);
 		};
-		// const mousemove = function (event, d) {
-		// 	tooltip
-		// 		.html(`${valeur}`)
-		// 		.style("opacity", 1)
-		// 		.style("transform", "translateY(-55%)")
-		// 		.style("left", event.x / 2 + "px")
-		// 		.style("top", event.y / 2 - 30 + "px");
-		// };
 
 		const mousemove = function (event, d) {
 			tooltip
@@ -81,12 +71,6 @@ const heatmapProfondPatrick = (name, donnees) => {
 		let maxValue = 0;
 		let minValue = 0;
 
-		console.log(dataRecueAppleWatch);
-
-		/**
-		 * dataCpap[i].tempsSommeil/dataCpap[i].tempsSommeilProfond *100
-		 */
-
 		let tableauCopie = [...dataRecueAppleWatch];
 
 		dataRecueCpap.forEach((element, index) => {
@@ -97,9 +81,6 @@ const heatmapProfondPatrick = (name, donnees) => {
 
 			let pourcentageProfond = 0;
 
-			// console.log("tempsProfond : " + tempsProfond);
-			// console.log("dureeNuit : " + dureeNuit);
-
 			if (tempsProfond == 1 || dureeNuit == 1) {
 				pourcentageProfond = 0;
 			} else {
@@ -109,20 +90,10 @@ const heatmapProfondPatrick = (name, donnees) => {
 			dates.push(element.date);
 			values.push(pourcentageProfond);
 
-			// console.log(pourcentageProfond);
-
 			if (pourcentageProfond > maxValue) {
 				maxValue = pourcentageProfond;
 			}
-			// if (pourcentageProfond < minValue) {
-			// 	minValue = pourcentageProfond;
-			// }
 		});
-
-		const xScale = d3
-			.scaleTime()
-			.domain([new Date(dates[0]), new Date(dates[dates.length - 1])])
-			.range([0, width]);
 
 		const colorScale = d3
 			.scaleLinear()
@@ -192,6 +163,10 @@ const heatmapProfondPatrick = (name, donnees) => {
 };
 
 heatmapProfondPatrick(".heatmap_profond_patrick", [dataCpap, dataAppleWatch]);
+heatmapProfondPatrick(".heatmap_profond_patrick_deux", [
+	dataCpap,
+	dataAppleWatch,
+]);
 
 const heatmapApneePatrick = (name, donnees) => {
 	const dates = [];
@@ -243,11 +218,6 @@ const heatmapApneePatrick = (name, donnees) => {
 				minValue = element.evenementHeure;
 			}
 		});
-
-		const xScale = d3
-			.scaleTime()
-			.domain([new Date(dates[0]), new Date(dates[dates.length - 1])])
-			.range([0, width]);
 
 		const colorScale = d3
 			.scaleLinear()
@@ -345,11 +315,6 @@ const heatmapProfondMiguel = (name, donnees) => {
 			values.push(element.pourcentagePhaseProfond);
 		});
 
-		const xScale = d3
-			.scaleTime()
-			.domain([new Date(dates[0]), new Date(dates[dates.length - 1])])
-			.range([0, width]);
-
 		const colorScale = d3
 			.scaleLinear()
 			.domain([minValue, maxValue])
@@ -416,7 +381,7 @@ const bar = (name, donnees) => {
 		.append("g")
 		.attr("transform", `translate(${60},${margin.top})`);
 
-	donnees.then(function (data) {
+	donnees.then((data) => {
 		// ----------------
 		// Create a tooltip
 		// ----------------
@@ -467,7 +432,8 @@ const bar = (name, donnees) => {
 			.range([0, height])
 			.domain(
 				data.map((d) => {
-					let date = dateFormatDayMonthYear(new Date(d.date));
+					// Si nous mettons la date au bon format, le graph n'affichera que la première ligne
+					//let date = dateFormatDayMonthYear(new Date(d.date));
 					return d.date;
 				})
 			)
@@ -522,7 +488,7 @@ const circular = (name, donnees) => {
 	const outerRadius = Math.min(width, height) / 2; // the outerRadius goes from the middle of the SVG area to the border
 
 	// append the svg object
-	const svg3 = d3
+	const svg = d3
 		.select(name)
 		.append("svg")
 		.attr("width", width)
@@ -530,7 +496,7 @@ const circular = (name, donnees) => {
 		.append("g")
 		.attr(
 			"transform",
-			`translate(${width / 2 + margin.left}, ${height / 2 + margin.top})`
+			`translate(${width / 2 + margin.left}, ${height / 2 + margin.top + 10})`
 		);
 
 	donnees.then((data) => {
@@ -566,9 +532,6 @@ const circular = (name, donnees) => {
 					`${d.fuiteMoyenne} ${litreSingulierPluriel}/minute ${supplementDeTexteSiPasDeFuite}`
 				)
 				.style("opacity", 1);
-			// tooltip
-			// 	.html("Sommeil " + subgroupName + "<br>" + subgroupValue + " min")
-			// 	.style("opacity", 1);
 		};
 		const mousemove = function (event, d) {
 			tooltip
@@ -603,7 +566,7 @@ const circular = (name, donnees) => {
 			.domain([minValue, maxValue]); // Domain of Y is from 0 to the max seen in the data
 
 		// Add the bars
-		svg3
+		svg
 			.append("g")
 			.selectAll("path")
 			.data(data)
@@ -625,7 +588,7 @@ const circular = (name, donnees) => {
 			.on("mouseleave", mouseleave);
 
 		// Add the labels
-		svg3
+		svg
 			.append("g")
 			.selectAll("g")
 			.data(data)
@@ -660,29 +623,6 @@ const circular = (name, donnees) => {
 			.on("mouseover", mouseover)
 			.on("mousemove", mousemove)
 			.on("mouseleave", mouseleave);
-
-		// svg
-		// 	.append("g")
-		// 	.selectAll("g")
-		// 	// Enter in the stack data = loop key per key = group per group
-		// 	.data(stackedData)
-		// 	.join("g")
-		// 	.attr("fill", (d) => {
-		// 		console.log("d.key : " + d.key);
-		// 		return color(d.key);
-		// 	})
-		// 	.selectAll("rect")
-		// 	// enter a second time = loop subgroup per subgroup to add all rectangles
-		// 	.data((d) => d)
-		// 	.join("rect")
-		// 	.attr("x", (d) => x(d.data.personne))
-		// 	.attr("y", (d) => y(d[1]))
-		// 	.attr("height", (d) => y(d[0]) - y(d[1]))
-		// 	.attr("width", x.bandwidth())
-		// 	.attr("stroke", "white")
-		// 	.on("mouseover", mouseover)
-		// 	.on("mousemove", mousemove)
-		// 	.on("mouseleave", mouseleave);
 	});
 };
 
@@ -701,43 +641,6 @@ const line = (name, donnees) => {
 		.attr("transform", `translate(${margin.left},${margin.top})`);
 
 	d3.csv("./sommeilprofond.csv").then(function (data) {
-		// Promise.all(donnees).then(([dataRecueMiguel, dataRecueAppleWatch]) => {
-		// 	const idMi = 10;
-		// 	const idPat = 24;
-
-		// 	const nuitMiguel = {
-		// 		leger: dataRecueMiguel[idMi].tempsSommeilLeger,
-		// 		paradoxale: dataRecueMiguel[idMi].tempsSommeilParadoxal,
-		// 		profond: dataRecueMiguel[idMi].tempsSommeilProfond,
-		// 	};
-		// 	const nuitPatrick = {
-		// 		leger: dataRecueAppleWatch[0].tempsSommeilLeger,
-		// 		paradoxale: dataRecueAppleWatch[0].tempsSommeilParadoxal,
-		// 		profond: dataRecueAppleWatch[0].tempsSommeilProfond,
-		// 	};
-
-		// 	console.log(nuitMiguel);
-		// 	console.log(nuitPatrick);
-
-		// 	let sleepData = [
-		// 		{
-		// 			dataMiguelComparaison: {
-		// 				leger: dataRecueMiguel[id].tempsSommeilLeger,
-		// 				paradoxale: dataRecueMiguel[id].tempsSommeilParadoxal,
-		// 				profond: dataRecueMiguel[id].tempsSommeilProfond,
-		// 			},
-		// 		},
-		// 		{
-		// 			dataAppleWatchComparaison: {
-		// 				leger: dataRecueAppleWatch[id].tempsSommeilLeger,
-		// 				paradoxale: dataRecueAppleWatch[id].tempsSommeilParadoxal,
-		// 				profond: dataRecueAppleWatch[id].tempsSommeilProfond,
-		// 			},
-		// 		},
-		// 	];
-
-		// 	let data = sleepData;
-
 		// List of subgroups = header of the csv files = soil condition here
 		const subgroups = data.columns.slice(1);
 
@@ -752,7 +655,10 @@ const line = (name, donnees) => {
 			.call(d3.axisBottom(x).tickSizeOuter(0));
 
 		// Add Y axis
-		const y = d3.scaleLinear().domain([0, dureeNuit]).range([height, 0]);
+		const y = d3
+			.scaleLinear()
+			.domain([0, 7.25 * 60])
+			.range([height, 0]);
 		svg.append("g").call(d3.axisLeft(y));
 
 		// color palette = one color per subgroup
