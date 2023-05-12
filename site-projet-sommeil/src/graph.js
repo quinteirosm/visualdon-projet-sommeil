@@ -43,16 +43,13 @@ const heatmapProfondPatrick = (name, donnees) => {
 		 * dataCpap[i].tempsSommeil/dataCpap[i].tempsSommeilProfond *100
 		 */
 
-		// console.log(dataRecueCpap);
-		// console.log(dataRecueAppleWatch);
-
 		let tableauCopie = [...dataRecueAppleWatch];
 
-		tableauCopie.forEach((element, index) => {
-			let tempsProfond = element.tempsSommeilProfond
-				? element.tempsSommeilProfond
+		dataRecueCpap.forEach((element, index) => {
+			let tempsProfond = tableauCopie[index].tempsSommeilProfond
+				? tableauCopie[index].tempsSommeilProfond
 				: 1;
-			let dureeNuit = element.duree ? element.duree : 1;
+			let dureeNuit = tableauCopie[index].duree ? tableauCopie[index].duree : 1;
 
 			let pourcentageProfond = 0;
 
@@ -64,8 +61,6 @@ const heatmapProfondPatrick = (name, donnees) => {
 			} else {
 				pourcentageProfond = (tempsProfond / (dureeNuit * 60)) * 100;
 			}
-
-			// console.log("pourcentage : " + pourcentageProfond);
 
 			dates.push(element.date);
 			values.push(pourcentageProfond);
