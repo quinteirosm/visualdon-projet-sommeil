@@ -34,6 +34,37 @@ const heatmapProfondPatrick = (name, donnees) => {
 	const values = [];
 
 	Promise.all(donnees).then(([dataRecueCpap, dataRecueAppleWatch]) => {
+		// ----------------
+		// Create a tooltip
+		// ----------------
+		const tooltip = d3
+			.select(name)
+			.append("div")
+			.style("opacity", 0)
+			.attr("class", "tooltip")
+			.style("background-color", "#005fc8")
+			.style("border", "solid")
+			.style("border-width", "1px")
+			.style("border-radius", "5px")
+			.style("padding", "10px");
+
+		// Three function that change the tooltip when user hover / move / leave a cell
+		const mouseover = function (event, d) {
+			// valeur arrondie à 2 chiffres après la virgule
+			let valeur = Math.round(d * 100) / 100;
+
+			tooltip.html(`${valeur}`).style("opacity", 1);
+		};
+		const mousemove = function (event, d) {
+			tooltip
+				.style("transform", "translateY(-55%)")
+				.style("left", event.x / 2 + "px")
+				.style("top", event.y / 2 - 30 + "px");
+		};
+		const mouseleave = function (event, d) {
+			tooltip.style("opacity", 0);
+		};
+
 		let maxValue = 0;
 		let minValue = 100;
 
@@ -123,7 +154,10 @@ const heatmapProfondPatrick = (name, donnees) => {
 			.attr("y", (d, i) => Math.floor(i / nbCols) * rectHeight)
 			.attr("width", rectWidth)
 			.attr("height", rectHeight)
-			.attr("fill", (d) => colorScale(d));
+			.attr("fill", (d) => colorScale(d))
+			.on("mouseover", mouseover)
+			.on("mousemove", mousemove)
+			.on("mouseleave", mouseleave);
 
 		// Insertion de texte dans chaque case
 		rows
@@ -151,6 +185,37 @@ const heatmapApneePatrick = (name, donnees) => {
 	const values = [];
 
 	donnees.then((dataRecue) => {
+		// ----------------
+		// Create a tooltip
+		// ----------------
+		const tooltip = d3
+			.select(name)
+			.append("div")
+			.style("opacity", 0)
+			.attr("class", "tooltip")
+			.style("background-color", "#005fc8")
+			.style("border", "solid")
+			.style("border-width", "1px")
+			.style("border-radius", "5px")
+			.style("padding", "10px");
+
+		// Three function that change the tooltip when user hover / move / leave a cell
+		const mouseover = function (event, d) {
+			// valeur arrondie à 2 chiffres après la virgule
+			let valeur = Math.round(d * 100) / 100;
+
+			tooltip.html(`${valeur}`).style("opacity", 1);
+		};
+		const mousemove = function (event, d) {
+			tooltip
+				.style("transform", "translateY(-55%)")
+				.style("left", event.x / 2 + "px")
+				.style("top", event.y / 2 - 30 + "px");
+		};
+		const mouseleave = function (event, d) {
+			tooltip.style("opacity", 0);
+		};
+
 		let maxValue = 0;
 		let minValue = 100;
 
@@ -214,7 +279,10 @@ const heatmapApneePatrick = (name, donnees) => {
 			.attr("y", (d, i) => Math.floor(i / nbCols) * rectHeight)
 			.attr("width", rectWidth)
 			.attr("height", rectHeight)
-			.attr("fill", (d) => colorScale(d));
+			.attr("fill", (d) => colorScale(d))
+			.on("mouseover", mouseover)
+			.on("mousemove", mousemove)
+			.on("mouseleave", mouseleave);
 	});
 };
 
@@ -225,6 +293,37 @@ const heatmapProfondMiguel = (name, donnees) => {
 	const values = [];
 
 	donnees.then((dataRecue) => {
+		// ----------------
+		// Create a tooltip
+		// ----------------
+		const tooltip = d3
+			.select(name)
+			.append("div")
+			.style("opacity", 0)
+			.attr("class", "tooltip")
+			.style("background-color", "#005fc8")
+			.style("border", "solid")
+			.style("border-width", "1px")
+			.style("border-radius", "5px")
+			.style("padding", "10px");
+
+		// Three function that change the tooltip when user hover / move / leave a cell
+		const mouseover = function (event, d) {
+			// valeur arrondie à 2 chiffres après la virgule
+			let valeur = Math.round(d * 100) / 100;
+
+			tooltip.html(`${valeur}`).style("opacity", 1);
+		};
+		const mousemove = function (event, d) {
+			tooltip
+				.style("transform", "translateY(-55%)")
+				.style("left", event.x / 2 + "px")
+				.style("top", event.y / 2 - 30 + "px");
+		};
+		const mouseleave = function (event, d) {
+			tooltip.style("opacity", 0);
+		};
+
 		let maxValue = 0;
 		let minValue = 100;
 
@@ -294,7 +393,10 @@ const heatmapProfondMiguel = (name, donnees) => {
 			.attr("y", (d, i) => Math.floor(i / nbCols) * rectHeight)
 			.attr("width", rectWidth)
 			.attr("height", rectHeight)
-			.attr("fill", (d) => colorScale(d));
+			.attr("fill", (d) => colorScale(d))
+			.on("mouseover", mouseover)
+			.on("mousemove", mousemove)
+			.on("mouseleave", mouseleave);
 	});
 };
 
