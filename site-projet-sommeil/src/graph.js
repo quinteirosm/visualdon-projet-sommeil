@@ -399,7 +399,7 @@ const heatmapProfondMiguel = (name, donnees) => {
 			.attr("width", width + margin.left + margin.right)
 			.attr("height", height + margin.top + margin.bottom)
 			.append("g")
-			.attr("transform", `translate(${margin.left}, ${margin.top})`);
+			.attr("transform", `translate(${margin.left + 40}, ${margin.top})`);
 
 		const rows = svg
 			.selectAll("g")
@@ -424,10 +424,18 @@ const heatmapProfondMiguel = (name, donnees) => {
 			.attr("height", rectHeight)
 			.attr("fill", (d) => colorScale(d));
 
-		const yAxis = d3
-			.axisLeft()
-			.scale(d3.scaleLinear().domain([minValue, maxValue]).range([0, height]));
+		const rowDates = [
+			"01.03 - 05.03",
+			"06.03 - 10.03",
+			"11.03 - 15.03",
+			"16.03 - 20.03",
+			"21.03 - 25.03",
+			"26.03 - 30.03",
+		];
 
+		const yScale = d3.scaleBand().domain(rowDates).range([0, height]);
+
+		const yAxis = d3.axisLeft(yScale);
 		svg.append("g").attr("class", "axis").call(yAxis);
 
 		rows
