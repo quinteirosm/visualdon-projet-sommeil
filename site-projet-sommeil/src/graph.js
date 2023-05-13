@@ -1,5 +1,28 @@
 "use strict";
 
+// Vérifier si le navigateur est Google Chrome
+var isChrome =
+	/Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+
+// Vérifier si le navigateur est Chromium (basé sur Chrome)
+var isChromium =
+	/Chromium/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+
+// Vérifier si le navigateur est Opera (basé sur Chromium)
+var isOpera =
+	/OPR/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+
+// Vérifier si le navigateur est Microsoft Edge (basé sur Chromium)
+var isEdge =
+	/Edg/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+
+// Afficher une alerte si le navigateur n'est pas Google Chrome
+if (!isChrome && !isChromium && !isOpera && !isEdge) {
+	alert(
+		"Bonjour,\nNavré de vous apprendre que ce cite est optimisé pour Google Chrome.\nVeuillez utiliser ce navigateur pour une meilleure expérience.\nMerci beaucoup.\nL'équipe de SleepCompare ♡"
+	);
+}
+
 import * as d3 from "d3";
 
 import {
