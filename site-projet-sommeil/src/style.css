@@ -85,6 +85,10 @@ a:active {
 	text-decoration: none;
 }
 
+.graph + p {
+	margin-left: 40px;
+}
+
 /*
 *
 * SECTIONS
