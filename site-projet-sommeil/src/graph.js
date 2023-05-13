@@ -284,42 +284,91 @@ const heatmapApneePatrick = (name, donnees) => {
 
 heatmapApneePatrick(".heatmap_nb_apnee", dataCpap);
 
+// const heatmapProfondMiguel = (name, donnees) => {
+// 	const dates = [];
+// 	const values = [];
+
+// 	donnees.then((dataRecue) => {
+// 		let maxValue = 26;
+// 		let minValue = 0;
+
+// 		dataRecue.forEach((element) => {
+// 			dates.push(element.heureReveil);
+// 			values.push(element.pourcentagePhaseProfond);
+// 		});
+
+// 		const colorScale = d3
+// 			.scaleLinear()
+// 			.domain([minValue, maxValue])
+// 			.range([couleurMin, couleurMax]);
+
+// 		let compteur = 0;
+// 		const data = [];
+// 		for (let i = 0; i < dates.length; i++) {
+// 			data[i] = [];
+// 			for (let j = 0; j < nbCols; j++) {
+// 				data[i][j] = values[compteur];
+// 				compteur++;
+// 				// data[i][j] = Math.floor(Math.random() * 11); // Remplacer par vos propres données
+// 			}
+// 		}
+
+// 		const svg = d3
+// 			.select(name)
+// 			.append("svg")
+// 			.attr("width", width)
+// 			.attr("height", height);
+
+// 		const rows = svg
+// 			.selectAll("g")
+// 			.data(data)
+// 			.enter()
+// 			.append("g")
+// 			.attr("transform", (d, i) => `translate(0, ${i * rectHeight})`);
+
+// 		const rects = rows
+// 			.selectAll("rect")
+// 			.data((d) => d)
+// 			.enter()
+// 			.append("rect")
+// 			.attr(
+// 				"x",
+// 				(d, i) =>
+// 					(i % nbCols) * rectWidth +
+// 					Math.floor(i / nbCols) * dates.length * rectWidth
+// 			)
+// 			.attr("y", (d, i) => Math.floor(i / nbCols) * rectHeight)
+// 			.attr("width", rectWidth)
+// 			.attr("height", rectHeight)
+// 			.attr("fill", (d) => colorScale(d));
+// 		// .on("mouseover", mouseover)
+// 		// .on("mousemove", mousemove)
+// 		// .on("mouseleave", mouseleave);
+
+// 		// Insertion de texte dans chaque case
+// 		rows
+// 			.selectAll("text")
+// 			.data((d) => d)
+// 			.enter()
+// 			.append("text")
+// 			.attr(
+// 				"x",
+// 				(d, i) =>
+// 					(i % nbCols) * rectWidth +
+// 					Math.floor(i / nbCols) * dates.length * rectWidth +
+// 					10
+// 			)
+// 			.attr("y", (d, i) => Math.floor(i / nbCols) * rectHeight + 20)
+// 			.text((d) => Math.round(d * 100) / 100 + "%")
+// 			.attr("fill", "black");
+// 	});
+// };
+
 const heatmapProfondMiguel = (name, donnees) => {
 	const dates = [];
 	const values = [];
 
 	donnees.then((dataRecue) => {
-		// // ----------------
-		// // Create a tooltip
-		// // ----------------
-		// const tooltip = d3
-		// 	.select(name)
-		// 	.append("div")
-		// 	.style("opacity", 0)
-		// 	.attr("class", "tooltip")
-		// 	.style("background-color", "#005fc8")
-		// 	.style("border", "solid")
-		// 	.style("border-width", "1px")
-		// 	.style("border-radius", "5px")
-		// 	.style("padding", "10px");
-
-		// // Three function that change the tooltip when user hover / move / leave a cell
-		// const mouseover = function (event, d) {
-		// 	// valeur arrondie à 2 chiffres après la virgule
-		// 	let valeur = Math.round(d * 100) / 100;
-
-		// 	tooltip.html(`${valeur}`).style("opacity", 1);
-		// };
-		// const mousemove = function (event, d) {
-		// 	tooltip
-		// 		.style("transform", "translateY(-55%)")
-		// 		.style("left", event.x / 2 + "px")
-		// 		.style("top", event.y / 2 - 30 + "px");
-		// };
-		// const mouseleave = function (event, d) {
-		// 	tooltip.style("opacity", 0);
-		// };
-
 		let maxValue = 26;
 		let minValue = 0;
 
@@ -335,24 +384,26 @@ const heatmapProfondMiguel = (name, donnees) => {
 
 		let compteur = 0;
 		const data = [];
-		for (let i = 0; i < dates.length; i++) {
+		for (let i = 0; i < dates.length - 1; i++) {
+			// Modifier ici pour exclure la dernière ligne
 			data[i] = [];
 			for (let j = 0; j < nbCols; j++) {
 				data[i][j] = values[compteur];
 				compteur++;
-				// data[i][j] = Math.floor(Math.random() * 11); // Remplacer par vos propres données
 			}
 		}
 
 		const svg = d3
 			.select(name)
 			.append("svg")
-			.attr("width", width)
-			.attr("height", height);
+			.attr("width", width + margin.left + margin.right)
+			.attr("height", height + margin.top + margin.bottom)
+			.append("g")
+			.attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 		const rows = svg
 			.selectAll("g")
-			.data(data)
+			.data(data.slice(0, 6))
 			.enter()
 			.append("g")
 			.attr("transform", (d, i) => `translate(0, ${i * rectHeight})`);
@@ -368,15 +419,17 @@ const heatmapProfondMiguel = (name, donnees) => {
 					(i % nbCols) * rectWidth +
 					Math.floor(i / nbCols) * dates.length * rectWidth
 			)
-			.attr("y", (d, i) => Math.floor(i / nbCols) * rectHeight)
+			.attr("y", 0)
 			.attr("width", rectWidth)
 			.attr("height", rectHeight)
 			.attr("fill", (d) => colorScale(d));
-		// .on("mouseover", mouseover)
-		// .on("mousemove", mousemove)
-		// .on("mouseleave", mouseleave);
 
-		// Insertion de texte dans chaque case
+		const yAxis = d3
+			.axisLeft()
+			.scale(d3.scaleLinear().domain([minValue, maxValue]).range([0, height]));
+
+		svg.append("g").attr("class", "axis").call(yAxis);
+
 		rows
 			.selectAll("text")
 			.data((d) => d)
@@ -389,7 +442,7 @@ const heatmapProfondMiguel = (name, donnees) => {
 					Math.floor(i / nbCols) * dates.length * rectWidth +
 					10
 			)
-			.attr("y", (d, i) => Math.floor(i / nbCols) * rectHeight + 20)
+			.attr("y", 20)
 			.text((d) => Math.round(d * 100) / 100 + "%")
 			.attr("fill", "black");
 	});
