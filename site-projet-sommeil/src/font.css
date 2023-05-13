@@ -19,3 +19,7 @@ p {
 	font-size: 20px;
 	text-align: center;
 }
+
+q {
+	font-style: italic;
+}

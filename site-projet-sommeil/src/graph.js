@@ -23,140 +23,19 @@ const couleurMin = "#FFFFFF";
 const couleurMilieu = "#00A6FF";
 const couleurMax = "#0154C2";
 
+// Utilisé pour les libellés des heatmaps
+const rowDates = [
+	"01.03 - 05.03",
+	"06.03 - 10.03",
+	"11.03 - 15.03",
+	"16.03 - 20.03",
+	"21.03 - 25.03",
+	"26.03 - 30.03",
+];
+
 /*
  * HEATMAP
  */
-
-// const heatmapProfondPatrick = (name, donnees) => {
-// 	const dates = [];
-// 	const values = [];
-
-// 	Promise.all(donnees).then(([dataRecueCpap, dataRecueAppleWatch]) => {
-// 		// // ----------------
-// 		// // Create a tooltip
-// 		// // ----------------
-// 		// const tooltip = d3
-// 		// 	.select(name)
-// 		// 	.append("div")
-// 		// 	.style("opacity", 0)
-// 		// 	.attr("class", "tooltip")
-// 		// 	.style("background-color", "#005fc8")
-// 		// 	.style("border", "solid")
-// 		// 	.style("border-width", "1px")
-// 		// 	.style("border-radius", "5px")
-// 		// 	.style("padding", "10px");
-
-// 		// // Three function that change the tooltip when user hover / move / leave a cell
-// 		// const mouseover = function (event, d) {
-// 		// 	// valeur arrondie à 2 chiffres après la virgule
-// 		// 	let valeur = Math.round(d * 100) / 100;
-
-// 		// 	tooltip.html(`${valeur}`).style("opacity", 1);
-// 		// };
-
-// 		// const mousemove = function (event, d) {
-// 		// 	tooltip
-// 		// 		.html(`${valeur}`)
-// 		// 		.style("opacity", 1)
-// 		// 		.style("position", "absolute")
-// 		// 		.style("left", event.pageX + "px")
-// 		// 		.style("top", event.pageY + "px")
-// 		// 		.style("z-index", 1000);
-// 		// };
-
-// 		// const mouseleave = function (event, d) {
-// 		// 	tooltip.style("opacity", 0);
-// 		// };
-
-// 		let maxValue = 26;
-// 		let minValue = 0;
-
-// 		let tableauCopie = [...dataRecueAppleWatch];
-
-// 		dataRecueCpap.forEach((element, index) => {
-// 			let tempsProfond = tableauCopie[index].tempsSommeilProfond
-// 				? tableauCopie[index].tempsSommeilProfond
-// 				: 1;
-// 			let dureeNuit = tableauCopie[index].duree ? tableauCopie[index].duree : 1;
-
-// 			let pourcentageProfond = 0;
-
-// 			if (tempsProfond == 1 || dureeNuit == 1) {
-// 				pourcentageProfond = 0;
-// 			} else {
-// 				pourcentageProfond = (tempsProfond / (dureeNuit * 60)) * 100;
-// 			}
-
-// 			dates.push(element.date);
-// 			values.push(pourcentageProfond);
-// 		});
-
-// 		const colorScale = d3
-// 			.scaleLinear()
-// 			.domain([minValue, maxValue])
-// 			.range([couleurMin, couleurMax]);
-
-// 		let compteur = 0;
-// 		const data = [];
-// 		for (let i = 0; i < dates.length; i++) {
-// 			data[i] = [];
-// 			for (let j = 0; j < nbCols; j++) {
-// 				data[i][j] = values[compteur];
-// 				compteur++;
-// 				// data[i][j] = Math.floor(Math.random() * 11); // Remplacer par vos propres données
-// 			}
-// 		}
-
-// 		const svg = d3
-// 			.select(name)
-// 			.append("svg")
-// 			.attr("width", width)
-// 			.attr("height", height);
-
-// 		const rows = svg
-// 			.selectAll("g")
-// 			.data(data)
-// 			.enter()
-// 			.append("g")
-// 			.attr("transform", (d, i) => `translate(0, ${i * rectHeight})`);
-
-// 		const rects = rows
-// 			.selectAll("rect")
-// 			.data((d) => d)
-// 			.enter()
-// 			.append("rect")
-// 			.attr(
-// 				"x",
-// 				(d, i) =>
-// 					(i % nbCols) * rectWidth +
-// 					Math.floor(i / nbCols) * dates.length * rectWidth
-// 			)
-// 			.attr("y", (d, i) => Math.floor(i / nbCols) * rectHeight)
-// 			.attr("width", rectWidth)
-// 			.attr("height", rectHeight)
-// 			.attr("fill", (d) => colorScale(d));
-// 		// .on("mouseover", mouseover)
-// 		// .on("mousemove", mousemove)
-// 		// .on("mouseleave", mouseleave);
-
-// 		// Insertion de texte dans chaque case
-// 		rows
-// 			.selectAll("text")
-// 			.data((d) => d)
-// 			.enter()
-// 			.append("text")
-// 			.attr(
-// 				"x",
-// 				(d, i) =>
-// 					(i % nbCols) * rectWidth +
-// 					Math.floor(i / nbCols) * dates.length * rectWidth +
-// 					10
-// 			)
-// 			.attr("y", (d, i) => Math.floor(i / nbCols) * rectHeight + 20)
-// 			.text((d) => Math.round(d * 100) / 100 + "%")
-// 			.attr("fill", "black");
-// 	});
-// };
 
 const heatmapProfondPatrick = (name, donnees) => {
 	const dates = [];
@@ -231,15 +110,6 @@ const heatmapProfondPatrick = (name, donnees) => {
 			.attr("width", rectWidth)
 			.attr("height", rectHeight)
 			.attr("fill", (d) => colorScale(d));
-
-		const rowDates = [
-			"01.03 - 05.03",
-			"06.03 - 10.03",
-			"11.03 - 15.03",
-			"16.03 - 20.03",
-			"21.03 - 25.03",
-			"26.03 - 30.03",
-		];
 
 		const yScale = d3.scaleBand().domain(rowDates).range([0, height]);
 
@@ -336,15 +206,6 @@ const heatmapApneePatrick = (name, donnees) => {
 			.attr("height", rectHeight)
 			.attr("fill", (d) => colorScale(d));
 
-		const rowDates = [
-			"01.03 - 05.03",
-			"06.03 - 10.03",
-			"11.03 - 15.03",
-			"16.03 - 20.03",
-			"21.03 - 25.03",
-			"26.03 - 30.03",
-		];
-
 		const yScale = d3.scaleBand().domain(rowDates).range([0, height]);
 
 		const yAxis = d3.axisLeft(yScale);
@@ -430,15 +291,6 @@ const heatmapProfondMiguel = (name, donnees) => {
 			.attr("height", rectHeight)
 			.attr("fill", (d) => colorScale(d));
 
-		const rowDates = [
-			"01.03 - 05.03",
-			"06.03 - 10.03",
-			"11.03 - 15.03",
-			"16.03 - 20.03",
-			"21.03 - 25.03",
-			"26.03 - 30.03",
-		];
-
 		const yScale = d3.scaleBand().domain(rowDates).range([0, height]);
 
 		const yAxis = d3.axisLeft(yScale);
@@ -469,7 +321,7 @@ heatmapProfondMiguel(".heatmap_profond_miguel", dataMiguel);
  */
 
 const bar = (name, donnees) => {
-	// append the svg object to the body of the page
+	// Ajout du SVG
 	const svg = d3
 		.select(name)
 		.append("svg")
@@ -577,8 +429,6 @@ bar("#bar_chart", dataCpap);
 /*
  * GRAPH CIRCULAIRE
  */
-
-// set the dimensions and margins of the graph
 
 const circular = (name, donnees) => {
 	const innerRadius = 90;
@@ -724,7 +574,7 @@ const circular = (name, donnees) => {
 };
 
 circular("#circular_chart", dataCpap);
-
+// Si on veut afficher les données de 2023 on décommente la ligne suivante et on commente la ligne précédent ce commentaire
 // circular("#circular_chart", dataCpap2023);
 
 const line = (name, donnees) => {
@@ -736,6 +586,9 @@ const line = (name, donnees) => {
 		.attr("height", height + margin.top + margin.bottom)
 		.append("g")
 		.attr("transform", `translate(${margin.left},${margin.top})`);
+
+	// Nous avons du mettre à la main les données dans un fichier csv pour pouvoir les utiliser avec d3 en raison de la complexité de la structure de données et de la difficulté à les manipuler avec d3
+	// Nous avons recherché manuellement deux nuits de la même durée approximative pour pouvoir comparer les données
 
 	d3.csv("./sommeilprofond.csv").then(function (data) {
 		// List of subgroups = header of the csv files = soil condition here
