@@ -55,7 +55,7 @@ Si nous parlons de **nos** données, personne d'autre dans le web n'aura utilis�
 Concernant ces données, le traitement a été purement logiciel.
 Nous avons simplement trié ces données pour correspondre à la plage qu'est le mois de mars 2023.
 
-### Données Cpap de Patrick
+### Données CPAP de Patrick
 
 Concernant ces données, le traitement a été purement logiciel.
 Nous avons simplement trié ces données pour correspondre à la plage qu'est le mois de mars 2023.
