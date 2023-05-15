@@ -19,7 +19,7 @@ var isEdge =
 // Afficher une alerte si le navigateur n'est pas Google Chrome
 if (!isChrome && !isChromium && !isOpera && !isEdge) {
 	alert(
-		"Bonjour,\nNavré de vous apprendre que ce cite est optimisé pour Google Chrome.\nVeuillez utiliser ce navigateur pour une meilleure expérience.\nMerci beaucoup.\nL'équipe de SleepCompare ♡"
+		"Bonjour,\nNavré de vous apprendre que ce site est optimisé pour Google Chrome.\nVeuillez utiliser ce navigateur pour une meilleure expérience.\nMerci beaucoup.\nL'équipe de SleepCompare ♡"
 	);
 }
 
