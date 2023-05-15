@@ -46,7 +46,7 @@ Si nous parlons de **nos** données, personne d'autre dans le web n'aura utilis�
 
 ---
 
-# Rendu final
+# Rendu final
 
 ## Méthode de préparation de données
 
