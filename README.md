@@ -45,6 +45,7 @@ Si nous parlons strictement des données relatives au sommeil d'une personne, le
 Si nous parlons de **nos** données, personne d'autre dans le web n'aura utilisé **ces** données précisément, à l'exception des données _CPAP_ de Patrick en raison de son suivi par un pneumologue et par la ligue Pulmonaire Vaudoise, ce qui rends le projet plus unique.
 
 # Rendu final
+
 ## Méthode de préparation de données
 
 ### Données Xiaomi Mi Band de Miguel
