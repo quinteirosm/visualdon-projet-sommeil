@@ -62,6 +62,10 @@ Nous avons simplement trié ces données pour correspondre à la plage qu'est le
 
 ### Données Apple Watch de Patrick
 
-Pour les données de l'Apple Watch c'est un autre tour de bras! Le fichier est non seulement un XML mais il était aussi beaucoup trop lourd (1.66 Go) et faisait crash le navigateur lorsque l'on voulais le trier en JS. Nous avons donc dû faire un tri préliminaire pour ne garder que les données de sommeil datant de 2023 afin de l'alléger. Une fois cette opération faite, le fichier était assez léger pour pouvoir être trié en JS et a subi le même sort que les autres datasets soit il a été trié pour ne garder que les données de Mars 2023.
+Pour les données de l'Apple Watch c'est un autre tour de bras! Le fichier est non seulement un XML mais il était aussi beaucoup trop lourd (1.66 Go) et faisait crash le navigateur lorsque l'on voulais le trier en JS. Nous avons donc dû faire un tri préliminaire pour ne garder que les données de sommeil datant de 2023 afin de l'alléger. Une fois cette opération faite, le fichier était assez léger pour pouvoir être trié en JS et a subi le même sort que les autres datasets soit il a été trié pour ne garder que les données de mars 2023.
 
-Le site est déployé sur l'adresse : [sur Netlify, cliquez sur moi :D](https://sleepcompare.netlify.app/)
+Le site est déployé [sur Netlify, cliquez sur moi :D](https://sleepcompare.netlify.app/)
+
+## Conclusion
+
+Ce projet fût intéressant et nous permit de nous améliorer en JS ainsi que de comprendre le framework D3.JS mais avant tout de pouvoir explorer et déduire des faits de nos propres données. Le fait d'avoir pris un jeu de données personnel nous a permit de rester motivé tout au long du projet et de ne pas lâcher par ennui du sujet.
