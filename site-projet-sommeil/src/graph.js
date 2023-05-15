@@ -35,13 +35,16 @@ import {
 
 const nbCols = 5; // Nombre de colonnes
 
+// Variables globale pour les dimensions des graphs, sera modifié si nécessaire dans les graphs
 const margin = { top: 30, right: 30, bottom: 30, left: 30 },
 	width = 500,
 	height = 500;
 
+// Dimensions des rectangles des heatmaps
 const rectWidth = width / 5;
 const rectHeight = height / 6;
 
+// Couleurs utilisées pour les graphs
 const couleurMin = "#FFFFFF";
 const couleurMilieu = "#00A6FF";
 const couleurMax = "#0154C2";
@@ -70,6 +73,7 @@ const heatmapProfondPatrick = (name, donnees) => {
 
 		let tableauCopie = [...dataRecueAppleWatch];
 
+		// Insertion de données et si manquantes, ajout de 1
 		dataRecueCpap.forEach((element, index) => {
 			let tempsProfond = tableauCopie[index].tempsSommeilProfond
 				? tableauCopie[index].tempsSommeilProfond
@@ -88,11 +92,13 @@ const heatmapProfondPatrick = (name, donnees) => {
 			values.push(pourcentageProfond);
 		});
 
+		// On récupère les valeurs min et max pour les couleurs
 		const colorScale = d3
 			.scaleLinear()
 			.domain([minValue, maxValue])
 			.range([couleurMin, couleurMax]);
 
+		// On crée un tableau de données pour les heatmaps
 		let compteur = 0;
 		const data = [];
 		for (let i = 0; i < dates.length; i++) {
@@ -103,6 +109,7 @@ const heatmapProfondPatrick = (name, donnees) => {
 			}
 		}
 
+		// On crée le SVG
 		const svg = d3
 			.select(name)
 			.append("svg")
@@ -111,6 +118,7 @@ const heatmapProfondPatrick = (name, donnees) => {
 			.append("g")
 			.attr("transform", `translate(${margin.left + 40}, ${margin.top})`);
 
+		// On crée les lignes
 		const rows = svg
 			.selectAll("g")
 			.data(data.slice(0, 6))
@@ -118,6 +126,7 @@ const heatmapProfondPatrick = (name, donnees) => {
 			.append("g")
 			.attr("transform", (d, i) => `translate(0, ${i * rectHeight})`);
 
+		// On crée les rectangles
 		const rects = rows
 			.selectAll("rect")
 			.data((d) => d)
@@ -134,11 +143,14 @@ const heatmapProfondPatrick = (name, donnees) => {
 			.attr("height", rectHeight)
 			.attr("fill", (d) => colorScale(d));
 
+		// On crée l'axe Y et on mets les dates
 		const yScale = d3.scaleBand().domain(rowDates).range([0, height]);
 
+		// On crée l'axe Y
 		const yAxis = d3.axisLeft(yScale);
 		svg.append("g").attr("class", "axis").call(yAxis);
 
+		// On crée les libellés
 		rows
 			.selectAll("text")
 			.data((d) => d)
@@ -157,6 +169,7 @@ const heatmapProfondPatrick = (name, donnees) => {
 	});
 };
 
+// Appel des fonctions pour les heatmaps
 heatmapProfondPatrick(".heatmap_profond_patrick", [dataCpap, dataAppleWatch]);
 heatmapProfondPatrick(".heatmap_profond_patrick_deux", [
 	dataCpap,
@@ -183,11 +196,13 @@ const heatmapApneePatrick = (name, donnees) => {
 			}
 		});
 
+		// On récupère les valeurs min et max pour les couleurs
 		const colorScale = d3
 			.scaleLinear()
 			.domain([minValue, maxValue])
 			.range([couleurMin, couleurMax]);
 
+		// On crée un tableau de données pour les heatmaps
 		let compteur = 0;
 		const data = [];
 		for (let i = 0; i < dates.length; i++) {
@@ -198,6 +213,7 @@ const heatmapApneePatrick = (name, donnees) => {
 			}
 		}
 
+		// On crée le SVG
 		const svg = d3
 			.select(name)
 			.append("svg")
@@ -206,6 +222,7 @@ const heatmapApneePatrick = (name, donnees) => {
 			.append("g")
 			.attr("transform", `translate(${margin.left + 40}, ${margin.top})`);
 
+		// On crée les lignes
 		const rows = svg
 			.selectAll("g")
 			.data(data.slice(0, 6))
@@ -213,6 +230,7 @@ const heatmapApneePatrick = (name, donnees) => {
 			.append("g")
 			.attr("transform", (d, i) => `translate(0, ${i * rectHeight})`);
 
+		// On crée les rectangles
 		const rects = rows
 			.selectAll("rect")
 			.data((d) => d)
@@ -229,11 +247,14 @@ const heatmapApneePatrick = (name, donnees) => {
 			.attr("height", rectHeight)
 			.attr("fill", (d) => colorScale(d));
 
+		// On crée l'axe Y et on mets les dates
 		const yScale = d3.scaleBand().domain(rowDates).range([0, height]);
 
+		// On crée l'axe Y
 		const yAxis = d3.axisLeft(yScale);
 		svg.append("g").attr("class", "axis").call(yAxis);
 
+		// On crée les libellés
 		rows
 			.selectAll("text")
 			.data((d) => d)
@@ -252,6 +273,7 @@ const heatmapApneePatrick = (name, donnees) => {
 	});
 };
 
+// Appel des fonctions pour les heatmaps
 heatmapApneePatrick(".heatmap_nb_apnee", dataCpap);
 
 const heatmapProfondMiguel = (name, donnees) => {
@@ -267,15 +289,16 @@ const heatmapProfondMiguel = (name, donnees) => {
 			values.push(element.pourcentagePhaseProfond);
 		});
 
+		// On récupère les valeurs min et max pour les couleurs
 		const colorScale = d3
 			.scaleLinear()
 			.domain([minValue, maxValue])
 			.range([couleurMin, couleurMax]);
 
+		// On crée un tableau de données pour les heatmaps
 		let compteur = 0;
 		const data = [];
 		for (let i = 0; i < dates.length - 1; i++) {
-			// Modifier ici pour exclure la dernière ligne
 			data[i] = [];
 			for (let j = 0; j < nbCols; j++) {
 				data[i][j] = values[compteur];
@@ -283,6 +306,7 @@ const heatmapProfondMiguel = (name, donnees) => {
 			}
 		}
 
+		// On crée le SVG
 		const svg = d3
 			.select(name)
 			.append("svg")
@@ -291,6 +315,7 @@ const heatmapProfondMiguel = (name, donnees) => {
 			.append("g")
 			.attr("transform", `translate(${margin.left + 40}, ${margin.top})`);
 
+		// On crée les lignes
 		const rows = svg
 			.selectAll("g")
 			.data(data.slice(0, 6))
@@ -298,6 +323,7 @@ const heatmapProfondMiguel = (name, donnees) => {
 			.append("g")
 			.attr("transform", (d, i) => `translate(0, ${i * rectHeight})`);
 
+		// On crée les rectangles
 		const rects = rows
 			.selectAll("rect")
 			.data((d) => d)
@@ -314,11 +340,14 @@ const heatmapProfondMiguel = (name, donnees) => {
 			.attr("height", rectHeight)
 			.attr("fill", (d) => colorScale(d));
 
+		// On crée l'axe Y et on mets les dates
 		const yScale = d3.scaleBand().domain(rowDates).range([0, height]);
 
+		// On crée l'axe Y
 		const yAxis = d3.axisLeft(yScale);
 		svg.append("g").attr("class", "axis").call(yAxis);
 
+		// On crée les libellés
 		rows
 			.selectAll("text")
 			.data((d) => d)
@@ -337,6 +366,7 @@ const heatmapProfondMiguel = (name, donnees) => {
 	});
 };
 
+// Appel des fonctions pour les heatmaps
 heatmapProfondMiguel(".heatmap_profond_miguel", dataMiguel);
 
 /*
@@ -355,7 +385,7 @@ const bar = (name, donnees) => {
 
 	donnees.then((data) => {
 		// ----------------
-		// Create a tooltip
+		// Création du tooltip
 		// ----------------
 		const tooltip = d3
 			.select(name)
@@ -368,7 +398,7 @@ const bar = (name, donnees) => {
 			.style("border-radius", "5px")
 			.style("padding", "10px");
 
-		// Three function that change the tooltip when user hover / move / leave a cell
+		// Trois fonctions qui changent le tooltip quand l'utilisateur survole / bouge / quitte une cellule
 		const mouseover = function (event, d) {
 			let apneeSingulierPluriel = d.evenementHeure > 1 ? "apnées" : "apnée";
 
@@ -413,7 +443,7 @@ const bar = (name, donnees) => {
 
 		svg.append("g").call(d3.axisLeft(y));
 
-		// Add X axis
+		// Création de l'axe X
 		const x = d3.scaleLinear().domain([0, maxValue]).range([0, width]);
 		svg
 			.append("g")
@@ -447,6 +477,7 @@ const bar = (name, donnees) => {
 	});
 };
 
+// Appel des fonctions pour les bar charts
 bar("#bar_chart", dataCpap);
 
 /*
@@ -455,9 +486,9 @@ bar("#bar_chart", dataCpap);
 
 const circular = (name, donnees) => {
 	const innerRadius = 90;
-	const outerRadius = Math.min(width, height) / 2; // the outerRadius goes from the middle of the SVG area to the border
+	const outerRadius = Math.min(width, height) / 2;
 
-	// append the svg object
+	// Ajout du SVG
 	const svg = d3
 		.select(name)
 		.append("svg")
@@ -484,7 +515,7 @@ const circular = (name, donnees) => {
 			.style("border-radius", "5px")
 			.style("padding", "10px");
 
-		// Three function that change the tooltip when user hover / move / leave a cell
+		// On crée les fonctions qui changent le tooltip quand l'utilisateur survole / bouge / quitte une cellule
 		const mouseover = function (event, d) {
 			let litreSingulierPluriel = d.fuiteMoyenne > 1 ? "litres" : "litre";
 
@@ -527,15 +558,17 @@ const circular = (name, donnees) => {
 		// Scales
 		const x = d3
 			.scaleBand()
-			.range([0, 2 * Math.PI]) // X axis goes from 0 to 2pi = all around the circle. If I stop at 1Pi, it will be around a half circle
-			.align(0) // This does nothing
-			.domain(data.map((d) => d.date)); // The domain of the X axis is the list of states.
+			.range([0, 2 * Math.PI])
+			.align(0)
+			.domain(data.map((d) => d.date));
+
+		// On crée les échelles
 		const y = d3
 			.scaleRadial()
-			.range([innerRadius, outerRadius]) // Domain will be define later.
-			.domain([minValue, maxValue]); // Domain of Y is from 0 to the max seen in the data
+			.range([innerRadius, outerRadius])
+			.domain([minValue, maxValue]);
 
-		// Add the bars
+		// Ajout des axes
 		svg
 			.append("g")
 			.selectAll("path")
@@ -545,7 +578,7 @@ const circular = (name, donnees) => {
 			.attr(
 				"d",
 				d3
-					.arc() // imagine your doing a part of a donut plot
+					.arc() // Imaginez que vous faites une partie d'un graphique en anneau
 					.innerRadius(innerRadius)
 					.outerRadius((d) => y(d.fuiteMoyenne))
 					.startAngle((d) => x(d.date))
@@ -557,7 +590,7 @@ const circular = (name, donnees) => {
 			.on("mousemove", mousemove)
 			.on("mouseleave", mouseleave);
 
-		// Add the labels
+		// Ajout des libellés
 		svg
 			.append("g")
 			.selectAll("g")
@@ -601,7 +634,7 @@ circular("#circular_chart", dataCpap);
 // circular("#circular_chart", dataCpap2023);
 
 const line = (name, donnees) => {
-	// append the svg object to the body of the page
+	// Ajout du SVG
 	const svg = d3
 		.select(name)
 		.append("svg")
@@ -614,33 +647,30 @@ const line = (name, donnees) => {
 	// Nous avons recherché manuellement deux nuits de la même durée approximative pour pouvoir comparer les données
 
 	d3.csv("./sommeilprofond.csv").then(function (data) {
-		// List of subgroups = header of the csv files = soil condition here
 		const subgroups = data.columns.slice(1);
 
-		// List of groups = species here = value of the first column called group -> I show them on the X axis
 		const groups = data.map((d) => d.personne);
 
-		// Add X axis
+		// Ajout de l'axe X
 		const x = d3.scaleBand().domain(groups).range([0, width]).padding([0.2]);
 		svg
 			.append("g")
 			.attr("transform", `translate(0, ${height})`)
 			.call(d3.axisBottom(x).tickSizeOuter(0));
 
-		// Add Y axis
+		// Ajout de l'axe Y
 		const y = d3
 			.scaleLinear()
 			.domain([0, 7.25 * 60])
 			.range([height, 0]);
 		svg.append("g").call(d3.axisLeft(y));
 
-		// color palette = one color per subgroup
+		// Ajout des couleurs
 		const color = d3
 			.scaleOrdinal()
 			.domain(subgroups)
 			.range([couleurMin, couleurMilieu, couleurMax]);
 
-		//stack the data? --> stack per subgroup
 		const stackedData = d3.stack().keys(subgroups)(data);
 
 		// ----------------
@@ -657,7 +687,7 @@ const line = (name, donnees) => {
 			.style("border-radius", "5px")
 			.style("padding", "10px");
 
-		// Three function that change the tooltip when user hover / move / leave a cell
+		// On crée les fonctions qui changent le tooltip quand l'utilisateur survole / bouge / quitte une cellule
 		const mouseover = function (event, d) {
 			const subgroupName = d3.select(this.parentNode).datum().key;
 			const subgroupValue = d.data[subgroupName];
@@ -675,11 +705,10 @@ const line = (name, donnees) => {
 			tooltip.style("opacity", 0);
 		};
 
-		// Show the bars
+		// Afficher des barres
 		svg
 			.append("g")
 			.selectAll("g")
-			// Enter in the stack data = loop key per key = group per group
 			.data(stackedData)
 			.join("g")
 			.attr("fill", (d) => {
@@ -687,7 +716,6 @@ const line = (name, donnees) => {
 				return color(d.key);
 			})
 			.selectAll("rect")
-			// enter a second time = loop subgroup per subgroup to add all rectangles
 			.data((d) => d)
 			.join("rect")
 			.attr("x", (d) => x(d.data.personne))
@@ -701,4 +729,5 @@ const line = (name, donnees) => {
 	});
 };
 
+// Appel des fonctions pour les bar charts
 line("#line_chart", [dataMiguel, dataAppleWatch]);
