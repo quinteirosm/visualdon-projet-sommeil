@@ -64,4 +64,4 @@ Nous avons simplement trié ces données pour correspondre à la plage qu'est le
 
 Pour les données de l'Apple Watch c'est un autre tour de bras! Le fichier est non seulement un XML mais il était aussi beaucoup trop lourd (1.66 Go) et faisait crash le navigateur lorsque l'on voulais le trier en JS. Nous avons donc dû faire un tri préliminaire pour ne garder que les données de sommeil datant de 2023 afin de l'alléger. Une fois cette opération faite, le fichier était assez léger pour pouvoir être trié en JS et a subi le même sort que les autres datasets soit il a été trié pour ne garder que les données de Mars 2023.
 
-Le site est déployé sur l'adresse : [sur Netlify, cliquez sur moi :D](sleepcompare.netlify.app)
+Le site est déployé sur l'adresse : [sur Netlify, cliquez sur moi :D](https://www.sleepcompare.netlify.app)
